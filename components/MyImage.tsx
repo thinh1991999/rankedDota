@@ -10,11 +10,13 @@ function MyImage({
   height = 500,
   width = 200,
   alt,
+  borderRadius = 0,
 }: {
   src: string;
   width?: number;
   height?: number;
   alt: string;
+  borderRadius?: number;
 }) {
   return (
     <Image
@@ -23,6 +25,9 @@ function MyImage({
       alt={alt}
       width={width}
       height={height}
+      style={{
+        borderRadius: `${borderRadius}px`,
+      }}
     />
   );
 }

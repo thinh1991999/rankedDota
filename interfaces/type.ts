@@ -5,16 +5,6 @@ export interface Hero {
   primary_attr: string;
   attack_type: string;
   roles: string[];
-  legs: number;
-}
-
-export interface HeroStats {
-  id: number;
-  name: string;
-  localized_name: string;
-  primary_attr: string;
-  attack_type: string;
-  roles: string[];
   img: string;
   icon: string;
   base_health: number;
@@ -38,28 +28,52 @@ export interface HeroStats {
   turn_rate: null;
   cm_enabled: boolean;
   legs: number;
-  hero_id: number;
-  turbo_picks: number;
-  turbo_wins: number;
-  pro_ban: number;
-  pro_win: number;
-  pro_pick: number;
-  "1_pick": number;
-  "1_win": number;
-  "2_pick": number;
-  "2_win": number;
-  "3_pick": number;
-  "3_win": number;
-  "4_pick": number;
-  "4_win": number;
-  "5_pick": number;
-  "5_win": number;
-  "6_pick": number;
-  "6_win": number;
-  "7_pick": number;
-  "7_win": number;
-  "8_pick": number;
-  "8_win": number;
-  null_pick: number;
-  null_win: number;
+}
+
+export interface HeroPageAll {
+  agi: HeroSortType[];
+  str: HeroSortType[];
+  int: HeroSortType[];
+}
+
+export interface HeroSortType {
+  id: number;
+  name: string;
+  displayName: string;
+  shortName: string;
+  aliases: string[];
+  gameVersionId: number;
+  stats: HeroStats;
+}
+
+export interface HeroStats {
+  enabled: boolean;
+  heroUnlockOrder: number;
+  team: boolean;
+  cMEnabled: boolean;
+  newPlayerEnabled: boolean;
+  attackType: string;
+  startingArmor: number;
+  startingMagicArmor: number;
+  startingDamageMin: number;
+  startingDamageMax: number;
+  attackRate: number;
+  attackAnimationPoint: number;
+  attackAcquisitionRange: number;
+  attackRange: number;
+  primaryAttribute: string;
+  strengthBase: number;
+  strengthGain: number;
+  intelligenceBase: number;
+  intelligenceGain: number;
+  agilityBase: number;
+  agilityGain: number;
+  hpRegen: number;
+  mpRegen: number;
+  moveSpeed: number;
+  moveTurnRate: number;
+  hpBarOffset: number;
+  visionDaytimeRange: number;
+  visionNighttimeRange: number;
+  complexity: number;
 }

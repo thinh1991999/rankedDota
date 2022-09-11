@@ -42,6 +42,7 @@ export const homeCards: any = [
   {
     name: "Heros",
     img: "/card1.jpg",
+    link: "/heroAll",
   },
   {
     name: "Public Matches",

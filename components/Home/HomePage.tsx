@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { homeCards } from "../../share";
 import { useAppSelector } from "../../store";
@@ -28,20 +29,22 @@ function HomePage() {
         </div>
         <div className="container m-auto flex flex-wrap justify-center ">
           {homeCards.map((card: any, index: number) => {
-            const { name, img } = card;
+            const { name, img, link = "/" } = card;
             return (
               <div key={index} className="w-[300px] h-[230px] px-2 ">
-                <div className="relative overflow-hidden hover:animate-[card_0.3s_ease-in-out_] h-full rounded-md cursor-pointer text-white bg-neutral flex items-center justify-center">
-                  <div
-                    className="absolute top-0 left-0 bottom-0 right-0 bg-cover bg-center grayscale-[0.5]"
-                    style={{
-                      backgroundImage: `url(${img})`,
-                    }}
-                  ></div>
-                  <h6 className="text-center uppercase font-bold text-xl relative">
-                    {name}
-                  </h6>
-                </div>
+                <Link href={link}>
+                  <a className="relative overflow-hidden hover:animate-[card_0.3s_ease-in-out_] h-full rounded-md cursor-pointer text-white bg-neutral flex items-center justify-center">
+                    <div
+                      className="absolute top-0 left-0 bottom-0 right-0 bg-cover bg-center grayscale-[0.5]"
+                      style={{
+                        backgroundImage: `url(${img})`,
+                      }}
+                    ></div>
+                    <h6 className="text-center uppercase font-bold text-xl relative">
+                      {name}
+                    </h6>
+                  </a>
+                </Link>
               </div>
             );
           })}
