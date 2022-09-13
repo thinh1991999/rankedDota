@@ -19,16 +19,20 @@ function MyImage({
   borderRadius?: number;
 }) {
   return (
-    <Image
-      loader={myLoader}
-      src={src}
-      alt={alt}
-      width={width}
-      height={height}
-      style={{
-        borderRadius: `${borderRadius}px`,
-      }}
-    />
+    <div className="text-[0px]">
+      <Image
+        loader={myLoader}
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        objectFit="cover"
+        // layout="fill"
+        style={{
+          borderRadius: `${borderRadius}px`,
+        }}
+      />
+    </div>
   );
 }
 

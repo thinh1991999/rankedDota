@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { HeroPageAll } from "../../interfaces/type";
+import { HeroPageAll } from "../../interfaces/heroes";
 import { useAppSelector } from "../../store";
 import MyImage from "../MyImage";
 import HeroType from "./HeroType";

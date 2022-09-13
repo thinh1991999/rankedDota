@@ -1,5 +1,5 @@
 import React from "react";
-import { HeroStats } from "../../interfaces/type";
+import { HeroStats } from "../../interfaces/heroes";
 
 const HeroContainer = ({ data }: { data: HeroStats }) => {
   console.log(data);

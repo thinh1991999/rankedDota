@@ -34,6 +34,11 @@ input {
   outline: none;
 }
 
+.ReactTooltip {
+  padding: unset !important;
+  border: unset !important;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
