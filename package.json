@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.6",
     "@reduxjs/toolkit": "^1.8.5",
     "axios": "^0.27.2",
     "lodash": "^4.17.21",

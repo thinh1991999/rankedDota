@@ -1,6 +1,6 @@
 import React from "react";
 import MyImage from "../MyImage";
-import { HeroSortType } from "../../interfaces/type";
+import { HeroSortType } from "../../interfaces/heroes";
 import HeroIcon from "./HeroIcon";
 
 const HeroType = ({

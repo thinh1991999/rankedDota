@@ -15,6 +15,19 @@ class StratsApiService {
     };
   }
 
+  getHeroesPaths() {
+    return this.axios.post("", {
+      query: `{
+        constants {
+          heroes {
+            id
+            
+          }
+        }
+      }`,
+    });
+  }
+
   getHeroesPage() {
     return this.axios.post("", {
       query: `{constants {
@@ -58,6 +71,171 @@ class StratsApiService {
             }
           }
         }}`,
+    });
+  }
+
+  getDetailHero(variables: object) {
+    const PlayerNameColSteamAccountTypeFragment = `fragment PlayerNameColSteamAccountTypeFragment on SteamAccountType {
+      id
+      name
+      proSteamAccount {
+        name
+        __typename
+      }
+      isAnonymous
+      smurfFlag
+      __typename
+    }`;
+    const HeroInfo = `fragment HeroInfoConstantQueryFragment on ConstantQuery {
+      hero(id: $heroId) {
+        id
+        name
+        displayName
+        shortName
+        aliases
+        gameVersionId
+        abilities {
+          slot
+          gameVersionId
+          abilityId
+          ability {
+            id
+            name
+            uri
+            language {
+              displayName
+              lore
+              attributes
+              aghanimDescription
+              shardDescription
+              description
+              notes
+            }
+            stat {
+              abilityId
+              type
+              behavior
+              unitTargetType
+              unitTargetTeam
+              unitTargetFlags
+              unitDamageType
+              spellImmunity
+              modifierSupportValue
+              modifierSupportBonus
+              isOnCastbar
+              isOnLearnbar
+              fightRecapLevel
+              isGrantedByScepter
+              hasScepterUpgrade
+              maxLevel
+              levelsBetweenUpgrades
+              requiredLevel
+              hotKeyOverride
+              displayAdditionalHeroes
+              isUltimate
+              duration
+              charges
+              chargeRestoreTime
+              isGrantedByShard
+              dispellable
+              manaCost
+              cooldown
+            }
+            attributes {
+              name
+              value
+              linkedSpecialBonusAbilityId
+            }
+            drawMatchPage
+            isTalent
+          }
+          __typename
+        }
+        roles {
+          roleId
+          level
+        }
+        language {
+          displayName
+          lore
+          hype
+        }
+        talents {
+          abilityId
+          slot
+        }
+        stats {
+          enabled
+          heroUnlockOrder
+          team
+          cMEnabled
+          newPlayerEnabled
+          attackType
+          startingArmor
+          startingMagicArmor
+          startingDamageMin
+          startingDamageMax
+          attackRate
+          attackAnimationPoint
+          attackAcquisitionRange
+          attackRange
+          primaryAttribute
+          strengthBase
+          strengthGain
+          intelligenceBase
+          intelligenceGain
+          agilityBase
+          agilityGain
+          hpRegen
+          mpRegen
+          moveSpeed
+          moveTurnRate
+          hpBarOffset
+          visionDaytimeRange
+          visionNighttimeRange
+          complexity
+        }
+      }
+    }`;
+    const HeroOverviewRampages = `fragment HeroOverviewRampagesHeroStatsQueryFragment on HeroStatsQuery {
+      rampages(request: {heroId: $heroId, bracketBasicIds: $bracketBasicIds, take: 5}) {
+        match {
+          id
+          rank
+          endDateTime
+          players {
+            steamAccountId
+            isRadiant
+            heroId
+            __typename
+          }
+          __typename
+        }
+        steamAccount {
+          avatar
+          ...PlayerNameColSteamAccountTypeFragment
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    `;
+    return this.axios.post("", {
+      query: `
+      ${PlayerNameColSteamAccountTypeFragment}
+      ${HeroOverviewRampages}
+      ${HeroInfo}
+        query GetHeroOverview($heroId: Short!, $bracketBasicIds: [RankBracketBasicEnum]) {
+        heroStats {
+          ...HeroOverviewRampagesHeroStatsQueryFragment
+          __typename
+        }
+        constants {
+          ...HeroInfoConstantQueryFragment
+        }
+      }`,
+      variables,
     });
   }
 }

@@ -42,7 +42,7 @@ export const homeCards: any = [
   {
     name: "Heros",
     img: "/card1.jpg",
-    link: "/heroAll",
+    link: "/heroes",
   },
   {
     name: "Public Matches",

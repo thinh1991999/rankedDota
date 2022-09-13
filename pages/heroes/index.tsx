@@ -1,18 +1,12 @@
 import React from "react";
-import Layout from "../../components/Layout";
-import { NextPageWithLayout } from "../_app";
 import { ReactElement } from "react";
 import { GetServerSideProps } from "next";
-import {
-  Hero,
-  HeroPageAll,
-  HeroSortType,
-  HeroStats,
-} from "../../interfaces/type";
-import stratsApiService from "../../services/stratsApi.service";
 import _ from "lodash";
-import axios from "axios";
+import { HeroPageAll, HeroSortType } from "../../interfaces/heroes";
+import stratsApiService from "../../services/stratsApi.service";
 import HeroAllContainer from "../../components/HeroAll/HeroAllContainer";
+import Layout from "../../components/Layout";
+import { NextPageWithLayout } from "../_app";
 
 type Props = {
   heroAll: HeroPageAll;
@@ -34,16 +28,16 @@ export const getServerSideProps: GetServerSideProps = async () => {
     agi: [],
     int: [],
   };
-  _.forEach(heroes, (hero: HeroSortType) => {
-    const { stats } = hero;
-    if (stats.primaryAttribute === "str") {
-      heroAll.str.push(hero);
-    } else if (stats.primaryAttribute === "agi") {
-      heroAll.agi.push(hero);
-    } else {
-      heroAll.int.push(hero);
-    }
-  });
+  // _.forEach(heroes, (hero: HeroSortType) => {
+  //   const { stats } = hero;
+  //   if (stats.primaryAttribute === "str") {
+  //     heroAll.str.push(hero);
+  //   } else if (stats.primaryAttribute === "agi") {
+  //     heroAll.agi.push(hero);
+  //   } else {
+  //     heroAll.int.push(hero);
+  //   }
+  // });
   return {
     props: { heroAll },
   };
