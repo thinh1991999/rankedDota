@@ -33,11 +33,11 @@ export interface AbilityElement {
   slot: number;
   gameVersionId: number;
   abilityId: number;
-  ability: AbilityAbility;
+  ability: AbilityDetail;
   __typename: string;
 }
 
-export interface AbilityAbility {
+export interface AbilityDetail {
   id: number;
   name: string;
   uri: null | string;

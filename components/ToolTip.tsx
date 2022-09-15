@@ -1,16 +1,19 @@
 import React, { ReactNode, useState } from "react";
 import ReactTooltip from "react-tooltip";
-
+type Place = "top" | "right" | "bottom" | "left";
 const ToolTip = ({
   target,
   tooltip,
   id,
+  place,
 }: {
   target: ReactNode;
   tooltip: ReactNode;
   id: string;
+  place?: Place;
 }) => {
   const [showToolTip, setShowToolTip] = useState<boolean>(true);
+
   return (
     <>
       <div
@@ -27,7 +30,7 @@ const ToolTip = ({
         {target}
       </div>
       {showToolTip && (
-        <ReactTooltip className="ReactTooltip" id={id}>
+        <ReactTooltip place={place} className="ReactTooltip" id={id}>
           {tooltip}
         </ReactTooltip>
       )}

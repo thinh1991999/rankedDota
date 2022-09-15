@@ -5,12 +5,12 @@ import { useAppSelector } from "../../store";
 import SearchID from "../SearchID";
 
 function HomePage() {
-  const theme = useAppSelector((state) => state.theme.theme);
+  // const theme = useAppSelector((state) => state.theme.theme);
   return (
     <section className="">
       <div className="h-[600px] relative">
         <div
-          className={`${theme.bannerGray} absolute top-0 left-0 bottom-0 right-0  bg-center bg-cover`}
+          className={`absolute top-0 left-0 bottom-0 right-0  bg-center bg-cover`}
           style={{
             backgroundImage: `url(/homeBanner.jpg)`,
           }}

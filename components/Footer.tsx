@@ -1,11 +1,10 @@
 import React from "react";
-import { useAppSelector } from "../store";
 
 export default function Footer() {
-  const theme = useAppSelector((state) => state.theme.theme);
-
   return (
-    <footer className={`${theme.footer} ${theme.text.main} py-2 text-xs`}>
+    <footer
+      className={`bg-component-light text-textMain-light dark:bg-component-dark dark:text-textMain-dark py-2 text-xs`}
+    >
       <p className="text-center">
         Dota 2, and the Dota 2 logo are registered trademarks{" "}
         <a href="https://www.valvesoftware.com/en/" className="underline">

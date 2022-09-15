@@ -1,20 +1,22 @@
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useAppSelector } from "../store";
 import MyImage from "./MyImage";
 
 function Logo() {
-  const theme = useAppSelector((state) => state.theme.theme);
-  const translateHeader = useAppSelector((state) => state.root.translateHeader);
-  const [link, setLink] = useState<string>(" ");
-
+  const { theme } = useTheme();
+  const [link, setLink] = useState("/lightLogo.png");
+  // const theme = useAppSelector((state) => state.theme.theme);
+  // const translateHeader = useAppSelector((state) => state.root.translateHeader);
   useEffect(() => {
-    if (translateHeader) {
-      setLink("/darkLogo.png");
-    } else {
-      setLink("/" + theme.theme + "Logo.png");
-    }
-  }, [theme, translateHeader]);
+    // if (translateHeader) {
+    //   setLink("/darkLogo.png");
+    // } else {
+    //   setLink("/" + theme.theme + "Logo.png");
+    // }
+    setLink("/" + theme + "Logo.png");
+  }, [theme]);
 
   return (
     <Link href={"/"}>
