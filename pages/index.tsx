@@ -3,8 +3,13 @@ import { ReactElement } from "react";
 import HomePage from "../components/Home/HomePage";
 import Layout from "../components/Layout";
 import { NextPageWithLayout } from "./_app";
+import { useEffect } from "react";
+import { useAppSelector } from "../store";
+import { fetchUserById } from "../store/Slices/globalDataSlice";
+import { useAppDispatch } from "../store/hook";
 
 const Home: NextPageWithLayout = () => {
+  const dispatch = useAppDispatch();
   return (
     <>
       <Head>

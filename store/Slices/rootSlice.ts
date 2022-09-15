@@ -6,7 +6,7 @@ const initialState: any = {
 };
 
 export const rootSlice = createSlice({
-  name: "language",
+  name: "root",
   initialState,
   reducers: {
     handleOffBgHeader: (state) => {

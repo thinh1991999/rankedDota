@@ -75,6 +75,88 @@ class StratsApiService {
   }
 
   getDetailHero(variables: object) {
+    const HeroOverviewGuidesHeroStatsQueryFragment = `fragment HeroOverviewGuidesHeroStatsQueryFragment on HeroStatsQuery {
+      guide(heroId: $heroId) {
+        heroId
+        guides(take: 3) {
+          ...GuidePreviewHeroGuide
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+    const GuidePreviewHeroGuide = `fragment GuidePreviewHeroGuide on HeroGuideType {
+      heroId
+      match {
+        id
+        durationSeconds
+        players {
+          matchId
+          steamAccountId
+          heroId
+          role
+          lane
+          __typename
+        }
+        __typename
+      }
+      matchPlayer {
+        matchId
+        steamAccountId
+        heroId
+        role
+        lane
+        steamAccount {
+          id
+          name
+          proSteamAccount {
+            name
+            __typename
+          }
+          __typename
+        }
+        assists
+        deaths
+        imp
+        isRadiant
+        item0Id
+        item1Id
+        item2Id
+        item3Id
+        item4Id
+        item5Id
+        neutral0Id
+        kills
+        additionalUnit {
+          item0Id
+          item1Id
+          item2Id
+          item3Id
+          item4Id
+          item5Id
+          neutral0Id
+          __typename
+        }
+        stats {
+          abilities {
+            abilityId
+            time
+            __typename
+          }
+          itemPurchases {
+            itemId
+            time
+            __typename
+          }
+          level
+          __typename
+        }
+        level
+        __typename
+      }
+      __typename
+    }`;
     const PlayerNameColSteamAccountTypeFragment = `fragment PlayerNameColSteamAccountTypeFragment on SteamAccountType {
       id
       name
@@ -223,11 +305,14 @@ class StratsApiService {
     `;
     return this.axios.post("", {
       query: `
+      ${HeroOverviewGuidesHeroStatsQueryFragment}
+      ${GuidePreviewHeroGuide}
       ${PlayerNameColSteamAccountTypeFragment}
       ${HeroOverviewRampages}
       ${HeroInfo}
         query GetHeroOverview($heroId: Short!, $bracketBasicIds: [RankBracketBasicEnum]) {
         heroStats {
+          ...HeroOverviewGuidesHeroStatsQueryFragment
           ...HeroOverviewRampagesHeroStatsQueryFragment
           __typename
         }
@@ -236,6 +321,120 @@ class StratsApiService {
         }
       }`,
       variables,
+    });
+  }
+
+  getAllDefaultData() {
+    const abilities = `abilities{
+      id
+      name
+      uri
+      stat {
+        abilityId
+        type
+        behavior
+        unitTargetType
+        unitTargetTeam
+        unitTargetFlags
+        unitDamageType
+        spellImmunity
+        modifierSupportValue
+        modifierSupportBonus
+        isOnCastbar
+        isOnLearnbar
+        fightRecapLevel
+        isGrantedByScepter
+        hasScepterUpgrade
+        maxLevel
+        levelsBetweenUpgrades
+        requiredLevel
+        hotKeyOverride
+        displayAdditionalHeroes
+        isUltimate
+        duration
+        charges
+        chargeRestoreTime
+        isGrantedByShard
+        dispellable
+      }
+      attributes {
+        name
+        value
+        linkedSpecialBonusAbilityId
+      }
+      drawMatchPage
+      isTalent
+      language {
+        displayName
+        lore
+        aghanimDescription
+        shardDescription
+      }
+    }`;
+    const items = `items{
+      id
+      name
+      displayName
+      shortName
+      isSupportFullItem
+      language {
+        displayName
+      }
+      stat {
+        behavior
+        unitTargetType
+        unitTargetTeam
+        unitTargetFlags
+        fightRecapLevel
+        sharedCooldown
+        cost
+        shopTags
+        aliases
+        quality
+        isSellable
+        isDroppable
+        isPurchasable
+        isSideShop
+        isStackable
+        isPermanent
+        isHideCharges
+        isRequiresCharges
+        isDisplayCharges
+        isSupport
+        isAlertable
+        isTempestDoubleClonable
+        stockMax
+        initialCharges
+        initialStock
+        stockTime
+        initialStockTime
+        isRecipe
+        needsComponents
+        upgradeItem
+        upgradeRecipe
+        itemResult
+        neutralItemDropTime
+        neutralItemTier
+      }
+      attributes {
+        name
+        value
+      }
+      components {
+        index
+        componentId
+      }
+      image
+    }`;
+    return this.axios.post("", {
+      query: `
+      {
+        constants{
+          ${abilities}
+          ${items}
+        }
+      }
+      `,
     });
   }
 }

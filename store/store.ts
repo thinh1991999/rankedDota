@@ -1,23 +1,24 @@
 import {
   Action,
-  combineReducers,
   configureStore,
+  EnhancedStore,
+  Reducer,
+  combineReducers,
   ThunkAction,
-  getDefaultMiddleware,
 } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 import languageSlice from "./Slices/languageSlice";
-import themeSlice from "./Slices/themeSlice";
 import rootSlice from "./Slices/rootSlice";
+import globalDataSlice from "./Slices/globalDataSlice";
+import { GlobalData, Root } from "../interfaces/state";
 
 export const makeStore = () => {
   const isServer = typeof window === "undefined";
   const combinedReducer = combineReducers({
-    root: rootSlice,
-    theme: themeSlice,
-    language: languageSlice,
+    // root: rootSlice,
+    globalData: globalDataSlice,
+    // language: languageSlice,
   });
-
   if (isServer) {
     return configureStore({
       reducer: combinedReducer,
@@ -31,21 +32,29 @@ export const makeStore = () => {
       storage,
     };
 
-    const persistedReducer = persistReducer(persistConfig, combinedReducer);
+    const persistedReducer: Reducer<Root> = persistReducer(
+      persistConfig,
+      combinedReducer
+    );
 
-    const store: any = configureStore({
+    // const store: EnhancedStore<Root, Action> & {
+    //   __persistor?: any;
+    // } = configureStore({
+    //   reducer: persistedReducer,
+    //   devTools: true,
+    // });
+    const store = configureStore({
       reducer: persistedReducer,
       devTools: true,
     });
 
-    store.__persistor = persistStore(store);
+    // store.__persistor = persistStore(store);
 
     return store;
   }
 };
 
 type Store = ReturnType<typeof makeStore>;
-
 export type AppDispatch = Store["dispatch"];
 export type RootState = ReturnType<Store["getState"]>;
 export type AppThunk<ReturnType = void> = ThunkAction<
@@ -55,4 +64,3 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   Action<string>
 >;
 export const wrapper = createWrapper(makeStore, { debug: true });
-export const store = makeStore();
