@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { REHYDRATE } from "redux-persist";
-import { AbilityDetail } from "../../interfaces/heroes";
+import { AbilityDetail, Hero } from "../../interfaces/heroes";
 import { GlobalData } from "../../interfaces/state";
 import stratsApiService from "../../services/stratsApi.service";
 import { RootState } from "../store";
@@ -9,6 +9,7 @@ import { Item } from "../../interfaces/item";
 const initialState: GlobalData = {
   abilitiesData: [],
   items: [],
+  heroes: [],
   loading: true,
 };
 
@@ -18,6 +19,7 @@ export const fetchDefaultData = createAsyncThunk(
     interface resultType {
       abilities: AbilityDetail[];
       items: Item[];
+      heroes: Hero[];
     }
     const result = await stratsApiService.getAllDefaultData().then((res) => {
       return res.data.data.constants;
@@ -37,9 +39,9 @@ export const globalDataSlice = createSlice({
     builder.addCase(fetchDefaultData.fulfilled, (state, action) => {
       state.abilitiesData = action.payload.abilities;
       state.items = action.payload.items;
+      state.heroes = action.payload.heroes;
       state.loading = false;
     });
-    builder.addCase(REHYDRATE, (state) => {});
   },
 });
 

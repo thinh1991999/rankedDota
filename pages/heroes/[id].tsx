@@ -1,37 +1,95 @@
 import _ from "lodash";
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { ParsedUrlQuery } from "querystring";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ReactElement } from "react";
-import HeroContainer from "../../components/Hero/HeroMain";
 import HeroIntro from "../../components/Hero/HeroIntro";
 import Layout from "../../components/Layout";
-import { Hero, Rampage, Role } from "../../interfaces/heroes";
+import { Hero, Rampage } from "../../interfaces/heroes";
 import stratsApiService from "../../services/stratsApi.service";
-import { usePageLoading } from "../../share";
+import { heroRankOptions, usePageLoading } from "../../share";
 import { NextPageWithLayout } from "../_app";
-import HeroMain from "../../components/Hero/HeroMain";
 import { GuideSymbol } from "../../interfaces/guide";
 import FeaturedGuides from "../../components/Hero/FeaturedGuides";
+import {
+  ItemBootPurchase,
+  ItemNeutral,
+  PurchasePattern,
+} from "../../interfaces/item";
+import HeroItems from "../../components/Hero/HeroItems";
+import HeroRampage from "../../components/Hero/HeroRampage";
+import HeroDetailAndLore from "../../components/Hero/HeroDetailAndLore";
+import { AiOutlineDown } from "react-icons/ai";
+import { OptionsRank } from "../../components";
+import { MoonLoader, PacmanLoader } from "react-spinners";
 
 type Props = {
   heroOverView: {
     hero: Hero;
-    rampages: Rampage[];
-    guide: GuideSymbol[];
   };
 };
 
 const HeroesPage: NextPageWithLayout<Props> = (props) => {
   const {
-    heroOverView: { hero, rampages, guide },
+    heroOverView: {
+      hero,
+      // rampages,
+      // guide,
+      // purchasePattern,
+      // itemNeutral,
+      // itemBootPurchase,
+    },
   } = props;
-  console.log(guide);
   const router = useRouter();
   const { isPageLoading } = usePageLoading();
-  useEffect(() => {}, [router.query?.id]);
+
+  const [loading, setLoading] = useState<boolean>(false);
+  const [mainData, setMainData] = useState<{
+    rampages: Rampage[];
+    guide: GuideSymbol[];
+    purchasePattern: PurchasePattern;
+    itemNeutral: ItemNeutral[];
+    itemBootPurchase: ItemBootPurchase;
+  }>();
+
+  useEffect(() => {
+    let isApiSubcribed: boolean = true;
+    setLoading(true);
+    const bracketBasicIds = router.query?.rankBracketHeroTimeDetail;
+    const variables: object = {
+      heroId: Number(router.query?.id),
+      // bracketIds: ["DIVINE", "IMMORTAL"],
+      bracketBasicIds: bracketBasicIds,
+      // topPlayersBracketIds: ["DIVINE", "IMMORTAL"],
+    };
+    var result = _(variables).omit(_.isUndefined).omit(_.isNull).value();
+    stratsApiService.getDetailHero(result).then((res) => {
+      if (isApiSubcribed) {
+        const {
+          heroStats: {
+            rampages,
+            guide,
+            purchasePattern,
+            itemNeutral,
+            itemBootPurchase,
+          },
+        } = res.data.data;
+        setMainData({
+          rampages,
+          guide,
+          purchasePattern,
+          itemNeutral,
+          itemBootPurchase,
+        });
+        setLoading(false);
+      }
+    });
+    return () => {
+      isApiSubcribed = false;
+    };
+  }, [router]);
+
   return (
     <>
       <Head>
@@ -41,16 +99,37 @@ const HeroesPage: NextPageWithLayout<Props> = (props) => {
       </Head>
       <section>
         <HeroIntro hero={hero} />
-        {/* <HeroMain hero={hero} rampages={rampages} /> */}
-        <div className="container m-auto">
-          {guide.length > 0 && <FeaturedGuides guide={guide[0]} />}
+        <div className="container m-auto mt-5">
+          <OptionsRank />
+          {loading && (
+            <div className="py-10 flex justify-center items-center">
+              <MoonLoader color="#fff" size={40} />
+            </div>
+          )}
+          {!loading && mainData && (
+            <>
+              <div className="my-5">
+                <HeroItems
+                  purchasePattern={mainData.purchasePattern}
+                  itemNeutral={mainData.itemNeutral}
+                  itemBootPurchase={mainData.itemBootPurchase}
+                />
+              </div>
+              {mainData.guide.length > 0 && (
+                <div className="my-5">
+                  <FeaturedGuides hero={hero} guide={mainData.guide[0]} />
+                </div>
+              )}
+              <div className="my-5">
+                <HeroRampage rampages={mainData.rampages} />
+              </div>
+              <div className="my-5">
+                <HeroDetailAndLore hero={hero} />
+              </div>
+            </>
+          )}
         </div>
       </section>
-      {/* {isPageLoading ? (
-        <p className="text-white">loading............</p>
-      ) : (
-        <HeroContainer data={heroStats} />
-      )} */}
     </>
   );
 };
@@ -62,25 +141,19 @@ HeroesPage.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps: GetServerSideProps<Props> = async (
   context
 ) => {
-  const res = await stratsApiService.getDetailHero({
-    heroId: 102,
-    // bracketIds: ["DIVINE", "IMMORTAL"],
-    bracketBasicIds: "DIVINE_IMMORTAL",
-    // topPlayersBracketIds: ["DIVINE", "IMMORTAL"],
-  });
+  const variables: object = {
+    heroId: Number(context.params?.id),
+  };
+  const res = await stratsApiService.getHeroInfo(variables);
   const {
     constants: { hero },
-    heroStats: { rampages, guide },
   }: {
     constants: { hero: Hero };
-    heroStats: { rampages: Rampage[]; guide: GuideSymbol[] };
   } = res.data.data;
   return {
     props: {
       heroOverView: {
         hero,
-        rampages,
-        guide,
       },
     },
   };

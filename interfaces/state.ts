@@ -1,4 +1,4 @@
-import { AbilityDetail } from "./heroes";
+import { AbilityDetail, Hero } from "./heroes";
 import { Item } from "./item";
 
 export interface Root {
@@ -8,5 +8,6 @@ export interface Root {
 export interface GlobalData {
   abilitiesData: AbilityDetail[];
   items: Item[];
+  heroes: Hero[];
   loading: boolean;
 }

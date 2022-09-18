@@ -1,9 +1,3 @@
-export interface HeroPageAll {
-  agi: HeroSortType[];
-  str: HeroSortType[];
-  int: HeroSortType[];
-}
-
 export interface HeroSortType {
   id: number;
   name: string;
@@ -176,5 +170,20 @@ export interface SteamAccount {
   proSteamAccount: null;
   isAnonymous: boolean;
   smurfFlag: number;
+  __typename: string;
+}
+
+export interface HeroesStatus {
+  POSITION_1: HeroStatus[];
+  POSITION_2: HeroStatus[];
+  POSITION_3: HeroStatus[];
+  POSITION_4: HeroStatus[];
+  POSITION_5: HeroStatus[];
+}
+
+export interface HeroStatus {
+  heroId: number;
+  matchCount: number;
+  winCount: number;
   __typename: string;
 }

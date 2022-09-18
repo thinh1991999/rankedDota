@@ -34,9 +34,25 @@ input {
   outline: none;
 }
 
+span {
+  margin: unset;
+}
+
+h5 {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
 .ReactTooltip {
   padding: unset !important;
   border: unset !important;
+}
+
+.one-line-max {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 @media (prefers-color-scheme: dark) {

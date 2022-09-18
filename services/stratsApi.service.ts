@@ -74,12 +74,251 @@ class StratsApiService {
     });
   }
 
+  getHeroStats() {
+    return this.axios.post("", {
+      query: `query HeroesOverview {
+        heroStats {
+          POSITION_1: winDay(take: 1, positionIds: [POSITION_1], bracketIds: [HERALD, GUARDIAN, CRUSADER, ARCHON, LEGEND, ANCIENT, DIVINE, IMMORTAL]) {
+            heroId
+            matchCount
+            winCount
+            __typename
+          }
+          POSITION_2: winDay(take: 1, positionIds: [POSITION_2], bracketIds: [HERALD, GUARDIAN, CRUSADER, ARCHON, LEGEND, ANCIENT, DIVINE, IMMORTAL]) {
+            heroId
+            matchCount
+            winCount
+            __typename
+          }
+          POSITION_3: winDay(take: 1, positionIds: [POSITION_3], bracketIds: [HERALD, GUARDIAN, CRUSADER, ARCHON, LEGEND, ANCIENT, DIVINE, IMMORTAL]) {
+            heroId
+            matchCount
+            winCount
+            __typename
+          }
+          POSITION_4: winDay(take: 1, positionIds: [POSITION_4], bracketIds: [HERALD, GUARDIAN, CRUSADER, ARCHON, LEGEND, ANCIENT, DIVINE, IMMORTAL]) {
+            heroId
+            matchCount
+            winCount
+            __typename
+          }
+          POSITION_5: winDay(take: 1, positionIds: [POSITION_5], bracketIds: [HERALD, GUARDIAN, CRUSADER, ARCHON, LEGEND, ANCIENT, DIVINE, IMMORTAL]) {
+            heroId
+            matchCount
+            winCount
+            __typename
+          }
+          __typename
+        }
+      }`,
+    });
+  }
+
+  getHeroInfo(variables: object) {
+    const HeroInfo = `fragment HeroInfoConstantQueryFragment on ConstantQuery {
+      hero(id: $heroId) {
+        id
+        name
+        displayName
+        shortName
+        aliases
+        gameVersionId
+        abilities {
+          slot
+          gameVersionId
+          abilityId
+          ability {
+            id
+            name
+            uri
+            language {
+              displayName
+              lore
+              attributes
+              aghanimDescription
+              shardDescription
+              description
+              notes
+            }
+            stat {
+              abilityId
+              type
+              behavior
+              unitTargetType
+              unitTargetTeam
+              unitTargetFlags
+              unitDamageType
+              spellImmunity
+              modifierSupportValue
+              modifierSupportBonus
+              isOnCastbar
+              isOnLearnbar
+              fightRecapLevel
+              isGrantedByScepter
+              hasScepterUpgrade
+              maxLevel
+              levelsBetweenUpgrades
+              requiredLevel
+              hotKeyOverride
+              displayAdditionalHeroes
+              isUltimate
+              duration
+              charges
+              chargeRestoreTime
+              isGrantedByShard
+              dispellable
+              manaCost
+              cooldown
+            }
+            attributes {
+              name
+              value
+              linkedSpecialBonusAbilityId
+            }
+            drawMatchPage
+            isTalent
+          }
+          __typename
+        }
+        roles {
+          roleId
+          level
+        }
+        language {
+          displayName
+          lore
+          hype
+        }
+        talents {
+          abilityId
+          slot
+        }
+        stats {
+          enabled
+          heroUnlockOrder
+          team
+          cMEnabled
+          newPlayerEnabled
+          attackType
+          startingArmor
+          startingMagicArmor
+          startingDamageMin
+          startingDamageMax
+          attackRate
+          attackAnimationPoint
+          attackAcquisitionRange
+          attackRange
+          primaryAttribute
+          strengthBase
+          strengthGain
+          intelligenceBase
+          intelligenceGain
+          agilityBase
+          agilityGain
+          hpRegen
+          mpRegen
+          moveSpeed
+          moveTurnRate
+          hpBarOffset
+          visionDaytimeRange
+          visionNighttimeRange
+          complexity
+        }
+      }
+    }`;
+    return this.axios.post("", {
+      query: `
+      ${HeroInfo}
+        query GetHeroOverview($heroId: Short!) {
+        constants {
+          ...HeroInfoConstantQueryFragment
+        }
+      }`,
+      variables,
+    });
+  }
+
   getDetailHero(variables: object) {
     const HeroOverviewGuidesHeroStatsQueryFragment = `fragment HeroOverviewGuidesHeroStatsQueryFragment on HeroStatsQuery {
       guide(heroId: $heroId) {
         heroId
         guides(take: 3) {
           ...GuidePreviewHeroGuide
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+
+    const HeroOverviewItemsHeroStatsQueryFragment = `fragment HeroOverviewItemsHeroStatsQueryFragment on HeroStatsQuery {
+      ...HeroOverviewItemsStagesHeroStatsQueryFragment
+      ...HeroOverviewItemsNeutralsHeroStatsQueryFragment
+      ...HeroOverviewItemsBootsHeroStatsQueryFragment
+      __typename
+    }`;
+    const HeroOverviewItemsStagesHeroStatsQueryFragment = `fragment HeroOverviewItemsStagesHeroStatsQueryFragment on HeroStatsQuery {
+      purchasePattern(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {
+        startingItems {
+          ...HeroOverviewItemsStagesHeroItemStartingPurchaseTypeFragment
+          __typename
+        }
+        earlyGame {
+          ...HeroOverviewItemsStagesHeroItemPurchaseTypeFragment
+          __typename
+        }
+        midGame {
+          ...HeroOverviewItemsStagesHeroItemPurchaseTypeFragment
+          __typename
+        }
+        lateGame {
+          ...HeroOverviewItemsStagesHeroItemPurchaseTypeFragment
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+    const HeroOverviewItemsStagesHeroItemPurchaseTypeFragment = `fragment HeroOverviewItemsStagesHeroItemPurchaseTypeFragment on HeroItemPurchaseType {
+      matchCount: count
+      events {
+        itemId
+        winCount: wins
+        matchCount: count
+        instance
+        __typename
+      }
+      __typename
+    }`;
+    const HeroOverviewItemsStagesHeroItemStartingPurchaseTypeFragment = `fragment HeroOverviewItemsStagesHeroItemStartingPurchaseTypeFragment on HeroItemStartingPurchaseType {
+      matchCount: count
+      events {
+        itemId
+        winCount: wins
+        matchCount: count
+        instance
+        wasGiven
+        __typename
+      }
+      __typename
+    }`;
+    const HeroOverviewItemsNeutralsHeroStatsQueryFragment = `fragment HeroOverviewItemsNeutralsHeroStatsQueryFragment on HeroStatsQuery {
+      itemNeutral(heroId: $heroId, bracketBasicIds: $bracketBasicIds, week: 1663085599) {
+        itemId
+        equippedMatchCount
+        equippedMatchWinCount
+        __typename
+      }
+      __typename
+    }`;
+    const HeroOverviewItemsBootsHeroStatsQueryFragment = `fragment HeroOverviewItemsBootsHeroStatsQueryFragment on HeroStatsQuery {
+      itemBootPurchase(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {
+        matchCount: count
+        events {
+          itemId
+          matchCount: count
+          winCount: wins
+          timeAverage
           __typename
         }
         __typename
@@ -305,19 +544,22 @@ class StratsApiService {
     `;
     return this.axios.post("", {
       query: `
+      ${HeroOverviewItemsStagesHeroItemStartingPurchaseTypeFragment}
       ${HeroOverviewGuidesHeroStatsQueryFragment}
+      ${HeroOverviewItemsHeroStatsQueryFragment}
+      ${HeroOverviewItemsStagesHeroStatsQueryFragment}
+      ${HeroOverviewItemsStagesHeroItemPurchaseTypeFragment}
+      ${HeroOverviewItemsNeutralsHeroStatsQueryFragment}
+      ${HeroOverviewItemsBootsHeroStatsQueryFragment}
       ${GuidePreviewHeroGuide}
       ${PlayerNameColSteamAccountTypeFragment}
       ${HeroOverviewRampages}
-      ${HeroInfo}
         query GetHeroOverview($heroId: Short!, $bracketBasicIds: [RankBracketBasicEnum]) {
         heroStats {
           ...HeroOverviewGuidesHeroStatsQueryFragment
+          ...HeroOverviewItemsHeroStatsQueryFragment
           ...HeroOverviewRampagesHeroStatsQueryFragment
           __typename
-        }
-        constants {
-          ...HeroInfoConstantQueryFragment
         }
       }`,
       variables,
@@ -426,12 +668,120 @@ class StratsApiService {
       }
       image
     }`;
+    const heroes = `heroes {
+      id
+      name
+      displayName
+      shortName
+      aliases
+      gameVersionId
+      abilities {
+        slot
+        gameVersionId
+        abilityId
+        ability {
+          id
+          name
+          uri
+          language {
+            displayName
+            description
+            attributes
+            lore
+            aghanimDescription
+            shardDescription
+            notes
+          }
+          stat {
+            abilityId
+            type
+            behavior
+            unitTargetType
+            unitTargetTeam
+            unitTargetFlags
+            unitDamageType
+            spellImmunity
+            modifierSupportValue
+            modifierSupportBonus
+            isOnCastbar
+            isOnLearnbar
+            fightRecapLevel
+            isGrantedByScepter
+            hasScepterUpgrade
+            maxLevel
+            levelsBetweenUpgrades
+            requiredLevel
+            hotKeyOverride
+            displayAdditionalHeroes
+            isUltimate
+            duration
+            charges
+            chargeRestoreTime
+            isGrantedByShard
+            dispellable
+          }
+          attributes {
+            name
+            value
+            linkedSpecialBonusAbilityId
+            requiresScepter
+          }
+          drawMatchPage
+          isTalent
+        }
+      }
+      roles {
+        roleId
+        level
+      }
+      language {
+        displayName
+        lore
+        hype
+      }
+      talents {
+        abilityId
+        slot
+      }
+      stats {
+        enabled
+        heroUnlockOrder
+        team
+        cMEnabled
+        newPlayerEnabled
+        attackType
+        startingArmor
+        startingMagicArmor
+        startingDamageMin
+        startingDamageMax
+        attackRate
+        attackAnimationPoint
+        attackAcquisitionRange
+        attackRange
+        primaryAttribute
+        strengthBase
+        strengthGain
+        intelligenceBase
+        intelligenceGain
+        agilityBase
+        agilityGain
+        hpRegen
+        mpRegen
+        moveSpeed
+        moveTurnRate
+        hpBarOffset
+        visionDaytimeRange
+        visionNighttimeRange
+        complexity
+      }
+    }`;
     return this.axios.post("", {
       query: `
       {
         constants{
           ${abilities}
           ${items}
+          ${heroes}
         }
       }
       `,
