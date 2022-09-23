@@ -5,11 +5,13 @@ import { GlobalData } from "../../interfaces/state";
 import stratsApiService from "../../services/stratsApi.service";
 import { RootState } from "../store";
 import { Item } from "../../interfaces/item";
+import { GameVersion } from "../../interfaces/gameVersion";
 
 const initialState: GlobalData = {
   abilitiesData: [],
   items: [],
   heroes: [],
+  gameVersions: [],
   loading: true,
 };
 
@@ -20,6 +22,7 @@ export const fetchDefaultData = createAsyncThunk(
       abilities: AbilityDetail[];
       items: Item[];
       heroes: Hero[];
+      gameVersions: GameVersion[];
     }
     const result = await stratsApiService.getAllDefaultData().then((res) => {
       return res.data.data.constants;
@@ -40,6 +43,7 @@ export const globalDataSlice = createSlice({
       state.abilitiesData = action.payload.abilities;
       state.items = action.payload.items;
       state.heroes = action.payload.heroes;
+      state.gameVersions = action.payload.gameVersions;
       state.loading = false;
     });
   },

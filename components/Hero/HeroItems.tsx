@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import _ from "lodash";
 import {
   Event,
   Item,
@@ -12,7 +13,6 @@ import {
   getTimeBySeconds,
 } from "../../share/ultils";
 import MyImage from "../MyImage";
-import _ from "lodash";
 import ToolTip from "../ToolTip";
 import { useAppSelector } from "../../store";
 
@@ -24,6 +24,7 @@ type ResultItemNeutral = {
 type Tier = {
   title: string;
   data: ResultItemNeutral[];
+  total: number;
 };
 
 type Timeline = {
@@ -102,7 +103,8 @@ const ItemList = ({
         <span className="text-xs">{timeline}</span>
       </div>
       <div className="flex mt-2 -ml-1 -mr-1">
-        {events.map((event) => {
+        {events.map((event, idx) => {
+          if (idx >= 4) return;
           const itemDetail = getDetailItem(items, event.itemId);
           const img = getImgStratsDota(
             "/items/" + itemDetail?.shortName + ".png"
@@ -112,7 +114,7 @@ const ItemList = ({
           const pickRate = ((matchCount * 100) / totalMatchCount).toFixed(0);
           const time = timeAverage ? getTimeBySeconds(timeAverage) : null;
           return (
-            <div key={event.itemId} className="px-1">
+            <div key={idx} className="px-1">
               <ToolTip
                 target={
                   <div>
@@ -137,7 +139,7 @@ const ItemList = ({
                     cost={itemDetail?.stat.cost}
                   />
                 }
-                id={title + event.itemId}
+                id={title + event.itemId + idx}
               />
             </div>
           );
@@ -148,19 +150,18 @@ const ItemList = ({
 };
 
 const NeutralList = ({
-  itemsNeutral,
-  totalMatchCount,
-  title,
+  tier,
+  currentNav,
 }: {
-  itemsNeutral: ResultItemNeutral[];
-  totalMatchCount: number;
-  title: string;
+  tier: Tier;
+  currentNav: number;
 }) => {
+  const { title, total, data } = tier;
   return (
     <>
       <h6 className="capitalize font-bold">{title}</h6>
       <div className="flex mt-2 -ml-1 -mr-1">
-        {itemsNeutral.map((itemNeutral, idx) => {
+        {data.map((itemNeutral, idx) => {
           if (idx >= 4) return;
           const {
             item: { equippedMatchCount, equippedMatchWinCount },
@@ -173,10 +174,7 @@ const NeutralList = ({
             (equippedMatchWinCount * 100) /
             equippedMatchCount
           ).toFixed(0);
-          const pickRate = (
-            (equippedMatchCount * 100) /
-            totalMatchCount
-          ).toFixed(0);
+          const pickRate = ((equippedMatchCount * 100) / total).toFixed(0);
           return (
             <div key={detailItem.id} className="px-1">
               <ToolTip
@@ -190,7 +188,7 @@ const NeutralList = ({
                       alt={detailItem?.displayName || " "}
                     />
                     <span className="text-xs text-center block">
-                      {winRate}%
+                      {currentNav === 0 ? winRate : pickRate}%
                     </span>
                   </div>
                 }
@@ -231,8 +229,8 @@ const HeroItems = ({
     const getNewArr = (events: Event[], total: number): Event[] => {
       const newEvents: Event[] = [];
       _.forEach(events, (event) => {
-        if (newEvents.length === 4) return;
-        if (event.matchCount >= 100) {
+        const idx = _.findIndex(newEvents, (e) => e.itemId === event.itemId);
+        if (event.matchCount >= 100 && idx === -1) {
           newEvents.push(event);
         }
       });
@@ -287,40 +285,51 @@ const HeroItems = ({
   }, [itemBootPurchase, purchasePattern, currentNav]);
   useEffect(() => {
     const getNewArr = (tier: Tier): Tier => {
+      const { data, title, total } = tier;
       const eventsSort = _.orderBy(
-        tier.data,
+        data,
         (result) => {
           const {
             item: { equippedMatchCount, equippedMatchWinCount },
           } = result;
-          return equippedMatchWinCount / equippedMatchCount;
+          if (currentNav === 0) {
+            return equippedMatchWinCount / equippedMatchCount;
+          } else {
+            return equippedMatchCount / total;
+          }
         },
         ["desc"]
       );
       return {
-        title: tier.title,
+        title,
         data: eventsSort,
+        total,
       };
     };
     const tier1: Tier = {
       title: "Tier 1",
       data: [],
+      total: 0,
     };
     const tier2: Tier = {
       title: "Tier 2",
       data: [],
+      total: 0,
     };
     const tier3: Tier = {
       title: "Tier 3",
       data: [],
+      total: 0,
     };
     const tier4: Tier = {
       title: "Tier 4",
       data: [],
+      total: 0,
     };
     const tier5: Tier = {
       title: "Tier 5",
       data: [],
+      total: 0,
     };
     _.forEach(itemNeutral, (item) => {
       if (item.equippedMatchCount === 0) return;
@@ -334,30 +343,35 @@ const HeroItems = ({
             item,
             detailItem,
           });
+          tier1.total += item.equippedMatchCount;
         }
         if (neutralItemTier === "TIER_2") {
           tier2.data.push({
             item,
             detailItem,
           });
+          tier2.total += item.equippedMatchCount;
         }
         if (neutralItemTier === "TIER_3") {
           tier3.data.push({
             item,
             detailItem,
           });
+          tier3.total += item.equippedMatchCount;
         }
         if (neutralItemTier === "TIER_4") {
           tier4.data.push({
             item,
             detailItem,
           });
+          tier4.total += item.equippedMatchCount;
         }
         if (neutralItemTier === "TIER_5") {
           tier5.data.push({
             item,
             detailItem,
           });
+          tier5.total += item.equippedMatchCount;
         }
       }
     });
@@ -368,10 +382,9 @@ const HeroItems = ({
     resultTiers.push(getNewArr(tier4));
     resultTiers.push(getNewArr(tier5));
     setTiers(resultTiers);
-  }, [itemNeutral, items]);
-
+  }, [itemNeutral, items, currentNav]);
   return (
-    <section>
+    <section className="p-2 rounded-md bg-layer-dark">
       <div className="flex justify-between">
         <h5>Items</h5>
         <div className="flex items-center">
@@ -410,7 +423,7 @@ const HeroItems = ({
         <div className="w-[1px] bg-gray-800 mx-5"></div>
         <div className="">
           <div className="flex -ml-4 -mr-4">
-            {timelines.map((timeline) => {
+            {timelines.map((timeline, idx) => {
               return (
                 <div key={timeline.title} className="px-4">
                   <ItemList
@@ -425,14 +438,10 @@ const HeroItems = ({
             })}
           </div>
           <div className="flex -ml-4 -mr-4">
-            {tiers.map((tier) => {
+            {tiers.map((tier, idx) => {
               return (
-                <div key={tier.title} className="p-4">
-                  <NeutralList
-                    title={tier.title}
-                    itemsNeutral={tier.data}
-                    totalMatchCount={purchasePattern.startingItems.matchCount}
-                  />
+                <div key={idx} className="p-4">
+                  <NeutralList tier={tier} currentNav={currentNav} />
                 </div>
               );
             })}

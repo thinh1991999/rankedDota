@@ -239,6 +239,41 @@ class StratsApiService {
   }
 
   getDetailHero(variables: object) {
+    const HeroOverviewMatchupsHeroStatsQueryFragment = `fragment HeroOverviewMatchupsHeroStatsQueryFragment on HeroStatsQuery {
+      heroVsHeroMatchup(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {
+        advantage {
+          ...HeroOverviewMatchupsHeroDryadTypeFragment
+          __typename
+        }
+        disadvantage {
+          ...HeroOverviewMatchupsHeroDryadTypeFragment
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+
+    const HeroOverviewMatchupsHeroDryadTypeFragment = `fragment HeroOverviewMatchupsHeroDryadTypeFragment on HeroDryadType {
+      with {
+        ...HeroOverviewMatchupsHeroStatsHeroDryadTypeFragment
+        __typename
+      }
+      vs {
+        ...HeroOverviewMatchupsHeroStatsHeroDryadTypeFragment
+        __typename
+      }
+      __typename
+    }`;
+
+    const HeroOverviewMatchupsHeroStatsHeroDryadTypeFragment = `fragment HeroOverviewMatchupsHeroStatsHeroDryadTypeFragment on HeroStatsHeroDryadType {
+      heroId2
+      synergy
+      matchCount
+      winCount
+      __typename
+    }`;
+
     const HeroOverviewGuidesHeroStatsQueryFragment = `fragment HeroOverviewGuidesHeroStatsQueryFragment on HeroStatsQuery {
       guide(heroId: $heroId) {
         heroId
@@ -246,6 +281,31 @@ class StratsApiService {
           ...GuidePreviewHeroGuide
           __typename
         }
+        __typename
+      }
+      __typename
+    }`;
+
+    const HeroOverviewGraphsHeroStatsQueryFragment = `fragment HeroOverviewGraphsHeroStatsQueryFragment on HeroStatsQuery {
+      winGameVersion(take: 7, groupBy: HERO_ID, bracketIds: $bracketIds) {
+        gameVersionId
+        heroId
+        winCount
+        matchCount
+        __typename
+      }
+      winDay(take: 32, groupBy: HERO_ID, bracketIds: $bracketIds) {
+        timestamp: day
+        heroId
+        winCount
+        matchCount
+        __typename
+      }
+      winHour(take: 25, groupBy: HERO_ID, bracketIds: $bracketIds) {
+        timestamp: hour
+        heroId
+        winCount
+        matchCount
         __typename
       }
       __typename
@@ -407,116 +467,57 @@ class StratsApiService {
       smurfFlag
       __typename
     }`;
-    const HeroInfo = `fragment HeroInfoConstantQueryFragment on ConstantQuery {
-      hero(id: $heroId) {
-        id
-        name
-        displayName
-        shortName
-        aliases
-        gameVersionId
-        abilities {
-          slot
-          gameVersionId
-          abilityId
-          ability {
-            id
-            name
-            uri
-            language {
-              displayName
-              lore
-              attributes
-              aghanimDescription
-              shardDescription
-              description
-              notes
-            }
-            stat {
-              abilityId
-              type
-              behavior
-              unitTargetType
-              unitTargetTeam
-              unitTargetFlags
-              unitDamageType
-              spellImmunity
-              modifierSupportValue
-              modifierSupportBonus
-              isOnCastbar
-              isOnLearnbar
-              fightRecapLevel
-              isGrantedByScepter
-              hasScepterUpgrade
-              maxLevel
-              levelsBetweenUpgrades
-              requiredLevel
-              hotKeyOverride
-              displayAdditionalHeroes
-              isUltimate
-              duration
-              charges
-              chargeRestoreTime
-              isGrantedByShard
-              dispellable
-              manaCost
-              cooldown
-            }
-            attributes {
-              name
-              value
-              linkedSpecialBonusAbilityId
-            }
-            drawMatchPage
-            isTalent
-          }
-          __typename
-        }
-        roles {
-          roleId
-          level
-        }
-        language {
-          displayName
-          lore
-          hype
-        }
-        talents {
-          abilityId
-          slot
-        }
-        stats {
-          enabled
-          heroUnlockOrder
-          team
-          cMEnabled
-          newPlayerEnabled
-          attackType
-          startingArmor
-          startingMagicArmor
-          startingDamageMin
-          startingDamageMax
-          attackRate
-          attackAnimationPoint
-          attackAcquisitionRange
-          attackRange
-          primaryAttribute
-          strengthBase
-          strengthGain
-          intelligenceBase
-          intelligenceGain
-          agilityBase
-          agilityGain
-          hpRegen
-          mpRegen
-          moveSpeed
-          moveTurnRate
-          hpBarOffset
-          visionDaytimeRange
-          visionNighttimeRange
-          complexity
-        }
+    const HeroOverviewPositionsHeroStatsQueryFragment = `fragment HeroOverviewPositionsHeroStatsQueryFragment on HeroStatsQuery {
+      position(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {
+        position
+        matchCount
+        winCount
+        __typename
       }
+      laneOutcome_POSITION_1: laneOutcome(heroId: $heroId, positionIds: [POSITION_1]) {
+        ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment
+        __typename
+      }
+      laneOutcome_POSITION_2: laneOutcome(heroId: $heroId, positionIds: [POSITION_2]) {
+        ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment
+        __typename
+      }
+      laneOutcome_POSITION_3: laneOutcome(heroId: $heroId, positionIds: [POSITION_3]) {
+        ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment
+        __typename
+      }
+      laneOutcome_POSITION_4: laneOutcome(heroId: $heroId, positionIds: [POSITION_4]) {
+        ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment
+        __typename
+      }
+      laneOutcome_POSITION_5: laneOutcome(heroId: $heroId, positionIds: [POSITION_5]) {
+        ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment
+        __typename
+      }
+      __typename
+    }`;
+    const HeroOverviewPositionsHeroLaneOutcomeTypeFragment = `fragment HeroOverviewPositionsHeroLaneOutcomeTypeFragment on HeroLaneOutcomeType {
+      matchCount
+      winCount
+      lossCount
+      drawCount
+      stompWinCount
+      stompLossCount
+      partners {
+        ...HeroOverviewPositionsHeroLaneOutcomeHeroObjectTypeFragment
+        __typename
+      }
+      against {
+        ...HeroOverviewPositionsHeroLaneOutcomeHeroObjectTypeFragment
+        __typename
+      }
+      __typename
+    }`;
+    const HeroOverviewPositionsHeroLaneOutcomeHeroObjectTypeFragment = `fragment HeroOverviewPositionsHeroLaneOutcomeHeroObjectTypeFragment on HeroLaneOutcomeHeroObjectType {
+      heroId
+      matchCount
+      winCount
+      __typename
     }`;
     const HeroOverviewRampages = `fragment HeroOverviewRampagesHeroStatsQueryFragment on HeroStatsQuery {
       rampages(request: {heroId: $heroId, bracketBasicIds: $bracketBasicIds, take: 5}) {
@@ -544,7 +545,11 @@ class StratsApiService {
     `;
     return this.axios.post("", {
       query: `
+      ${HeroOverviewMatchupsHeroStatsQueryFragment}
+      ${HeroOverviewMatchupsHeroDryadTypeFragment}
+      ${HeroOverviewMatchupsHeroStatsHeroDryadTypeFragment}
       ${HeroOverviewItemsStagesHeroItemStartingPurchaseTypeFragment}
+      ${HeroOverviewGraphsHeroStatsQueryFragment}
       ${HeroOverviewGuidesHeroStatsQueryFragment}
       ${HeroOverviewItemsHeroStatsQueryFragment}
       ${HeroOverviewItemsStagesHeroStatsQueryFragment}
@@ -553,11 +558,17 @@ class StratsApiService {
       ${HeroOverviewItemsBootsHeroStatsQueryFragment}
       ${GuidePreviewHeroGuide}
       ${PlayerNameColSteamAccountTypeFragment}
+      ${HeroOverviewPositionsHeroStatsQueryFragment}
+      ${HeroOverviewPositionsHeroLaneOutcomeTypeFragment}
+      ${HeroOverviewPositionsHeroLaneOutcomeHeroObjectTypeFragment}
       ${HeroOverviewRampages}
-        query GetHeroOverview($heroId: Short!, $bracketBasicIds: [RankBracketBasicEnum]) {
+        query GetHeroOverview($heroId: Short!, $bracketIds: [RankBracket], $bracketBasicIds: [RankBracketBasicEnum]) {
         heroStats {
           ...HeroOverviewGuidesHeroStatsQueryFragment
           ...HeroOverviewItemsHeroStatsQueryFragment
+          ...HeroOverviewMatchupsHeroStatsQueryFragment
+          ...HeroOverviewGraphsHeroStatsQueryFragment
+          ...HeroOverviewPositionsHeroStatsQueryFragment
           ...HeroOverviewRampagesHeroStatsQueryFragment
           __typename
         }
@@ -775,6 +786,11 @@ class StratsApiService {
         complexity
       }
     }`;
+    const gameVersions = `gameVersions {
+      id
+      name
+      asOfDateTime
+    }`;
     return this.axios.post("", {
       query: `
       {
@@ -782,6 +798,7 @@ class StratsApiService {
           ${abilities}
           ${items}
           ${heroes}
+          ${gameVersions}
         }
       }
       `,

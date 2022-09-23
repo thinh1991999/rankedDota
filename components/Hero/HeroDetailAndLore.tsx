@@ -13,8 +13,8 @@ const HeroDetailAndLore = ({ hero }: { hero: Hero }) => {
   const img = getImgStratsDota("/heroes/" + shortName + "_modelcrop.png");
   return (
     <section className="flex -ml-2 -mr-2">
-      <div className="w-1/2 px-2">
-        <div className="h-full rounded-md bg-neutral-dark  flex flex-col justify-between">
+      <div className="w-1/2 p-2">
+        <div className="h-full rounded-md bg-layer-dark  flex flex-col justify-between">
           <div className="relative pb-12 px-3 pt-3 border-b">
             <h5>Details</h5>
             <p className="text-sm mt-2 w-[calc(100%_-_200px)]">{parse(hype)}</p>
@@ -40,8 +40,8 @@ const HeroDetailAndLore = ({ hero }: { hero: Hero }) => {
           </div>
         </div>
       </div>
-      <div className="w-1/2 px-2">
-        <div className="h-full p-3 rounded-md bg-neutral-dark">
+      <div className="w-1/2 p-2">
+        <div className="h-full p-3 rounded-md bg-layer-dark">
           <h5>Lore</h5>
           <p className="text-sm mt-2">{parse(lore)}</p>
         </div>

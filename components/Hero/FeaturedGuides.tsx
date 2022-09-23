@@ -20,7 +20,7 @@ const FeaturedGuides = ({
   const { abilities: abilitiesHero } = hero;
   const items = useAppSelector((state) => state.globalData.items);
   return (
-    <section>
+    <section className="p-2 rounded-md bg-layer-dark">
       <h5>Featured guides</h5>
       <div className="">
         {guides.map((guide, idx) => {
@@ -88,7 +88,7 @@ const FeaturedGuides = ({
           return (
             <div
               key={idx}
-              className="my-2 px-3 py-2 bg-gray-500 flex items-center"
+              className="my-2 px-3 py-2 rounded-md bg-layerStrong-dark flex items-center"
             >
               <div className="w-[20px]">
                 <MyImage src="/sp.svg" width={20} height={20} alt="sp" />

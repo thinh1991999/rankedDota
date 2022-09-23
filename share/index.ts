@@ -7,5 +7,7 @@ export {
   getDetailItem,
   getDetaiHero,
   getTimeBySeconds,
+  getTypeOfHero,
+  nFormatter,
 } from "./ultils";
 export { RADIANT_ICON, DIRE_ICON } from "./constant";

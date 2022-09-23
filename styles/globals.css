@@ -46,6 +46,7 @@ h5 {
 .ReactTooltip {
   padding: unset !important;
   border: unset !important;
+  /* justify-content: space-between; */
 }
 
 .one-line-max {

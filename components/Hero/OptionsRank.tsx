@@ -46,29 +46,22 @@ const OptionsRank = () => {
   return (
     <section className="relative inline-block">
       <div
-        className="cursor-pointer flex items-center border rounded-md"
+        className="cursor-pointer flex items-center border border-borderSecondary-dark rounded-md bg-layer-dark"
         onClick={() => setShow(!show)}
       >
         <span className="px-2">{title}</span>
-        <div className="p-2 border-l">
+        <div className="p-2 border-l border-borderSecondary-dark">
           {show ? <AiOutlineUp /> : <AiOutlineDown />}
         </div>
       </div>
       {show && (
-        <ul className="absolute min-w-[250px] z-10 top-[calc(100%_+_10px)] left-0 whitespace-nowrap p-2 rounded-md border bg-neutral-dark">
+        <ul className="absolute min-w-[250px] z-10 top-[calc(100%_+_10px)] left-0 whitespace-nowrap p-2 rounded-md border border-borderSecondary-dark bg-layer-dark">
           {heroRankOptions.map((option) => {
             const { title, query } = option;
-            // let link: object = {
-            //   pathname: "/heroes/" + id,
-            //   query: { rankBracketHeroTimeDetail: query },
-            // };
-            // if (!query) {
-            //   link = _.omit(link, ["query"]);
-            // }
             return (
               <li
                 key={query}
-                className="cursor-pointer px-3 py-2 rounded-md hover:bg-gray-700"
+                className="cursor-pointer px-3 py-2 rounded-md hover:bg-layerStrong-dark"
                 onClick={() => handleForward(option)}
               >
                 {title}

@@ -38,6 +38,18 @@ module.exports = {
           dark: "#0c1322",
           light: "#F5F5F5",
         },
+        layer: {
+          dark: "rgba(255, 255, 255, 0.1)",
+          light: "rgba(255, 255, 255, 0.04)",
+        },
+        layerStrong: {
+          dark: "rgba(255, 255, 255, 0.12)",
+          light: "rgba(255, 255, 255, 0.04)",
+        },
+        borderSecondary: {
+          dark: "rgba(99, 100, 100, 1)",
+          light: "rgba(255, 255, 255, 0.04)",
+        },
       },
       width: {
         player: "1024px",
