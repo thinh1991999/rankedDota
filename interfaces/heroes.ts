@@ -1,9 +1,3 @@
-export interface HeroPageAll {
-  agi: HeroSortType[];
-  str: HeroSortType[];
-  int: HeroSortType[];
-}
-
 export interface HeroSortType {
   id: number;
   name: string;
@@ -176,5 +170,71 @@ export interface SteamAccount {
   proSteamAccount: null;
   isAnonymous: boolean;
   smurfFlag: number;
+  __typename: string;
+}
+
+export interface HeroesStatus {
+  POSITION_1: HeroStatus[];
+  POSITION_2: HeroStatus[];
+  POSITION_3: HeroStatus[];
+  POSITION_4: HeroStatus[];
+  POSITION_5: HeroStatus[];
+}
+
+export interface HeroStatus {
+  heroId: number;
+  matchCount: number;
+  winCount: number;
+  __typename: string;
+}
+
+export interface RoleStatus {
+  matchCount: number;
+  winCount: number;
+  lossCount: number;
+  drawCount: number;
+  stompWinCount: number;
+  stompLossCount: number;
+  partners: Against[];
+  against: Against[];
+  __typename: string;
+}
+
+export interface Against {
+  heroId: number;
+  matchCount: number;
+  winCount: number;
+  __typename: Typename;
+}
+
+export enum Typename {
+  HeroLaneOutcomeHeroObjectType = "HeroLaneOutcomeHeroObjectType",
+}
+
+export interface Position {
+  position: string;
+  matchCount: number;
+  winCount: number;
+  __typename: string;
+}
+
+// Matchups
+export interface HeroVsHeroMatchup {
+  advantage: Advantage[];
+  disadvantage: Advantage[];
+  __typename: string;
+}
+
+export interface Advantage {
+  vs: MatchupDetail[];
+  with: MatchupDetail[];
+  __typename: string;
+}
+
+export interface MatchupDetail {
+  heroId2: number;
+  synergy: number;
+  matchCount: number;
+  winCount: number;
   __typename: string;
 }

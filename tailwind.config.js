@@ -5,6 +5,7 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
     "./redux/**/*.{js,ts,jsx,tsx}",
   ],
+  mode: "jit",
   darkMode: "class",
   theme: {
     extend: {
@@ -30,12 +31,24 @@ module.exports = {
           light: "black",
         },
         background: {
-          dark: "hsla(222 47% 11% / var(--tw-bg-opacity, 1))",
+          dark: "#000000",
           light: "white",
         },
         component: {
           dark: "#0c1322",
           light: "#F5F5F5",
+        },
+        layer: {
+          dark: "rgba(255, 255, 255, 0.1)",
+          light: "rgba(255, 255, 255, 0.04)",
+        },
+        layerStrong: {
+          dark: "rgba(255, 255, 255, 0.12)",
+          light: "rgba(255, 255, 255, 0.04)",
+        },
+        borderSecondary: {
+          dark: "rgba(99, 100, 100, 1)",
+          light: "rgba(255, 255, 255, 0.04)",
         },
       },
       width: {
@@ -68,6 +81,9 @@ module.exports = {
       },
     },
   },
-  safelist: [{ pattern: /(bg|text|boxShadow)-./ }],
+  safelist: [
+    { pattern: /(bg|text|boxShadow)-./ },
+    { pattern: /(from|to)-[.]/ },
+  ],
   plugins: [],
 };

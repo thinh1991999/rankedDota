@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useState, memo } from "react";
 import ReactTooltip from "react-tooltip";
 type Place = "top" | "right" | "bottom" | "left";
 const ToolTip = ({
@@ -9,7 +9,7 @@ const ToolTip = ({
 }: {
   target: ReactNode;
   tooltip: ReactNode;
-  id: string;
+  id: string | number | undefined;
   place?: Place;
 }) => {
   const [showToolTip, setShowToolTip] = useState<boolean>(true);
@@ -18,19 +18,25 @@ const ToolTip = ({
     <>
       <div
         data-tip
-        data-for={id}
+        data-for={String(id)}
         onMouseEnter={() => setShowToolTip(true)}
         onMouseLeave={() => {
           setShowToolTip(false);
           setTimeout(() => {
             setShowToolTip(true);
-          }, 100);
+          }, 500);
         }}
+        className="w-full h-full"
       >
         {target}
       </div>
       {showToolTip && (
-        <ReactTooltip place={place} className="ReactTooltip" id={id}>
+        <ReactTooltip
+          arrowColor="transparent"
+          place={place}
+          className="ReactTooltip"
+          id={String(id)}
+        >
           {tooltip}
         </ReactTooltip>
       )}
@@ -38,4 +44,4 @@ const ToolTip = ({
   );
 };
 
-export default ToolTip;
+export default memo(ToolTip);

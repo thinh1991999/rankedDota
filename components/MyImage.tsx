@@ -13,8 +13,8 @@ function MyImage({
   borderRadius = 0,
 }: {
   src: string;
-  width?: number;
-  height?: number;
+  width?: number | string;
+  height?: number | string;
   alt: string;
   borderRadius?: number;
 }) {

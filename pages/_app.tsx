@@ -1,13 +1,12 @@
-import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { NextPage } from "next";
-import { ReactElement, ReactNode, useEffect } from "react";
+import React, { ReactElement, ReactNode, useEffect, useState } from "react";
 import { ThemeProvider } from "next-themes";
+import { ClockLoader } from "react-spinners";
 import { wrapper } from "../store/store";
-import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store";
 import { fetchDefaultData } from "../store/Slices/globalDataSlice";
-import React from "react";
+import "../styles/globals.css";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -30,12 +29,16 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   useEffect(() => {
     dispatch(fetchDefaultData());
-    // setPageLoaded(true);
   }, [dispatch]);
 
   const getLayout = Component.getLayout ?? ((page) => page);
-  if (loading) return <p>loading..........</p>;
-  // if (!pageLoaded) return <></>;
+  if (loading)
+    return (
+      <section className="w-screen h-screen bg-background-dark flex justify-center items-center">
+        <ClockLoader color="#fff" size={40} />
+        <span className="ml-1 text-xl font-bold text-white">RankedDota</span>
+      </section>
+    );
   return (
     <ThemeProvider attribute="class">
       {getLayout(<Component {...pageProps} />)}
