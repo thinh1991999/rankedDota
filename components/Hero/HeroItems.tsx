@@ -411,8 +411,8 @@ const HeroItems = ({
           </ul>
         </div>
       </div>
-      <div className="flex mt-2">
-        <div className="">
+      <div className="flex flex-wrap mt-2">
+        <div className="w-full xl:w-[200px] py-4 ">
           <ItemList
             title="boosts"
             events={boots}
@@ -420,12 +420,12 @@ const HeroItems = ({
             currentNav={currentNav}
           />
         </div>
-        <div className="w-[1px] bg-gray-800 mx-5"></div>
-        <div className="">
-          <div className="flex -ml-4 -mr-4">
+        <div className="w-[1px] bg-gray-800 mx-5 xl:block hidden"></div>
+        <div className="w-full xl:w-auto flex-1">
+          <div className="flex flex-wrap -ml-4 -mr-4">
             {timelines.map((timeline, idx) => {
               return (
-                <div key={timeline.title} className="px-4">
+                <div key={timeline.title} className="w-full xl:w-[200px] p-4">
                   <ItemList
                     title={timeline.title}
                     events={timeline.data}
@@ -437,10 +437,10 @@ const HeroItems = ({
               );
             })}
           </div>
-          <div className="flex -ml-4 -mr-4">
+          <div className="flex flex-wrap -ml-4 -mr-4">
             {tiers.map((tier, idx) => {
               return (
-                <div key={idx} className="p-4">
+                <div key={idx} className="w-full xl:w-[200px] p-4">
                   <NeutralList tier={tier} currentNav={currentNav} />
                 </div>
               );

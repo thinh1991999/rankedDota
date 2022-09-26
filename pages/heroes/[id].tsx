@@ -10,6 +10,7 @@ import Layout from "../../components/Layout";
 import {
   Hero,
   HeroVsHeroMatchup,
+  LeaderBoard,
   Position,
   Rampage,
   RoleStatus,
@@ -35,6 +36,7 @@ import {
   RolesStatus,
 } from "../../components";
 import { WinGameVersion } from "../../interfaces/gameVersion";
+import { LeaderBoards } from "../../components/Hero";
 
 type Props = {
   heroOverView: {
@@ -58,6 +60,7 @@ type MainData = {
     pos5: RoleStatus[];
   };
   winGameVersion: WinGameVersion[];
+  leaderboards: LeaderBoard[];
 };
 
 const HeroesPage: NextPageWithLayout<Props> = (props) => {
@@ -112,6 +115,7 @@ const HeroesPage: NextPageWithLayout<Props> = (props) => {
             laneOutcome_POSITION_5,
             winGameVersion,
           },
+          leaderboard: { hero },
         } = res.data.data;
         setMainData({
           rampages,
@@ -129,6 +133,7 @@ const HeroesPage: NextPageWithLayout<Props> = (props) => {
             pos5: laneOutcome_POSITION_5,
           },
           winGameVersion,
+          leaderboards: hero,
         });
         setLoading(false);
       }
@@ -156,48 +161,51 @@ const HeroesPage: NextPageWithLayout<Props> = (props) => {
           )}
           {!loading && mainData && (
             <>
-              <div className="mb-8 flex -ml-2 -mr-2">
-                <div className="w-1/3 p-2 lg:h-[200px]">
+              <div className="my-4 flex flex-wrap -ml-2 -mr-2">
+                <div className="w-full xl:w-1/3 p-2 h-[200px]">
                   <HeroCharWinrate
                     winGameVersions={mainData.winGameVersion}
                     hero={hero}
                   />
                 </div>
-                <div className="w-1/3 p-2 lg:h-[200px]">
+                <div className="w-full xl:w-1/3 p-2 h-[200px]">
                   <ChartPickRate
                     winGameVersions={mainData.winGameVersion}
                     hero={hero}
                   />
                 </div>
-                <div className="w-1/3 p-2 lg:h-[200px]">
+                <div className="w-full xl:w-1/3 p-2 h-[200px]">
                   <MatchUps
                     heroVsHeroMatchup={mainData.heroVsHeroMatchup}
                     hero={hero}
                   />
                 </div>
               </div>
-              <div className="mb-8">
+              <div className="my-4">
                 <RolesStatus
                   data={mainData.rolesStatus}
                   positions={mainData.positions}
                 />
               </div>
-              <div className="mb-8">
+              <div className="my-4">
                 <HeroItems
                   purchasePattern={mainData.purchasePattern}
                   itemNeutral={mainData.itemNeutral}
                   itemBootPurchase={mainData.itemBootPurchase}
                 />
               </div>
-              {mainData.guide.length > 0 && (
-                <div className="mb-8">
+              <div className="my-4 flex flex-wrap -ml-2 -mr-2">
+                <div className="xl:w-4/6 xl:m-0 mb-4 w-full px-2">
                   <FeaturedGuides hero={hero} guide={mainData.guide[0]} />
                 </div>
-              )}
-              <div className="mb-8">
+                <div className="xl:w-2/6 w-full px-2 ">
+                  <LeaderBoards leaderBoards={mainData.leaderboards} />
+                </div>
+              </div>
+              <div className="my-4">
                 <HeroRampage rampages={mainData.rampages} />
               </div>
-              <div className="mb-8">
+              <div className="my-4">
                 <HeroDetailAndLore hero={hero} />
               </div>
             </>

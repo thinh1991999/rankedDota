@@ -83,7 +83,6 @@ const externalTooltipHandler = (context: any) => {
       titleEl.innerText = title;
       headerDiv.appendChild(titleEl);
     });
-
     const bodyDiv = document.createElement("div");
     bodyDiv.style.padding = "5px 10px";
     bodyLines.forEach((body: any, i: number) => {

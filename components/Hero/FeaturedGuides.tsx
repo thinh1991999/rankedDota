@@ -6,7 +6,11 @@ import { useAppSelector } from "../../store/hook";
 import MyImage from "../MyImage";
 import { RADIANT_ICON, DIRE_ICON } from "../../share/constant";
 import _ from "lodash";
-import { getDetailItem, getImgStratsDota } from "../../share/ultils";
+import {
+  getDetailItem,
+  getImgStratsDota,
+  getTypeOfHero,
+} from "../../share/ultils";
 import ToolTip from "../ToolTip";
 
 const FeaturedGuides = ({
@@ -31,6 +35,8 @@ const FeaturedGuides = ({
               isRadiant,
               deaths,
               assists,
+              role,
+              lane,
               kills,
               item0Id,
               item1Id,
@@ -77,6 +83,7 @@ const FeaturedGuides = ({
             .utc(durationSeconds * 1000)
             .format(durationSeconds >= 3600 ? "HH:mm:ss" : "mm:ss");
           const itemNeutral = getDetailItem(items, neutral0Id);
+          const typeHero = getTypeOfHero(role, lane);
           let upgrageImg = "/atriFullScepNorShard.svg";
           if (checkedScepter && checkShard) {
             upgrageImg = "/atriFullScepNorShard.svg";
@@ -88,10 +95,10 @@ const FeaturedGuides = ({
           return (
             <div
               key={idx}
-              className="my-2 px-3 py-2 rounded-md bg-layerStrong-dark flex items-center"
+              className="my-3 px-3 py-3 rounded-md bg-layerStrong-dark flex items-center"
             >
               <div className="w-[20px]">
-                <MyImage src="/sp.svg" width={20} height={20} alt="sp" />
+                <MyImage src={typeHero.icon} width={20} height={20} alt="sp" />
               </div>
               <div className="w-[200px] flex flex-col ml-2">
                 <span className=" one-line-max text-lg font-bold">{name}</span>
@@ -126,83 +133,82 @@ const FeaturedGuides = ({
                   const arrLv = Array.from(Array(countLv).keys());
                   const arrLvCurr = isUltimate ? [0, 1, 2] : [0, 1, 2, 3];
                   return (
-                    <ToolTip
-                      key={abilityId}
-                      target={
-                        <div key={abilityId} className="mx-1">
-                          <div className="grayscale-[0.5] hover:grayscale-0">
-                            <MyImage
-                              src={getImgStratsDota(`/abilities/${name}.png`)}
-                              alt={name}
-                              width={30}
-                              height={30}
-                              borderRadius={5}
-                            />
-                          </div>
-                          <div className="flex justify-center">
-                            <div className="relative flex  mt-2">
-                              {arrLvCurr.map((idx) => {
-                                return (
-                                  <div
-                                    key={idx}
-                                    className="w-[4px] h-[4px] mx-[1px] bg-gray-900 rounded-full"
-                                  ></div>
-                                );
-                              })}
-                              <div className="absolute left-0 right-0 bottom-0 top-0 flex ">
-                                {arrLv.map((item, idx) => {
+                    <div key={abilityId} className="mx-1">
+                      <ToolTip
+                        target={
+                          <div>
+                            <div className="grayscale-[0.5] hover:grayscale-0 flex justify-center">
+                              <MyImage
+                                src={getImgStratsDota(`/abilities/${name}.png`)}
+                                alt={name}
+                                width={40}
+                                height={30}
+                                borderRadius={5}
+                              />
+                            </div>
+                            <div className="flex justify-center">
+                              <div className="relative flex  mt-2">
+                                {arrLvCurr.map((idx) => {
                                   return (
                                     <div
                                       key={idx}
-                                      className="w-[4px] h-[4px] mx-[1px] bg-yellow-300 rounded-full"
+                                      className="w-[4px] h-[4px] mx-[1px] bg-gray-900 rounded-full"
                                     ></div>
                                   );
                                 })}
+                                <div className="absolute left-0 right-0 bottom-0 top-0 flex ">
+                                  {arrLv.map((item, idx) => {
+                                    return (
+                                      <div
+                                        key={idx}
+                                        className="w-[4px] h-[4px] mx-[1px] bg-yellow-300 rounded-full"
+                                      ></div>
+                                    );
+                                  })}
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      }
-                      tooltip={
-                        // <DetailAbility key={abilityId} ability={ability} />
-                        <div className="flex items-center p-2">
-                          <MyImage
-                            src={getImgStratsDota(`/abilities/${name}.png`)}
-                            alt={name}
-                            width={40}
-                            height={40}
-                            borderRadius={5}
-                          />
-                          <div className="flex flex-col ml-1 ">
-                            <span className="font-bold text-lg">
-                              {displayName}
-                            </span>
-                            <span>Level {countLv}</span>
+                        }
+                        tooltip={
+                          <div className="flex items-center p-2">
+                            <MyImage
+                              src={getImgStratsDota(`/abilities/${name}.png`)}
+                              alt={name}
+                              width={40}
+                              height={40}
+                              borderRadius={5}
+                            />
+                            <div className="flex flex-col ml-1 ">
+                              <span className="font-bold text-lg">
+                                {displayName}
+                              </span>
+                              <span>Level {countLv}</span>
+                            </div>
                           </div>
-                        </div>
-                      }
-                      id={mathchId + abilityId}
-                    />
+                        }
+                        id={mathchId + abilityId}
+                      />
+                    </div>
                   );
                 })}
-                <div className="">
+                <div className="ml-1">
                   <MyImage
                     src={upgrageImg}
-                    width={24}
-                    height={40}
-                    // borderRadius={5}
+                    width={20}
+                    height={36}
                     alt={"upgrade"}
                   />
                 </div>
               </div>
-              <div className="w-[1px] h-[30px] bg-black mx-5"></div>
+              <div className="w-[1px] h-[30px] bg-borderSecondary-dark mx-5"></div>
               <div className="flex ">
                 {itemsResult.map((item, idx) => {
                   if (!item) {
                     return (
                       <div
                         key={idx}
-                        className="mx-1 w-[40px] h-[30px] rounded-[5px] bg-neutral-dark"
+                        className="mx-1 w-[40px] h-[30px] rounded-[5px] bg-layer-dark opacity-50"
                       ></div>
                     );
                   }
@@ -215,74 +221,76 @@ const FeaturedGuides = ({
                     "/items/" + vl?.shortName + ".png"
                   );
                   return (
-                    <ToolTip
-                      key={idx}
-                      target={
-                        <div
-                          key={itemId}
-                          className="mx-1 flex flex-col items-center"
-                        >
-                          <MyImage
-                            src={img}
-                            width={40}
-                            height={30}
-                            borderRadius={5}
-                            alt={vl?.displayName || " "}
-                          />
-                          <span className="text-xs">{newTime}</span>
-                        </div>
-                      }
-                      tooltip={
-                        <div className="flex items-center px-2 py-1 rounded-sm">
-                          <MyImage
-                            src={img}
-                            width={50}
-                            height={40}
-                            borderRadius={5}
-                            alt={vl?.displayName || " "}
-                          />
-                          <span className="font-bold ml-1">
-                            {vl?.displayName}
-                          </span>
-                        </div>
-                      }
-                      id={mathchId + idx}
-                    />
+                    <div key={idx} className="mx-1">
+                      <ToolTip
+                        target={
+                          <div className="flex flex-col items-center">
+                            <div className="">
+                              <MyImage
+                                src={img}
+                                width={40}
+                                height={30}
+                                borderRadius={5}
+                                alt={vl?.displayName || " "}
+                              />
+                            </div>
+                            <span className="text-xs">{newTime}</span>
+                          </div>
+                        }
+                        tooltip={
+                          <div className="flex items-center px-2 py-1 rounded-sm">
+                            <MyImage
+                              src={img}
+                              width={50}
+                              height={40}
+                              borderRadius={5}
+                              alt={vl?.displayName || " "}
+                            />
+                            <span className="font-bold ml-1">
+                              {vl?.displayName}
+                            </span>
+                          </div>
+                        }
+                        id={mathchId + idx}
+                      />
+                    </div>
                   );
                 })}
-                <ToolTip
-                  key={mathchId + neutral0Id}
-                  target={
-                    <div className="mx-1">
-                      <MyImage
-                        src={getImgStratsDota(
-                          "/items/" + itemNeutral?.shortName + ".png"
-                        )}
-                        width={30}
-                        height={30}
-                        borderRadius={999}
-                        alt={itemNeutral?.displayName || " "}
-                      />
-                    </div>
-                  }
-                  tooltip={
-                    <div className="flex items-center px-2 py-1 rounded-sm">
-                      <MyImage
-                        src={getImgStratsDota(
-                          "/items/" + itemNeutral?.shortName + ".png"
-                        )}
-                        width={50}
-                        height={40}
-                        borderRadius={5}
-                        alt={itemNeutral?.displayName || " "}
-                      />
-                      <span className="font-bold ml-1">
-                        {itemNeutral?.displayName}
-                      </span>
-                    </div>
-                  }
-                  id={mathchId + neutral0Id}
-                />
+                <div>
+                  <ToolTip
+                    key={mathchId + neutral0Id}
+                    target={
+                      <div className="mx-1">
+                        <MyImage
+                          src={getImgStratsDota(
+                            "/items/" + itemNeutral?.shortName + ".png"
+                          )}
+                          width={30}
+                          height={30}
+                          borderRadius={999}
+                          alt={itemNeutral?.displayName || " "}
+                        />
+                      </div>
+                    }
+                    tooltip={
+                      <div className="flex items-center px-2 py-1 rounded-sm">
+                        <MyImage
+                          src={getImgStratsDota(
+                            "/items/" + itemNeutral?.shortName + ".png"
+                          )}
+                          width={50}
+                          height={40}
+                          borderRadius={5}
+                          alt={itemNeutral?.displayName || " "}
+                        />
+                        <span className="font-bold ml-1">
+                          {itemNeutral?.displayName}
+                        </span>
+                      </div>
+                    }
+                    id={mathchId + neutral0Id}
+                  />
+                </div>
               </div>
             </div>
           );

@@ -239,6 +239,25 @@ class StratsApiService {
   }
 
   getDetailHero(variables: object) {
+    const HeroOverviewPlayersLeaderboardQueryFragment = `fragment HeroOverviewPlayersLeaderboardQueryFragment on LeaderboardQuery {
+      hero(request: {heroIds: [$heroId], bracketIds: $topPlayersBracketIds, take: 5}) {
+        position
+        impAverage
+        steamAccount {
+          ...PlayerColSteamAccountTypeFragment
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+
+    const PlayerColSteamAccountTypeFragment = `fragment PlayerColSteamAccountTypeFragment on SteamAccountType {
+      avatar
+      ...PlayerNameColSteamAccountTypeFragment
+      __typename
+    }`;
+
     const HeroOverviewMatchupsHeroStatsQueryFragment = `fragment HeroOverviewMatchupsHeroStatsQueryFragment on HeroStatsQuery {
       heroVsHeroMatchup(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {
         advantage {
@@ -545,6 +564,8 @@ class StratsApiService {
     `;
     return this.axios.post("", {
       query: `
+      ${HeroOverviewPlayersLeaderboardQueryFragment}
+      ${PlayerColSteamAccountTypeFragment}
       ${HeroOverviewMatchupsHeroStatsQueryFragment}
       ${HeroOverviewMatchupsHeroDryadTypeFragment}
       ${HeroOverviewMatchupsHeroStatsHeroDryadTypeFragment}
@@ -562,7 +583,7 @@ class StratsApiService {
       ${HeroOverviewPositionsHeroLaneOutcomeTypeFragment}
       ${HeroOverviewPositionsHeroLaneOutcomeHeroObjectTypeFragment}
       ${HeroOverviewRampages}
-        query GetHeroOverview($heroId: Short!, $bracketIds: [RankBracket], $bracketBasicIds: [RankBracketBasicEnum]) {
+        query GetHeroOverview($heroId: Short!, $bracketIds: [RankBracket], $bracketBasicIds: [RankBracketBasicEnum],$topPlayersBracketIds: [RankBracket]) {
         heroStats {
           ...HeroOverviewGuidesHeroStatsQueryFragment
           ...HeroOverviewItemsHeroStatsQueryFragment
@@ -570,6 +591,10 @@ class StratsApiService {
           ...HeroOverviewGraphsHeroStatsQueryFragment
           ...HeroOverviewPositionsHeroStatsQueryFragment
           ...HeroOverviewRampagesHeroStatsQueryFragment
+          __typename
+        }
+        leaderboard {
+          ...HeroOverviewPlayersLeaderboardQueryFragment
           __typename
         }
       }`,
@@ -802,6 +827,133 @@ class StratsApiService {
         }
       }
       `,
+    });
+  }
+
+  // Matches/graphs
+  getMatchesGraphsGameMode() {
+    return this.axios.post("", {
+      query: `
+      query ($take: Int!) {
+        heroStats {
+          ALL_PICK: winMonth(take: $take, gameModeIds: [ALL_PICK], groupBy: ALL) {
+            month
+            matchCount
+            __typename
+          }
+          CAPTAINS_MODE: winMonth(take: $take, gameModeIds: [CAPTAINS_MODE], groupBy: ALL) {
+            month
+            matchCount
+            __typename
+          }
+          ALL_PICK_RANKED: winMonth(take: $take, gameModeIds: [ALL_PICK_RANKED], groupBy: ALL) {
+            month
+            matchCount
+            __typename
+          }
+          TURBO: winMonth(take: $take, gameModeIds: [TURBO], groupBy: ALL) {
+            month
+            matchCount
+            __typename
+          }
+          
+        }
+      }
+      `,
+      variables: {
+        take: 120,
+      },
+    });
+  }
+  getMatchesGraphsRegion() {
+    return this.axios.post("", {
+      query: `
+      query ($take: Int!) {
+        heroStats {
+          CHINA: winMonth(take: $take, regionIds: [CHINA], groupBy: ALL) {
+            month
+            matchCount
+            __typename
+          }
+          SEA: winMonth(take: $take, regionIds: [SEA], groupBy: ALL) {
+            month
+            matchCount
+            __typename
+          }
+          NORTH_AMERICA: winMonth(take: $take, regionIds: [NORTH_AMERICA], groupBy: ALL) {
+            month
+            matchCount
+            __typename
+          }
+          SOUTH_AMERICA: winMonth(take: $take, regionIds: [SOUTH_AMERICA], groupBy: ALL) {
+            month
+            matchCount
+            __typename
+          }
+          EUROPE: winMonth(take: $take, regionIds: [EUROPE], groupBy: ALL) {
+            month
+            matchCount
+            __typename
+          }
+        }
+      }
+      `,
+      variables: {
+        take: 120,
+      },
+    });
+  }
+  getMatchesGraphsRank() {
+    return this.axios.post("", {
+      query: `
+      query ($take: Int!) {
+        heroStats {
+          HERALD: winMonth(take: $take, bracketIds: [HERALD], groupBy: ALL) {
+            month
+            matchCount
+            __typename
+          }
+          GUARDIAN: winMonth(take: $take, bracketIds: [GUARDIAN], groupBy: ALL) {
+            month
+            matchCount
+            __typename
+          }
+          CRUSADER: winMonth(take: $take, bracketIds: [CRUSADER], groupBy: ALL) {
+            month
+            matchCount
+            __typename
+          }
+          ARCHON: winMonth(take: $take, bracketIds: [ARCHON], groupBy: ALL) {
+            month
+            matchCount
+            __typename
+          }
+          LEGEND: winMonth(take: $take, bracketIds: [LEGEND], groupBy: ALL) {
+            month
+            matchCount
+            __typename
+          }
+          ANCIENT: winMonth(take: $take, bracketIds: [ANCIENT], groupBy: ALL) {
+            month
+            matchCount
+            __typename
+          }
+          DIVINE: winMonth(take: $take, bracketIds: [DIVINE], groupBy: ALL) {
+            month
+            matchCount
+            __typename
+          }
+          IMMORTAL: winMonth(take: $take, bracketIds: [IMMORTAL], groupBy: ALL) {
+            month
+            matchCount
+            __typename
+          }
+        }
+      }
+      `,
+      variables: {
+        take: 120,
+      },
     });
   }
 }

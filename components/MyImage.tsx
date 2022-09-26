@@ -27,7 +27,6 @@ function MyImage({
         width={width}
         height={height}
         objectFit="cover"
-        // layout="fill"
         style={{
           borderRadius: `${borderRadius}px`,
         }}
