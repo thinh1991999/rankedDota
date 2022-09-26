@@ -26,19 +26,24 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const loading = useAppSelector((state) => state.globalData.loading);
 
   const [pageLoaded, setPageLoaded] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchDefaultData());
+    // dispatch(fetchDefaultData());
+    setMounted(true);
   }, [dispatch]);
 
   const getLayout = Component.getLayout ?? ((page) => page);
-  if (loading)
-    return (
-      <section className="w-screen h-screen bg-background-dark flex justify-center items-center">
-        <ClockLoader color="#fff" size={40} />
-        <span className="ml-1 text-xl font-bold text-white">RankedDota</span>
-      </section>
-    );
+  // if (loading)
+  //   return (
+  //     <section className="w-screen h-screen bg-background-dark flex justify-center items-center">
+  //       <ClockLoader color="#fff" size={40} />
+  //       <span className="ml-1 text-xl font-bold text-white">RankedDota</span>
+  //     </section>
+  //   );
+  if (!mounted) {
+    return <></>;
+  }
   return (
     <ThemeProvider attribute="class">
       {getLayout(<Component {...pageProps} />)}

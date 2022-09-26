@@ -39,7 +39,7 @@ module.exports = {
           light: "#F5F5F5",
         },
         layer: {
-          dark: "rgba(255, 255, 255, 0.1)",
+          dark: "rgba(255, 255, 255, 0.08)",
           light: "rgba(255, 255, 255, 0.04)",
         },
         layerStrong: {
@@ -81,9 +81,6 @@ module.exports = {
       },
     },
   },
-  safelist: [
-    { pattern: /(bg|text|boxShadow)-./ },
-    { pattern: /(from|to)-[.]/ },
-  ],
+  safelist: [{ pattern: /(bg|text|boxShadow)-./ }],
   plugins: [],
 };

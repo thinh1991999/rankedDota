@@ -238,3 +238,12 @@ export interface MatchupDetail {
   winCount: number;
   __typename: string;
 }
+
+// Leaderboards
+
+export interface LeaderBoard {
+  position: string;
+  impAverage: number;
+  steamAccount: SteamAccount;
+  __typename: string;
+}

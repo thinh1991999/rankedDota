@@ -37,7 +37,6 @@ const RolesStatus = ({
   };
   positions: Position[];
 }) => {
-  const heroes = useAppSelector((state) => state.globalData.heroes);
   const [roles, setRoles] = useState<Roles[]>([]);
 
   useEffect(() => {
@@ -135,7 +134,7 @@ const RolesStatus = ({
   }, [data, positions]);
   return (
     <section>
-      <div className="flex -ml-2 -mr-2">
+      <div className="flex flex-wrap -ml-2 -mr-2">
         {roles.map((role, idx) => {
           const {
             type,
@@ -151,9 +150,12 @@ const RolesStatus = ({
           } = role;
           const { name, icon } = getTypeOfHero(type);
           return (
-            <div className="p-2 w-1/5" key={type}>
+            <div className="p-2 xl:px-2 xl:m-0 xl:w-1/5 w-full" key={type}>
               <div className="p-2 bg-layer-dark rounded-md">
-                <h6 className="font-bold">{name}</h6>
+                <div className="flex items-center">
+                  <MyImage src={icon} width={20} height={20} alt={name} />
+                  <h6 className="font-bold ml-2">{name}</h6>
+                </div>
                 <div className="flex flex-col">
                   <div className="flex items-center my-1">
                     <span className="w-[45px] text-sm">{pr}%</span>

@@ -45,36 +45,62 @@ export const getTimeBySeconds = (time: number): string => {
 };
 
 export const getTypeOfHero = (
-  key: string
+  key: string,
+  lane?: string
 ): {
   name: string;
   icon: string;
 } => {
   switch (key) {
+    case "CORE": {
+      if (lane === "OFF_LANE") {
+        return {
+          name: "Off lane",
+          icon: "/HeroType/offlane.svg",
+        };
+      } else if (lane === "MID_LANE") {
+        return {
+          name: "Mid lane",
+          icon: "/HeroType/mid.svg",
+        };
+      } else {
+        return {
+          name: "Safe lane",
+          icon: "/HeroType/carry.svg",
+        };
+      }
+    }
     case "pos1":
+    case "POSITION_1":
       return {
         name: "Safe lane",
-        icon: "",
+        icon: "/HeroType/carry.svg",
       };
     case "pos2":
+    case "POSITION_2":
       return {
         name: "Mid lane",
-        icon: "",
+        icon: "/HeroType/mid.svg",
       };
     case "pos3":
+    case "POSITION_3":
       return {
         name: "Off lane",
-        icon: "",
+        icon: "/HeroType/offlane.svg",
       };
     case "pos4":
+    case "POSITION_4":
+    case "LIGHT_SUPPORT":
       return {
         name: "Soft support",
-        icon: "",
+        icon: "/HeroType/sp1.svg",
       };
     case "pos5":
+    case "POSITION_5":
+    case "HARD_SUPPORT":
       return {
         name: "Hard support",
-        icon: "",
+        icon: "/HeroType/sp2.svg",
       };
     default:
       return {
