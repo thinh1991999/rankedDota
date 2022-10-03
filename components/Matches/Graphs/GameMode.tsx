@@ -17,7 +17,7 @@ import {
   ChartData,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
-import { Match } from "../../../interfaces/matches";
+import { MatchGraph } from "../../../interfaces/matches";
 import { nFormatter } from "../../../share";
 
 ChartJS.register(
@@ -138,10 +138,10 @@ const GameMode = ({
   gameMode,
 }: {
   gameMode: {
-    ALL_PICK: Match[];
-    CAPTAINS_MODE: Match[];
-    ALL_PICK_RANKED: Match[];
-    TURBO: Match[];
+    ALL_PICK: MatchGraph[];
+    CAPTAINS_MODE: MatchGraph[];
+    ALL_PICK_RANKED: MatchGraph[];
+    TURBO: MatchGraph[];
   };
 }) => {
   const [data, setData] = useState<ChartData | null>(null);
@@ -312,7 +312,7 @@ const GameMode = ({
     _.forEach(newMonths, (month) => {
       // labels.push(moment.unix(month).format("MMMM D, YYYY h:mm A"));
       labels.push(month);
-      const getCheckMatch = (arrMatch: Match[]) => {
+      const getCheckMatch = (arrMatch: MatchGraph[]) => {
         return _.filter(arrMatch, (match) => match.month === month)[0];
       };
       dataAllPick.push(Math.round(getCheckMatch(ALL_PICK).matchCount / 10));

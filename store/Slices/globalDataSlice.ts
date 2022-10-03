@@ -6,11 +6,12 @@ import stratsApiService from "../../services/stratsApi.service";
 import { RootState } from "../store";
 import { Item } from "../../interfaces/item";
 import { GameVersion } from "../../interfaces/gameVersion";
+import { heroes } from "../../share/data";
 
 const initialState: GlobalData = {
   abilitiesData: [],
   items: [],
-  heroes: [],
+  heroes: heroes,
   gameVersions: [],
   loading: true,
 };

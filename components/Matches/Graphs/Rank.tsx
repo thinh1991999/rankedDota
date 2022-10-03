@@ -17,7 +17,7 @@ import {
   ChartData,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
-import { Match } from "../../../interfaces/matches";
+import { MatchGraph } from "../../../interfaces/matches";
 import { nFormatter } from "../../../share";
 
 ChartJS.register(
@@ -139,14 +139,14 @@ const Rank = ({
   rank,
 }: {
   rank: {
-    HERALD: Match[];
-    GUARDIAN: Match[];
-    CRUSADER: Match[];
-    ARCHON: Match[];
-    LEGEND: Match[];
-    ANCIENT: Match[];
-    DIVINE: Match[];
-    IMMORTAL: Match[];
+    HERALD: MatchGraph[];
+    GUARDIAN: MatchGraph[];
+    CRUSADER: MatchGraph[];
+    ARCHON: MatchGraph[];
+    LEGEND: MatchGraph[];
+    ANCIENT: MatchGraph[];
+    DIVINE: MatchGraph[];
+    IMMORTAL: MatchGraph[];
   };
 }) => {
   const [data, setData] = useState<ChartData | null>(null);
@@ -329,7 +329,7 @@ const Rank = ({
     const newMonths = _.orderBy(months, (month) => month, "asc");
     _.forEach(newMonths, (month) => {
       labels.push(month);
-      const getCheckMatch = (arrMatch: Match[]) => {
+      const getCheckMatch = (arrMatch: MatchGraph[]) => {
         return _.filter(arrMatch, (match) => match.month === month)[0];
       };
       dataHerald.push(Math.round(getCheckMatch(HERALD).matchCount / 10));

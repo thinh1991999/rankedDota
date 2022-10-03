@@ -9,5 +9,6 @@ export {
   getTimeBySeconds,
   getTypeOfHero,
   nFormatter,
+  normalizeCoords,
 } from "./ultils";
 export { RADIANT_ICON, DIRE_ICON } from "./constant";

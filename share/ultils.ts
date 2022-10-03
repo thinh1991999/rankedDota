@@ -131,3 +131,19 @@ export const nFormatter = (num: number, digits: number) => {
     ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol
     : "0";
 };
+
+export const normalizeCoords = (
+  x: number,
+  y: number
+): {
+  x: number;
+  y: number;
+} => {
+  const MAX_COORD = 255;
+  const HALF_COORD = MAX_COORD / 2;
+  const QUARTER_COORD = MAX_COORD / 4;
+  return {
+    x: ((x - QUARTER_COORD) * MAX_COORD) / HALF_COORD,
+    y: ((HALF_COORD - (y - QUARTER_COORD)) * MAX_COORD) / HALF_COORD,
+  };
+};

@@ -1,9 +1,10 @@
-import { AbilityDetail, Hero } from "./heroes";
+import { AbilityDetail, Hero, HeroesStatus } from "./heroes";
 import { Item } from "./item";
 import { GameVersion } from "./gameVersion";
 
 export interface Root {
   globalData: GlobalData;
+  compos: ComposData;
 }
 
 export interface GlobalData {
@@ -12,4 +13,10 @@ export interface GlobalData {
   heroes: Hero[];
   gameVersions: GameVersion[];
   loading: boolean;
+}
+
+export interface ComposData {
+  heroesStatus: HeroesStatus | null;
+  radiants: Hero[];
+  dires: Hero[];
 }

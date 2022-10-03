@@ -7,25 +7,31 @@ const myLoader = ({ src }: { src: string }) => {
 
 function MyImage({
   src,
-  height = 500,
-  width = 200,
+  height = "500px",
+  width = "200px",
   alt,
   borderRadius = 0,
 }: {
   src: string;
-  width?: number | string;
-  height?: number | string;
+  width?: string;
+  height?: string;
   alt: string;
   borderRadius?: number;
 }) {
   return (
-    <div className="text-[0px]">
+    <div
+      style={{
+        width: `${width}`,
+        height: `${height}`,
+        borderRadius: `${borderRadius}px`,
+      }}
+      className="text-[0px] relative flex items-center justify-center"
+    >
       <Image
         loader={myLoader}
+        layout="fill"
         src={src}
         alt={alt}
-        width={width}
-        height={height}
         objectFit="cover"
         style={{
           borderRadius: `${borderRadius}px`,

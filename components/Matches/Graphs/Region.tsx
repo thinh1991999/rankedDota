@@ -17,7 +17,7 @@ import {
   ChartData,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
-import { Match } from "../../../interfaces/matches";
+import { MatchGraph } from "../../../interfaces/matches";
 import { nFormatter } from "../../../share";
 
 ChartJS.register(
@@ -139,11 +139,11 @@ const Region = ({
   region,
 }: {
   region: {
-    CHINA: Match[];
-    SEA: Match[];
-    NORTH_AMERICA: Match[];
-    SOUTH_AMERICA: Match[];
-    EUROPE: Match[];
+    CHINA: MatchGraph[];
+    SEA: MatchGraph[];
+    NORTH_AMERICA: MatchGraph[];
+    SOUTH_AMERICA: MatchGraph[];
+    EUROPE: MatchGraph[];
   };
 }) => {
   const [data, setData] = useState<ChartData | null>(null);
@@ -315,7 +315,7 @@ const Region = ({
     _.forEach(newMonths, (month) => {
       // labels.push(moment.unix(month).format("MMMM D, YYYY h:mm A"));
       labels.push(month);
-      const getCheckMatch = (arrMatch: Match[]) => {
+      const getCheckMatch = (arrMatch: MatchGraph[]) => {
         return _.filter(arrMatch, (match) => match.month === month)[0];
       };
       dataChina.push(Math.round(getCheckMatch(CHINA).matchCount / 10));
