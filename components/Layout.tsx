@@ -4,6 +4,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 import { useAppDispatch } from "../store/hook";
 import { handleOffBgHeader, handleOnBgHeader } from "../store/Slices/rootSlice";
+import Head from "next/head";
 
 function Layout({ children }: { children: React.ReactNode }) {
   const dispatch = useAppDispatch();
@@ -21,14 +22,22 @@ function Layout({ children }: { children: React.ReactNode }) {
   // };
   // ${theme.background}
   return (
-    <section
-      className={`bg-background-light dark:bg-background-dark  overflow-y-scroll h-screen w-screen`}
-      // onScroll={handleScroll}
-    >
-      <Header />
-      <main className="min-h-[800px]">{children}</main>
-      <Footer />
-    </section>
+    <>
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"
+        />
+      </Head>
+      <section
+        className={`bg-background-light dark:bg-background-dark  overflow-y-scroll h-screen w-screen text-textPrimary-light dark:text-textPrimary-dark`}
+        // onScroll={handleScroll}
+      >
+        <Header />
+        <main className="min-h-[800px]">{children}</main>
+        <Footer />
+      </section>
+    </>
   );
 }
 

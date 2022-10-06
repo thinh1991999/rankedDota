@@ -56,6 +56,20 @@ h5 {
   overflow: hidden;
 }
 
+.filter-green {
+  filter: drop-shadow(rgb(58, 182, 107) 1px 0px 1px)
+    drop-shadow(rgb(58, 182, 107) -1px 0px 1px)
+    drop-shadow(rgb(58, 182, 107) 0px 1px 1px)
+    drop-shadow(rgb(58, 182, 107) 0px -1px 1px);
+}
+
+.filter-red {
+  filter: drop-shadow(rgb(214, 91, 46) 1px 0px 1px)
+    drop-shadow(rgb(214, 91, 46) -1px 0px 1px)
+    drop-shadow(rgb(214, 91, 46) 0px 1px 1px)
+    drop-shadow(rgb(214, 91, 46) 0px -1px 1px);
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

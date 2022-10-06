@@ -11,13 +11,15 @@ import languageSlice from "./Slices/languageSlice";
 import rootSlice from "./Slices/rootSlice";
 import globalDataSlice from "./Slices/globalDataSlice";
 import { GlobalData, Root } from "../interfaces/state";
+import composSlice from "./Slices/composSlice";
+import matchDetailSlice from "./Slices/matchDetailSlice";
 
 export const makeStore = () => {
   const isServer = typeof window === "undefined";
   const combinedReducer = combineReducers({
-    // root: rootSlice,
     globalData: globalDataSlice,
-    // language: languageSlice,
+    compos: composSlice,
+    matchDetail: matchDetailSlice,
   });
   if (isServer) {
     return configureStore({
@@ -37,16 +39,16 @@ export const makeStore = () => {
       combinedReducer
     );
 
-    // const store: EnhancedStore<Root, Action> & {
-    //   __persistor?: any;
-    // } = configureStore({
-    //   reducer: persistedReducer,
-    //   devTools: true,
-    // });
-    const store = configureStore({
+    const store: EnhancedStore<Root, Action> & {
+      __persistor?: any;
+    } = configureStore({
       reducer: persistedReducer,
       devTools: true,
     });
+    // const store = configureStore({
+    //   reducer: persistedReducer,
+    //   devTools: true,
+    // });
 
     // store.__persistor = persistStore(store);
 

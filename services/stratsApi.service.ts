@@ -956,6 +956,1164 @@ class StratsApiService {
       },
     });
   }
+  getMatchesLive() {
+    const LiveMatchMatchLiveTypeFragment = `fragment LiveMatchMatchLiveTypeFragment on MatchLiveType {
+    gameTime
+    averageRank
+    league {
+      id
+      displayName
+      __typename
+    }
+    players {
+      ...LiveMatchFactionMatchLivePlayerTypeFragment
+      __typename
+    }
+    ...GetGameStateMatchLiveTypeFragment
+    ...LiveMinimapMatchLiveTypeFragment
+    ...LiveMatchKashaMatchLiveTypeFragment
+    __typename
+  }`;
+
+    const GetGameStateMatchLiveTypeFragment = ` fragment GetGameStateMatchLiveTypeFragment on MatchLiveType {
+    playbackData {
+      buildingEvents {
+        npcId
+        isAlive
+        __typename
+      }
+      __typename
+    }
+    isParsing
+    players {
+      heroId
+      __typename
+    }
+    gameTime
+    __typename
+  }`;
+
+    const LiveMatchFactionMatchLivePlayerTypeFragment = `fragment LiveMatchFactionMatchLivePlayerTypeFragment on MatchLivePlayerType {
+    heroId
+    numKills
+    numDeaths
+    numAssists
+    steamAccount {
+      id
+      name
+      proSteamAccount {
+        name
+        team {
+          id
+          tag
+          name
+          __typename
+        }
+        __typename
+      }
+      ...SteamAccountHoverCardSteamAccountTypeFragment
+      __typename
+    }
+    __typename
+  }`;
+
+    const SteamAccountHoverCardSteamAccountTypeFragment = ` fragment SteamAccountHoverCardSteamAccountTypeFragment on SteamAccountType {
+    id
+    name
+    avatar
+    isAnonymous
+    smurfFlag
+    proSteamAccount {
+      name
+      team {
+        id
+        tag
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+  `;
+
+    const LiveMinimapMatchLiveTypeFragment = ` fragment LiveMinimapMatchLiveTypeFragment on MatchLiveType {
+    players {
+      heroId
+      isRadiant
+      playbackData {
+        positionEvents {
+          x
+          y
+          time
+          __typename
+        }
+        __typename
+      }
+      ...LiveMinimapHeroHoverCardMatchLivePlayerTypeFragment
+      __typename
+    }
+    playbackData {
+      buildingEvents {
+        npcId
+        isRadiant
+        type
+        indexId
+        isAlive
+        time
+        positionX
+        positionY
+        __typename
+      }
+      __typename
+    }
+    gameTime
+    ...LiveScoreAndTimeMatchLiveTypeFragment
+    __typename
+  }
+  `;
+    const LiveMinimapHeroHoverCardMatchLivePlayerTypeFragment = ` fragment LiveMinimapHeroHoverCardMatchLivePlayerTypeFragment on MatchLivePlayerType {
+    heroId
+    level
+    steamAccount {
+      ...SteamAccountHoverCardSteamAccountTypeFragment
+      __typename
+    }
+    __typename
+  }`;
+
+    const LiveScoreAndTimeMatchLiveTypeFragment = ` fragment LiveScoreAndTimeMatchLiveTypeFragment on MatchLiveType {
+    gameTime
+    radiantScore
+    direScore
+    radiantTeam {
+      ...LiveScoreAndTimeTeamTypeFragment
+      __typename
+    }
+    direTeam {
+      ...LiveScoreAndTimeTeamTypeFragment
+      __typename
+    }
+    playbackData {
+      radiantScore {
+        ...LiveScoreAndTimeMatchLiveTeamScoreDetailTypeFragment
+        __typename
+      }
+      direScore {
+        ...LiveScoreAndTimeMatchLiveTeamScoreDetailTypeFragment
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }`;
+    const LiveScoreAndTimeTeamTypeFragment = ` fragment LiveScoreAndTimeTeamTypeFragment on TeamType {
+      id
+      name
+      __typename
+    }`;
+
+    const LiveScoreAndTimeMatchLiveTeamScoreDetailTypeFragment = `fragment LiveScoreAndTimeMatchLiveTeamScoreDetailTypeFragment on MatchLiveTeamScoreDetailType {
+      time
+      score
+      __typename
+    }
+    `;
+    const LiveMatchKashaMatchLiveTypeFragment = ` fragment LiveMatchKashaMatchLiveTypeFragment on MatchLiveType {
+      matchId
+      serverSteamId
+      radiantScore
+      direScore
+      winRateValues
+      durationValues
+      liveWinRateValues {
+        winRate
+        __typename
+      }
+      players {
+        networth
+        __typename
+      }
+      radiantTeam {
+        ...LiveMatchKashaTeamTypeFragment
+        __typename
+      }
+      direTeam {
+        ...LiveMatchKashaTeamTypeFragment
+        __typename
+      }
+      ...GetDidRadiantWinMatchLiveTypeFragment
+      __typename
+    }`;
+
+    const LiveMatchKashaTeamTypeFragment = ` fragment LiveMatchKashaTeamTypeFragment on TeamType {
+      id
+      name
+      __typename
+    }`;
+
+    const GetDidRadiantWinMatchLiveTypeFragment = ` fragment GetDidRadiantWinMatchLiveTypeFragment on MatchLiveType {
+      playbackData {
+        buildingEvents {
+          npcId
+          isAlive
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+
+    const LivePageModifiersMatchLiveType = ` fragment LivePageModifiersMatchLiveType on MatchLiveType {
+      players {
+        steamAccount {
+          ...SteamAccountPageModifierSteamAccountTypeFragment
+          __typename
+        }
+        heroId
+        __typename
+      }
+      radiantTeam {
+        ...LivePageModifiersTeamTypeFragment
+        __typename
+      }
+      direTeam {
+        ...LivePageModifiersTeamTypeFragment
+        __typename
+      }
+      league {
+        id
+        displayName
+        __typename
+      }
+      ...GetGameStateMatchLiveTypeFragment
+      __typename
+    }`;
+
+    const LivePageModifiersTeamTypeFragment = ` fragment LivePageModifiersTeamTypeFragment on TeamType {
+      id
+      name
+      __typename
+    }`;
+
+    const SteamAccountPageModifierSteamAccountTypeFragment = ` fragment SteamAccountPageModifierSteamAccountTypeFragment on SteamAccountType {
+      id
+      name
+      avatar
+      proSteamAccount {
+        name
+        team {
+          id
+          tag
+          name
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+    return this.axios.post("", {
+      query: `
+      ${LiveMatchMatchLiveTypeFragment}
+      ${GetGameStateMatchLiveTypeFragment}
+      ${LiveMatchFactionMatchLivePlayerTypeFragment}
+      ${SteamAccountHoverCardSteamAccountTypeFragment}
+      ${LiveMinimapMatchLiveTypeFragment}
+      ${LiveMinimapHeroHoverCardMatchLivePlayerTypeFragment}
+      ${LiveScoreAndTimeMatchLiveTypeFragment}
+      ${LiveScoreAndTimeTeamTypeFragment}
+      ${LiveScoreAndTimeMatchLiveTeamScoreDetailTypeFragment}
+      ${LiveMatchKashaMatchLiveTypeFragment}
+      ${LiveMatchKashaTeamTypeFragment}
+      ${GetDidRadiantWinMatchLiveTypeFragment}
+      ${LivePageModifiersMatchLiveType}
+      ${LivePageModifiersTeamTypeFragment}
+      ${SteamAccountPageModifierSteamAccountTypeFragment}
+      query GetLiveMatches {
+        live {
+          matches(request: {take: 100, orderBy: GAME_TIME, isParsing: true}) {
+            matchId
+            spectators
+            ...LiveMatchMatchLiveTypeFragment
+            ...LivePageModifiersMatchLiveType
+            __typename
+          }
+          __typename
+        }
+      }
+      `,
+    });
+  }
+
+  getMatchDetail(variables: object) {
+    const HeroGuideMatch = ` fragment HeroGuideMatch on MatchType {
+      ...HeroGuideTimelineMatch
+      ...HeroGuidePickBan
+      __typename
+    }`;
+
+    const HeroGuideMatchPlayer = ` fragment HeroGuideMatchPlayer on MatchPlayerType {
+      ...HeroGuideTimelineMatchPlayer
+      ...HeroGuideAbilityBuildMatchPlayer
+      ...HeroGuidePostGameStatsMatchPlayer
+      ...HeroGuidePickBanPlayer
+      __typename
+    }`;
+
+    const HeroGuideMatchPlayerOther = `fragment HeroGuideMatchPlayerOther on MatchPlayerType {
+  ...HeroGuideTimelineMatchPlayerOther
+  ...HeroGuidePostGameStatsMatchPlayerOther
+  __typename
+}`;
+
+    const HeroGuideTimelineMatch = ` fragment HeroGuideTimelineMatch on MatchType {
+      durationSeconds
+      stats {
+        towerDeaths {
+          npcId
+          time
+          isRadiant
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    `;
+    const HeroGuideTimelineMatchPlayerOther = ` fragment HeroGuideTimelineMatchPlayerOther on MatchPlayerType {
+      lane
+      role
+      heroId
+      stats {
+        networthPerMinute
+        level
+        wards {
+          positionX
+          positionY
+          time
+          type
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+
+    const HeroGuideTimelineMatchPlayer = ` fragment HeroGuideTimelineMatchPlayer on MatchPlayerType {
+      lane
+      role
+      stats {
+        itemPurchases {
+          time
+          itemId
+          __typename
+        }
+        inventoryReport {
+          backPack0 {
+            ...inventoryReportItem
+            __typename
+          }
+          backPack1 {
+            ...inventoryReportItem
+            __typename
+          }
+          backPack2 {
+            ...inventoryReportItem
+            __typename
+          }
+          item0 {
+            ...inventoryReportItem
+            __typename
+          }
+          item1 {
+            ...inventoryReportItem
+            __typename
+          }
+          item2 {
+            ...inventoryReportItem
+            __typename
+          }
+          item3 {
+            ...inventoryReportItem
+            __typename
+          }
+          item4 {
+            ...inventoryReportItem
+            __typename
+          }
+          item5 {
+            ...inventoryReportItem
+            __typename
+          }
+          neutral0 {
+            ...inventoryReportItem
+            __typename
+          }
+          __typename
+        }
+        spiritBearInventoryReport {
+          backPack0Id
+          backPack1Id
+          backPack2Id
+          item0Id
+          item1Id
+          item2Id
+          item3Id
+          item4Id
+          item5Id
+          neutral0Id
+          __typename
+        }
+        killEvents {
+          time
+          __typename
+        }
+        deathEvents {
+          time
+          __typename
+        }
+        assistEvents {
+          time
+          __typename
+        }
+        goldPerMinute
+        experiencePerMinute
+        lastHitsPerMinute
+        deniesPerMinute
+        level
+        matchPlayerBuffEvent {
+          abilityId
+          itemId
+          time
+          stackCount
+          __typename
+        }
+        __typename
+      }
+      additionalUnit {
+        item0Id
+        item1Id
+        item2Id
+        item3Id
+        item4Id
+        item5Id
+        neutral0Id
+        __typename
+      }
+      __typename
+    }`;
+
+    const inventoryReportItem = ` fragment inventoryReportItem on MatchPlayerInventoryObjectType {
+      itemId
+      charges
+      __typename
+    }`;
+
+    const HeroGuideAbilityBuildMatchPlayer = ` fragment HeroGuideAbilityBuildMatchPlayer on MatchPlayerType {
+      item0Id
+      item1Id
+      item2Id
+      item3Id
+      item4Id
+      item5Id
+      stats {
+        itemPurchases {
+          itemId
+          __typename
+        }
+        abilities {
+          abilityId
+          level
+          time
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+
+    const HeroGuidePostGameStatsMatchPlayerOther = `fragment HeroGuidePostGameStatsMatchPlayerOther on MatchPlayerType {
+      isRadiant
+      kills
+      __typename
+    }`;
+
+    const HeroGuidePostGameStatsMatchPlayer = `fragment HeroGuidePostGameStatsMatchPlayer on MatchPlayerType {
+      isRadiant
+      kills
+      deaths
+      assists
+      level
+      networth
+      imp
+      goldPerMinute
+      experiencePerMinute
+      numLastHits
+      numDenies
+      heroDamage
+      towerDamage
+      heroAverage {
+        time
+        kills
+        deaths
+        assists
+        networth
+        xp
+        cs
+        dn
+        heroDamage
+        towerDamage
+        __typename
+      }
+      __typename
+    }`;
+
+    const HeroGuidePickBan = `fragment HeroGuidePickBan on MatchType {
+      stats {
+        pickBans {
+          bannedHeroId
+          isPick
+          playerIndex
+          isRadiant
+          order
+          heroId
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+
+    const HeroGuidePickBanPlayer = ` fragment HeroGuidePickBanPlayer on MatchPlayerType {
+      playerSlot
+      __typename
+    }`;
+
+    const MatchLanesMatchTypeFragment = `fragment MatchLanesMatchTypeFragment on MatchType {
+      players {
+        stats {
+          tripsFountainPerMinute
+          farmDistributionReport {
+            other {
+              id
+              count
+              __typename
+            }
+            creepType {
+              id
+              count
+              __typename
+            }
+            neutralLocation {
+              count
+              __typename
+            }
+            ancientLocation {
+              count
+              __typename
+            }
+            __typename
+          }
+          assistEvents {
+            target
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      topLaneOutcome
+      bottomLaneOutcome
+      midLaneOutcome
+      stats {
+        towerStatus {
+          towers {
+            npcId
+            hp
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+
+    const MatchBuilds = `fragment MatchBuilds on MatchType {
+      didRadiantWin
+      statsDateTime
+      stats {
+        radiantKills
+        direKills
+        __typename
+      }
+      players {
+        role
+        lane
+        heroId
+        level
+        neutral0Id
+        steamAccount {
+          id
+          name
+          isAnonymous
+          smurfFlag
+          proSteamAccount {
+            name
+            __typename
+          }
+          __typename
+        }
+        stats {
+          abilities {
+            abilityId
+            time
+            level
+            __typename
+          }
+          itemPurchases {
+            time
+            itemId
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+
+    const MatchGraphs = `fragment MatchGraphs on MatchType {
+      durationSeconds
+      stats {
+        winRates
+        radiantNetworthLeads
+        __typename
+      }
+      players {
+        stats {
+          level
+          lastHitsPerMinute
+          networthPerMinute
+          actionsPerMinute
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+
+    const MatchLog = `fragment MatchLog on MatchType {
+      id
+      endDateTime
+      statsDateTime
+      stats {
+        towerDeaths {
+          attacker
+          npcId
+          time
+          isRadiant
+          __typename
+        }
+        chatEvents {
+          isRadiant
+          time
+          value
+          fromHeroId
+          type
+          __typename
+        }
+        __typename
+      }
+      players {
+        isRadiant
+        heroId
+        lane
+        role
+        steamAccount {
+          id
+          isAnonymous
+          name
+          smurfFlag
+          proSteamAccount {
+            name
+            __typename
+          }
+          __typename
+        }
+        stats {
+          runes {
+            time
+            rune
+            action
+            __typename
+          }
+          allTalks {
+            time
+            message
+            pausedTick
+            __typename
+          }
+          chatWheels {
+            time
+            chatWheelId
+            __typename
+          }
+          killEvents {
+            time
+            target
+            __typename
+          }
+          deathEvents {
+            time
+            attacker
+            target
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+
+    const MatchPerformance = ` fragment MatchPerformance on MatchType {
+      ...MatchPerformanceDistribution
+      ...MatchPerformanceSimulation
+      __typename
+    }`;
+
+    const MatchPerformanceDistribution = `fragment MatchPerformanceDistribution on MatchType {
+      players {
+        award
+        heroId
+        imp
+        stats {
+          impPerMinute2
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+
+    const MatchPerformanceSimulation = ` fragment MatchPerformanceSimulation on MatchType {
+      ...MatchPerformanceSimulationHeroSection
+      ...MatchPerformanceSimulationStatDataRowList
+      __typename
+    }`;
+
+    const MatchPerformanceSimulationHeroSection = ` fragment MatchPerformanceSimulationHeroSection on MatchType {
+      rank
+      players {
+        heroId
+        lane
+        role
+        steamAccount {
+          id
+          name
+          isAnonymous
+          smurfFlag
+          seasonRank
+          proSteamAccount {
+            name
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+
+    const MatchPerformanceSimulationStatDataRowList = ` fragment MatchPerformanceSimulationStatDataRowList on MatchType {
+      players {
+        heroId
+        __typename
+      }
+      __typename
+    }
+    `;
+
+    const MatchScoreboard = `fragment MatchScoreboard on MatchType {
+      didRadiantWin
+      stats {
+        pickBans {
+          heroId
+          order
+          isPick
+          letter
+          __typename
+        }
+        __typename
+      }
+      players {
+        role
+        stats {
+          campStack
+          heroDamageReceivedPerMinute
+          runes {
+            time
+            rune
+            action
+            __typename
+          }
+          killEvents {
+            time
+            target
+            __typename
+          }
+          assistEvents {
+            time
+            __typename
+          }
+          deathEvents {
+            time
+            timeDead
+            goldLost
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+
+    const MatchHeaderMatchTypeFragment = `fragment MatchHeaderMatchTypeFragment on MatchType {
+      id
+      players {
+        heroId
+        role
+        lane
+        __typename
+      }
+      didRadiantWin
+      radiantTeam {
+        ...MatchHeaderTeamTypeFragment
+        __typename
+      }
+      direTeam {
+        ...MatchHeaderTeamTypeFragment
+        __typename
+      }
+      statsDateTime
+      series {
+        matches {
+          id
+          __typename
+        }
+        __typename
+      }
+      analysisOutcome
+      durationSeconds
+      stats {
+        radiantKills
+        direKills
+        __typename
+      }
+      ...MatchHeaderSummaryRowMatchTypeFragment
+      __typename
+    }`;
+
+    const MatchHeaderTeamTypeFragment = `fragment MatchHeaderTeamTypeFragment on TeamType {
+      id
+      name
+      __typename
+    }`;
+
+    const MatchHeaderSummaryRowMatchTypeFragment = `fragment MatchHeaderSummaryRowMatchTypeFragment on MatchType {
+      id
+      lobbyType
+      gameMode
+      regionId
+      durationSeconds
+      endDateTime
+      rank
+      league {
+        id
+        displayName
+        __typename
+      }
+      __typename
+    }`;
+
+    const MatchLeagueSeriesSectionMatchTypeFragmen = `fragment MatchLeagueSeriesSectionMatchTypeFragment on MatchType {
+      id
+      league {
+        id
+        displayName
+        __typename
+      }
+      series {
+        type
+        matches {
+          id
+          radiantTeamId
+          direTeamId
+          didRadiantWin
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }`;
+
+    const MatchOverviewMatchTypeFragment = `fragment MatchOverviewMatchTypeFragment on MatchType {
+      bottomLaneOutcome
+      durationSeconds
+      endDateTime
+      midLaneOutcome
+      statsDateTime
+      topLaneOutcome
+      gameMode
+      players {
+        assists
+        award
+        deaths
+        experiencePerMinute
+        goldPerMinute
+        heroDamage
+        heroHealing
+        heroId
+        imp
+        isRadiant
+        kills
+        lane
+        level
+        networth
+        numDenies
+        numLastHits
+        partyId
+        position
+        towerDamage
+        item0Id
+        item1Id
+        item2Id
+        item3Id
+        item4Id
+        item5Id
+        backpack0Id
+        backpack1Id
+        backpack2Id
+        neutral0Id
+        stats {
+          deniesPerMinute
+          experiencePerMinute
+          goldPerMinute
+          healPerMinute
+          heroDamagePerMinute
+          impPerMinute2
+          lastHitsPerMinute
+          level
+          networthPerMinute
+          towerDamagePerMinute
+          killEvents {
+            time
+            target
+            gold
+            xp
+            __typename
+          }
+          deathEvents {
+            time
+            attacker
+            __typename
+          }
+          assistEvents {
+            time
+            __typename
+          }
+          itemPurchases {
+            itemId
+            time
+            __typename
+          }
+          inventoryReport {
+            backPack0 {
+              ...inventoryReportItem
+              __typename
+            }
+            backPack1 {
+              ...inventoryReportItem
+              __typename
+            }
+            backPack2 {
+              ...inventoryReportItem
+              __typename
+            }
+            item0 {
+              ...inventoryReportItem
+              __typename
+            }
+            item1 {
+              ...inventoryReportItem
+              __typename
+            }
+            item2 {
+              ...inventoryReportItem
+              __typename
+            }
+            item3 {
+              ...inventoryReportItem
+              __typename
+            }
+            item4 {
+              ...inventoryReportItem
+              __typename
+            }
+            item5 {
+              ...inventoryReportItem
+              __typename
+            }
+            neutral0 {
+              ...inventoryReportItem
+              __typename
+            }
+            __typename
+          }
+          matchPlayerBuffEvent {
+            time
+            abilityId
+            itemId
+            stackCount
+            __typename
+          }
+          spiritBearInventoryReport {
+            item0Id
+            item1Id
+            item2Id
+            item3Id
+            item4Id
+            item5Id
+            neutral0Id
+            __typename
+          }
+          abilities {
+            abilityId
+            time
+            __typename
+          }
+          __typename
+        }
+        additionalUnit {
+          item0Id
+          item1Id
+          item2Id
+          item3Id
+          item4Id
+          item5Id
+          neutral0Id
+          __typename
+        }
+        steamAccount {
+          id
+          name
+          isAnonymous
+          smurfFlag
+          proSteamAccount {
+            name
+            __typename
+          }
+          seasonRank
+          seasonLeaderboardRank
+          __typename
+        }
+        dotaPlus {
+          level
+          __typename
+        }
+        __typename
+      }
+      stats {
+        towerDeaths {
+          time
+          npcId
+          attacker
+          __typename
+        }
+        radiantNetworthLeads
+        radiantExperienceLeads
+        pickBans {
+          heroId
+          bannedHeroId
+          wasBannedSuccessfully
+          isRadiant
+          order
+          __typename
+        }
+        __typename
+      }
+      radiantTeam {
+        ...team
+        __typename
+      }
+      direTeam {
+        ...team
+        __typename
+      }
+      __typename
+    }`;
+
+    const team = ` fragment team on TeamType {
+      id
+      name
+      __typename
+    }`;
+    return this.axios.post("", {
+      query: `
+      ${HeroGuideMatch}
+      ${HeroGuideMatchPlayer}
+      ${HeroGuideMatchPlayerOther}
+      ${HeroGuideTimelineMatch}
+      ${HeroGuideTimelineMatchPlayerOther}
+      ${HeroGuideTimelineMatchPlayer}
+      ${inventoryReportItem}
+      ${HeroGuideAbilityBuildMatchPlayer}
+      ${HeroGuidePostGameStatsMatchPlayerOther}
+      ${HeroGuidePostGameStatsMatchPlayer}
+      ${HeroGuidePickBan}
+      ${HeroGuidePickBanPlayer}
+      ${MatchLanesMatchTypeFragment}
+      ${MatchBuilds}
+      ${MatchGraphs}
+      ${MatchLog}
+      ${MatchPerformance}
+      ${MatchPerformanceDistribution}
+      ${MatchPerformanceSimulation}
+      ${MatchPerformanceSimulationHeroSection}
+      ${MatchPerformanceSimulationStatDataRowList}
+      ${MatchScoreboard}
+      ${MatchHeaderMatchTypeFragment}
+      ${MatchHeaderTeamTypeFragment}
+      ${MatchHeaderSummaryRowMatchTypeFragment}
+      ${MatchLeagueSeriesSectionMatchTypeFragmen}
+      ${MatchOverviewMatchTypeFragment}
+      ${team}
+      query GetMatch($id: Long!) {
+        match(id: $id) {
+          id
+          durationSeconds
+          ...MatchBuilds
+          ...MatchGraphs
+          ...MatchLanesMatchTypeFragment
+          ...MatchLog
+          ...MatchPerformance
+          ...MatchScoreboard
+          ...HeroGuideMatch
+          players {
+            ...HeroGuideMatchPlayer
+            ...HeroGuideMatchPlayerOther
+            __typename
+          }
+          ...MatchHeaderMatchTypeFragment
+          ...MatchLeagueSeriesSectionMatchTypeFragment
+          ...MatchOverviewMatchTypeFragment
+          __typename
+        }
+      }`,
+      variables,
+    });
+  }
 }
 
 export default new StratsApiService();

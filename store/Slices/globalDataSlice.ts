@@ -6,11 +6,12 @@ import stratsApiService from "../../services/stratsApi.service";
 import { RootState } from "../store";
 import { Item } from "../../interfaces/item";
 import { GameVersion } from "../../interfaces/gameVersion";
+import { heroes, items } from "../../share/data";
 
 const initialState: GlobalData = {
   abilitiesData: [],
-  items: [],
-  heroes: [],
+  items: items,
+  heroes: heroes,
   gameVersions: [],
   loading: true,
 };
@@ -27,7 +28,8 @@ export const fetchDefaultData = createAsyncThunk(
     const result = await stratsApiService.getAllDefaultData().then((res) => {
       return res.data.data.constants;
     });
-    return (await result) as resultType;
+    // return (await result) as resultType;
+    console.log(result.items);
   }
 );
 
@@ -36,16 +38,16 @@ export const globalDataSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchDefaultData.pending, (state, action) => {
-      state.loading = true;
-    });
-    builder.addCase(fetchDefaultData.fulfilled, (state, action) => {
-      state.abilitiesData = action.payload.abilities;
-      state.items = action.payload.items;
-      state.heroes = action.payload.heroes;
-      state.gameVersions = action.payload.gameVersions;
-      state.loading = false;
-    });
+    // builder.addCase(fetchDefaultData.pending, (state, action) => {
+    //   state.loading = true;
+    // });
+    // builder.addCase(fetchDefaultData.fulfilled, (state, action) => {
+    //   state.abilitiesData = action.payload.abilities;
+    //   state.items = action.payload.items;
+    //   state.heroes = action.payload.heroes;
+    //   state.gameVersions = action.payload.gameVersions;
+    //   state.loading = false;
+    // });
   },
 });
 

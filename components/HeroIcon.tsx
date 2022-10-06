@@ -9,10 +9,12 @@ const HeroIcon = ({
   id,
   gray,
   size = 30,
+  filterClass,
 }: {
   id: number;
   gray?: boolean;
   size?: number;
+  filterClass?: string;
 }) => {
   const heroes = useAppSelector((state) => state.globalData.heroes);
   const detailHero = getDetaiHero(heroes, id);
@@ -27,9 +29,14 @@ const HeroIcon = ({
         <div
           className={`${
             gray ? "grayscale" : "grayscale-0"
-          } flex justify-center items-center`}
+          } ${filterClass} flex justify-center items-center `}
         >
-          <MyImage src={heroIcon} width={size} height={size} alt={shortName} />
+          <MyImage
+            src={heroIcon}
+            width={size + "px"}
+            height={size + "px"}
+            alt={shortName}
+          />
         </div>
       }
       tooltip={
