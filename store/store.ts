@@ -12,12 +12,14 @@ import rootSlice from "./Slices/rootSlice";
 import globalDataSlice from "./Slices/globalDataSlice";
 import { GlobalData, Root } from "../interfaces/state";
 import composSlice from "./Slices/composSlice";
+import matchDetailSlice from "./Slices/matchDetailSlice";
 
 export const makeStore = () => {
   const isServer = typeof window === "undefined";
   const combinedReducer = combineReducers({
     globalData: globalDataSlice,
     compos: composSlice,
+    matchDetail: matchDetailSlice,
   });
   if (isServer) {
     return configureStore({

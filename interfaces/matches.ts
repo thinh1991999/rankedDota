@@ -137,8 +137,8 @@ export interface MatchDetail {
 }
 
 export interface PlayerMatchDetail {
-  role: null;
-  lane: null;
+  role: string;
+  lane: string;
   heroId: number;
   level: number;
   neutral0Id: number;
@@ -147,7 +147,7 @@ export interface PlayerMatchDetail {
   __typename: PlayerTypename;
   isRadiant: boolean;
   award: null;
-  imp: null;
+  imp: number;
   additionalUnit: null;
   item0Id: number;
   item1Id: number;
@@ -246,10 +246,26 @@ export interface WelcomeStats {
   direKills: null;
   __typename: string;
   winRates: null;
-  radiantNetworthLeads: null;
+  radiantNetworthLeads: number[];
   towerStatus: null;
   towerDeaths: null;
   chatEvents: null;
   pickBans: null;
-  radiantExperienceLeads: null;
+  radiantExperienceLeads: number[];
+}
+
+export interface TeamTotalInfo {
+  lv: number;
+  kills: number;
+  deaths: number;
+  assists: number;
+  nw: number;
+  imp: number;
+  lh: number;
+  dn: number;
+  gpm: number;
+  xpm: number;
+  hd: number;
+  td: number;
+  hh: number;
 }

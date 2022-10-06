@@ -54,6 +54,10 @@ module.exports = {
           dark: "rgba(99, 100, 100, 1)",
           light: "rgba(0, 0, 0, 0.12)",
         },
+        borderTender: {
+          dark: "rgba(99, 100, 100, 0.5)",
+          light: "rgba(0, 0, 0, 0.12)",
+        },
       },
       width: {
         player: "1024px",
@@ -80,25 +84,26 @@ module.exports = {
           md: "728px",
           lg: "984px",
           xl: "1240px",
-          "2xl": "1496px",
+          // "2xl": "1496px",
         },
       },
     },
-    screens: {
-      sm: "500px",
-      // => @media (min-width: 640px) { ... }
+    theme: {
+      screens: {
+        sm: "500px",
+        // => @media (min-width: 640px) { ... }
 
-      md: "768px",
-      // => @media (min-width: 768px) { ... }
+        md: "768px",
+        // => @media (min-width: 768px) { ... }
 
-      lg: "1024px",
-      // => @media (min-width: 1024px) { ... }
+        lg: "1024px",
+        // => @media (min-width: 1024px) { ... }
 
-      xl: "1280px",
-      // => @media (min-width: 1280px) { ... }
-
-      "2xl": "1536px",
-      // => @media (min-width: 1536px) { ... }
+        xl: "1240px",
+        // => @media (min-width: 1240px) { ... }
+        "2xl": "1536px",
+        // => @media (min-width: 1536px) { ... }
+      },
     },
   },
   safelist: [{ pattern: /(bg|text|boxShadow)-./ }],

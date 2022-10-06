@@ -1,14 +1,16 @@
 import { GetServerSideProps } from "next";
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import Layout from "../../components/Layout";
-import { Matchup } from "../../components/Matches";
+import { Status, Matchup } from "../../components/Matches";
 import { MatchDetail } from "../../interfaces/matches";
 import stratsApiService from "../../services/stratsApi.service";
 import { NextPageWithLayout } from "../_app";
+import { useAppDispatch } from "../../store/hook";
+import { setMatchDetail } from "../../store/Slices/matchDetailSlice";
 
 const MatchPage: NextPageWithLayout = () => {
-  const [match, setMatch] = useState<MatchDetail>();
-
+  const dispatch = useAppDispatch();
+  // const [match, setMatch] = useState<MatchDetail>();
   useEffect(() => {
     stratsApiService
       .getMatchDetail({
@@ -16,14 +18,19 @@ const MatchPage: NextPageWithLayout = () => {
       })
       .then((res) => {
         const { match } = res.data.data;
-        setMatch(match);
+        dispatch(setMatchDetail(match));
       });
-  }, []);
-  if (!match) return <></>;
+  }, [dispatch]);
+  // if (!match) return <></>;
   return (
     <section>
       <div className="container m-auto">
-        <Matchup match={match} />
+        {/* <div className="my-4">
+          <Matchup />
+        </div> */}
+        <div className="my-4">
+          <Status />
+        </div>
       </div>
     </section>
   );
