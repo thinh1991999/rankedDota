@@ -4,6 +4,7 @@ import { useAppSelector } from "../../../../store";
 import Map from "../../../Map";
 import ChartHead from "./ChartHead";
 import ChartMain from "./ChartMain";
+import LaneStatus from "./LaneStatus";
 
 const MapStatus = () => {
   return (
@@ -13,12 +14,14 @@ const MapStatus = () => {
       </div>
       <div className="flex-1 p-2">
         <div className="h-[300px]">
-          <ChartHead />
-          <ChartMain />
+          {/* <ChartHead />
+          <ChartMain /> */}
         </div>
       </div>
-      <div className=" p-2">
-        <div className="w-[200px] bg-layer-dark"></div>
+      <div className="p-2">
+        <div className="w-[200px] bg-layer-dark">
+          <LaneStatus />
+        </div>
       </div>
     </section>
   );

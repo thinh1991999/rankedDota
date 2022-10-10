@@ -8,14 +8,14 @@ import MyImage from "./MyImage";
 const ItemIcon = ({
   id,
   gray,
-  width = 24,
-  height = 18,
+  width = "100%",
+  height = "100%",
   filterClass,
 }: {
   id: number;
   gray?: boolean;
-  width?: number;
-  height?: number;
+  width?: string;
+  height?: string;
   filterClass?: string;
 }) => {
   const items = useAppSelector((state) => state.globalData.items);
@@ -24,7 +24,7 @@ const ItemIcon = ({
     return <></>;
   }
   const { shortName, displayName } = detailItem;
-  const heroIcon = getImgStratsDota(`/items/${shortName}.png`);
+  const itemIcon = getImgStratsDota(`/items/${shortName}.png`);
   return (
     <ToolTip
       target={
@@ -34,9 +34,9 @@ const ItemIcon = ({
           } ${filterClass} flex justify-center items-center `}
         >
           <MyImage
-            src={heroIcon}
-            width={width + "px"}
-            height={height + "px"}
+            src={itemIcon}
+            width={width}
+            height={height}
             alt={shortName}
           />
         </div>
@@ -44,7 +44,7 @@ const ItemIcon = ({
       tooltip={
         <div className="px-3 py-2 rounded-sm flex items-center">
           <MyImage
-            src={heroIcon}
+            src={itemIcon}
             width={"30px"}
             height={"20px"}
             alt={shortName}

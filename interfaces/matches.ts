@@ -136,6 +136,75 @@ export interface MatchDetail {
   league: null;
 }
 
+export interface WelcomeStats {
+  radiantKills: number[];
+  direKills: number[];
+  __typename: string;
+  winRates: number[];
+  radiantNetworthLeads: number[];
+  towerStatus: TowerStatus[];
+  towerDeaths: TowerDeath[];
+  chatEvents: ChatEvent[];
+  pickBans: PickBan[];
+  radiantExperienceLeads: number[];
+}
+
+export interface ChatEvent {
+  isRadiant: boolean;
+  time: number;
+  value: number;
+  fromHeroId: number | null;
+  type: number;
+  __typename: ChatEventTypename;
+}
+
+export enum ChatEventTypename {
+  MatchStatsChatEventType = "MatchStatsChatEventType",
+}
+
+export interface PickBan {
+  heroId: number;
+  order: number | null;
+  isPick: boolean;
+  letter: number | null;
+  __typename: PickBanTypename;
+  bannedHeroId: number | null;
+  playerIndex: number;
+  isRadiant: boolean;
+  wasBannedSuccessfully: boolean | null;
+}
+
+export enum PickBanTypename {
+  MatchStatsPickBanType = "MatchStatsPickBanType",
+}
+
+export interface TowerDeath {
+  attacker: number | null;
+  npcId: number;
+  time: number;
+  isRadiant: boolean;
+  __typename: TowerDeathTypename;
+}
+
+export enum TowerDeathTypename {
+  MatchStatsTowerDeathType = "MatchStatsTowerDeathType",
+}
+
+export interface TowerStatus {
+  towers: Tower[];
+  __typename: string;
+}
+
+export interface Tower {
+  npcId: number;
+  hp: number;
+  __typename: TowerTypename;
+}
+
+export enum TowerTypename {
+  MatchStatsTowerReportObjectType = "MatchStatsTowerReportObjectType",
+}
+
 export interface PlayerMatchDetail {
   role: string;
   lane: string;
@@ -143,10 +212,10 @@ export interface PlayerMatchDetail {
   level: number;
   neutral0Id: number;
   steamAccount: SteamAccountMatchDetail;
-  stats: PlayerStats;
-  __typename: PlayerTypename;
+  stats: Stats;
+  __typename: string;
   isRadiant: boolean;
-  award: null;
+  award: string;
   imp: number;
   additionalUnit: null;
   item0Id: number;
@@ -165,54 +234,60 @@ export interface PlayerMatchDetail {
   numDenies: number;
   heroDamage: number;
   towerDamage: number;
-  heroAverage: null;
+  heroAverage: HeroAverage[];
   playerSlot: number;
   heroHealing: number;
-  partyId: number | null;
-  position: null;
-  backpack0Id: number | null;
-  backpack1Id: number | null;
-  backpack2Id: number | null;
+  partyId: null;
+  position: string;
+  backpack0Id: null;
+  backpack1Id: null;
+  backpack2Id: null;
   dotaPlus: null;
 }
 
-export enum PlayerTypename {
-  MatchPlayerType = "MatchPlayerType",
+export interface HeroAverage {
+  time: number;
+  kills: number;
+  deaths: number;
+  assists: number;
+  networth: number;
+  xp: number;
+  cs: number;
+  dn: number;
+  heroDamage: number;
+  towerDamage: number;
+  __typename: string;
 }
 
-export interface PlayerStats {
+export interface Stats {
   abilities: Ability[];
-  itemPurchases: null;
-  __typename: StatsTypename;
-  level: null;
-  lastHitsPerMinute: null;
-  networthPerMinute: null;
-  actionsPerMinute: null;
-  tripsFountainPerMinute: null;
-  farmDistributionReport: null;
-  assistEvents: null;
-  runes: null;
-  allTalks: null;
-  chatWheels: null;
-  killEvents: null;
-  deathEvents: null;
-  impPerMinute2: null;
-  campStack: null;
-  heroDamageReceivedPerMinute: null;
-  inventoryReport: null;
+  itemPurchases: ItemPurchase[];
+  __typename: string;
+  level: number[];
+  lastHitsPerMinute: number[];
+  networthPerMinute: number[];
+  actionsPerMinute: number[];
+  tripsFountainPerMinute: number[];
+  farmDistributionReport: FarmDistributionReport[];
+  assistEvents: AssistEvent[];
+  runes: Rune[];
+  allTalks: any[];
+  chatWheels: ChatWheel[];
+  killEvents: KillEvent[];
+  deathEvents: DeathEvent[];
+  impPerMinute2: number[];
+  campStack: number[];
+  heroDamageReceivedPerMinute: number[];
+  inventoryReport: InventoryReport[];
   spiritBearInventoryReport: null;
-  goldPerMinute: null;
-  experiencePerMinute: null;
-  deniesPerMinute: null;
-  matchPlayerBuffEvent: null;
-  wards: null;
-  healPerMinute: null;
-  heroDamagePerMinute: null;
-  towerDamagePerMinute: null;
-}
-
-export enum StatsTypename {
-  MatchPlayerStatsType = "MatchPlayerStatsType",
+  goldPerMinute: number[];
+  experiencePerMinute: number[];
+  deniesPerMinute: number[];
+  matchPlayerBuffEvent: MatchPlayerBuffEvent[];
+  wards: Ward[];
+  healPerMinute: number[];
+  heroDamagePerMinute: number[];
+  towerDamagePerMinute: number[];
 }
 
 export interface Ability {
@@ -226,32 +301,128 @@ export enum AbilityTypename {
   PlayerAbilityType = "PlayerAbilityType",
 }
 
+export interface AssistEvent {
+  target: number;
+  __typename: string;
+  time: number;
+}
+
+export interface ChatWheel {
+  time: number;
+  chatWheelId: number;
+  __typename: string;
+}
+
+export interface DeathEvent {
+  time: number;
+  attacker: number;
+  target: number;
+  __typename: string;
+  timeDead: number;
+  goldLost: number;
+}
+
+export interface FarmDistributionReport {
+  other: CreepType[];
+  creepType: CreepType[];
+  neutralLocation: NeutralLocation[];
+  ancientLocation: any[];
+  __typename: string;
+}
+
+export interface CreepType {
+  id: number;
+  count: number;
+  __typename: CreepTypeTypename;
+}
+
+export enum CreepTypeTypename {
+  MatchPlayerStatsFarmDistributionObjectType = "MatchPlayerStatsFarmDistributionObjectType",
+}
+
+export interface NeutralLocation {
+  count: number;
+  __typename: CreepTypeTypename;
+}
+
+export interface InventoryReport {
+  backPack0: BackPack0 | null;
+  backPack1: null;
+  backPack2: null;
+  item0: BackPack0 | null;
+  item1: BackPack0 | null;
+  item2: BackPack0 | null;
+  item3: BackPack0 | null;
+  item4: BackPack0 | null;
+  item5: BackPack0 | null;
+  neutral0: BackPack0 | null;
+  __typename: InventoryReportTypename;
+}
+
+export enum InventoryReportTypename {
+  MatchPlayerInventoryType = "MatchPlayerInventoryType",
+}
+
+export interface BackPack0 {
+  itemId: number;
+  charges?: number | null;
+  __typename?: BackPack0Typename;
+}
+
+export enum BackPack0Typename {
+  MatchPlayerInventoryObjectType = "MatchPlayerInventoryObjectType",
+}
+
+export interface ItemPurchase {
+  time: number;
+  itemId: number;
+  __typename: ItemPurchaseTypename;
+}
+
+export enum ItemPurchaseTypename {
+  MatchPlayerItemPurchaseEventType = "MatchPlayerItemPurchaseEventType",
+}
+
+export interface KillEvent {
+  time: number;
+  target: number;
+  __typename: string;
+  gold: number;
+  xp: number;
+}
+
+export interface MatchPlayerBuffEvent {
+  abilityId: null;
+  itemId: null;
+  time: number;
+  stackCount: null;
+  __typename: string;
+}
+
+export interface Rune {
+  time: number;
+  rune: string;
+  action: string;
+  __typename: string;
+}
+
+export interface Ward {
+  positionX: number;
+  positionY: number;
+  time: number;
+  type: number;
+  __typename: string;
+}
+
 export interface SteamAccountMatchDetail {
   id: number;
   name: string;
   isAnonymous: boolean;
-  smurfFlag: number | null;
+  smurfFlag: number;
   proSteamAccount: null;
-  __typename: SteamAccountTypename;
-  seasonRank: number | null;
-  seasonLeaderboardRank: null;
-}
-
-export enum SteamAccountTypename {
-  SteamAccountType = "SteamAccountType",
-}
-
-export interface WelcomeStats {
-  radiantKills: null;
-  direKills: null;
   __typename: string;
-  winRates: null;
-  radiantNetworthLeads: number[];
-  towerStatus: null;
-  towerDeaths: null;
-  chatEvents: null;
-  pickBans: null;
-  radiantExperienceLeads: number[];
+  seasonRank: number;
+  seasonLeaderboardRank: null;
 }
 
 export interface TeamTotalInfo {
@@ -268,4 +439,26 @@ export interface TeamTotalInfo {
   hd: number;
   td: number;
   hh: number;
+}
+
+export interface PlayerTimeline {
+  heroId: number;
+  partyId: number | null;
+  lv: number;
+  role: string;
+  lane: string;
+  kills: number;
+  deaths: number;
+  assists: number;
+  networth: number;
+  imp: number;
+  numLastHits: number;
+  numDenies: number;
+  goldPerMinute: number;
+  experiencePerMinute: number;
+  heroDamage: number;
+  towerDamage: number;
+  heroHealing: number;
+  inventory: InventoryReport;
+  steamAccount: SteamAccountMatchDetail;
 }

@@ -32,6 +32,7 @@ import {
   formatTime,
   getGradient,
   formatNetword,
+  drawLinePluginChart,
 } from "../../../../share/ultils";
 import { AiOutlineClockCircle } from "react-icons/ai";
 
@@ -62,7 +63,6 @@ const externalTooltipHandler = (context: any) => {
   const vlNw: number = dataNw[idxNw];
   const vlExp: number = dataExp[idxExp];
 
-  console.log(vlNw, vlExp);
   let tooltipEl = chart.canvas.parentNode.querySelector("div");
 
   if (!tooltipEl) {
@@ -223,41 +223,44 @@ const externalTooltipHandler = (context: any) => {
   const { offsetLeft: positionX, offsetTop: positionY } = chart.canvas;
   // Display, position, and set styles for font
   tooltipEl.style.opacity = 1;
-  // const center = data.length / 2;
-  // if (dataIndex < center) {
-  //   tooltipEl.style.left = positionX + tooltip.caretX + 80 + "px";
-  // } else if (dataIndex > center) {
-  //   tooltipEl.style.left = positionX + tooltip.caretX - 80 + "px";
-  // } else {
-  //   tooltipEl.style.left = positionX + tooltip.caretX + "px";
-  // }
+  const center = dataNw.length / 2;
+  if (idxNw < center) {
+    tooltipEl.style.left = positionX + tooltip.caretX + 10 + "px";
+  } else if (idxNw > center) {
+    tooltipEl.style.left = positionX + tooltip.caretX - 190 + "px";
+  } else {
+    tooltipEl.style.left = positionX + tooltip.caretX + "px";
+  }
+  tooltipEl.style.top = "50%";
+  tooltipEl.style.transform = "translateY(-50%)";
+  tooltipEl.style.font = tooltip.options.bodyFont.string;
   tooltipEl.style.top = positionY + tooltip.caretY + "px";
   tooltipEl.style.font = tooltip.options.bodyFont.string;
 };
 
 const ChartMain = () => {
+  const timeSeek = useAppSelector((state) => state.matchDetail.timeSeek);
   const matchDetail = useAppSelector((state) => state.matchDetail.matchDetail);
   const [show, setShow] = useState(false);
-  const [maxY, setMaxY] = useState<number>(0);
   const [dataChart, setDataChart] = useState<ChartData>();
   const [options, setOptions] = useState<ChartOptions>();
 
-  const extendPlugin = {
-    id: "beforeDraw",
-    beforeDraw: (chart: ChartJS) => {
-      const activeEle = chart.getActiveElements();
-      if (activeEle.length <= 0) return;
-      const { ctx, scales } = chart;
-      const { x } = activeEle[0].element;
-      const topY = scales.y.top;
-      const bottomY = scales.y.bottom;
+  const pluginTimeSeek = {
+    id: "pluginTimeSeek",
+    beforeDraw: (chart: ChartJS, args: any, opts: any) => {
+      // console.log(opts);
+      const labels = chart.data.labels as number[];
+      console.log(labels[timeSeek]);
+      var ctx = chart.ctx;
       ctx.save();
-      ctx.beginPath();
-      ctx.moveTo(x, topY);
-      ctx.lineTo(x, bottomY);
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = "white";
-      ctx.stroke();
+      ctx.textAlign = "center";
+      ctx.font = "12px Arial";
+      labels.forEach((l, i) => {
+        var value = chart.data.datasets[0].data[i];
+        // var x = xAxis.getPixelForValue(l);
+        ctx.fillStyle = "red";
+        ctx.fillText("123", 0, 123);
+      });
       ctx.restore();
     },
   };
@@ -288,7 +291,7 @@ const ChartMain = () => {
             if (!chartArea) {
               return;
             }
-            return getGradient(ctx, chartArea, scales);
+            return getGradient(ctx, chartArea, scales, timeSeek);
           },
           pointRadius: 0,
           tension: 0.5,
@@ -300,19 +303,21 @@ const ChartMain = () => {
             below: COLOR_CHART_DIRE_BG,
           },
         },
-        {
-          label: "Experience",
-          data: radiantExperienceLeads,
-          borderWidth: 1,
-          tension: 0.5,
-          borderColor: "gray",
-          pointRadius: 0,
-          fill: {
-            target: 0,
-            above: "rgba(48, 47, 47, 0.8)",
-            below: "rgba(48, 47, 47, 0.8)",
-          },
-        },
+        // {
+        //   label: "Experience",
+        //   data: [10000, 20000, 30000],
+        //   borderWidth: 1,
+        //   tension: 0.5,
+        //   borderColor: "gray",
+        //   pointRadius: 10,
+        //   backgroundColor: ["blue", "yellow", "red"],
+        //   fill: true,
+        //   // fill: {
+        //   //   target: 0,
+        //   //   above: "rgba(48, 47, 47, 0.8)",
+        //   //   below: "rgba(48, 47, 47, 0.8)",
+        //   // },
+        // },
       ],
     });
     if (maxY) {
@@ -330,11 +335,11 @@ const ChartMain = () => {
             intersect: false,
             displayColors: false,
             enabled: false,
-            external: externalTooltipHandler,
+            // external: externalTooltipHandler,
           },
         },
         hover: {
-          mode: "nearest",
+          mode: "index",
           intersect: false,
         },
         maintainAspectRatio: false,
@@ -378,12 +383,12 @@ const ChartMain = () => {
         },
       });
     }
-  }, [matchDetail]);
+  }, [matchDetail, timeSeek]);
   return (
     <>
       <button onClick={() => setShow(!show)}>click</button>
       <AiOutlineClockCircle />
-      <section className="h-[200px]">
+      <section className="h-[200px] relative">
         {dataChart && show && (
           <Chart
             type="line"
@@ -392,7 +397,7 @@ const ChartMain = () => {
             options={options}
             data={dataChart}
             redraw={true}
-            plugins={[extendPlugin]}
+            plugins={[drawLinePluginChart, pluginTimeSeek]}
           />
         )}
       </section>

@@ -1,7 +1,8 @@
 import _ from "lodash";
 import { Item } from "../interfaces/item";
 import moment from "moment";
-import { Hero } from "../interfaces/heroes";
+import { Chart as ChartJS } from "chart.js";
+import { AbilityDetail, Hero } from "../interfaces/heroes";
 import {
   COLOR_CHART_RADIANT_BORDER,
   COLOR_CHART_DIRE_BORDER,
@@ -35,6 +36,20 @@ export const getDetaiHero = (arr: Hero[], id: number): Hero | null => {
   _.forEach(arr, (hero) => {
     if (hero.id === id) {
       result = hero;
+      return;
+    }
+  });
+  return result;
+};
+
+export const getDetaiAbility = (
+  arr: AbilityDetail[],
+  id: number
+): AbilityDetail | null => {
+  let result: AbilityDetail | null = null;
+  _.forEach(arr, (abi) => {
+    if (abi.id === id) {
+      result = abi;
       return;
     }
   });
@@ -260,26 +275,49 @@ export const formatTime = (input: number) => {
   }
 };
 
-export const getGradient = (ctx: any, chartArea: any, scales: any) => {
+export const getGradient = (
+  ctx: any,
+  chartArea: any,
+  scales: any,
+  timeSeek: number
+) => {
   let width: number = 0,
     height: number = 0,
     gradient: any;
   const chartWidth = chartArea.right - chartArea.left;
   const chartHeight = chartArea.bottom - chartArea.top;
+
   if (!gradient || width !== chartWidth || height !== chartHeight) {
+    const a = scales.x.getPixelForValue(10);
     const pointAvarage = scales.y.getPixelForValue(50);
     const pointAvarageHeight = pointAvarage - chartArea.top;
     const pointAvaragePercentage = pointAvarageHeight / chartHeight;
     width = chartWidth;
     height = chartHeight;
-    gradient = ctx.createLinearGradient(
-      0,
-      chartArea.top,
-      0,
-      chartHeight + chartArea.top
-    );
-    gradient.addColorStop(pointAvaragePercentage, COLOR_CHART_RADIANT_BORDER);
-    gradient.addColorStop(pointAvaragePercentage, COLOR_CHART_DIRE_BORDER);
+    gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+    gradient.addColorStop(0.5, COLOR_CHART_DIRE_BORDER);
+    gradient.addColorStop(0.5, COLOR_CHART_RADIANT_BORDER);
   }
+  console.log(gradient);
   return gradient;
+};
+
+export const drawLinePluginChart = {
+  id: "beforeDraw",
+  beforeDraw: (chart: ChartJS) => {
+    const activeEle = chart.getActiveElements();
+    if (activeEle.length <= 0) return;
+    const { ctx, scales } = chart;
+    const { x } = activeEle[0].element;
+    const topY = scales.y.top;
+    const bottomY = scales.y.bottom;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(x, topY);
+    ctx.lineTo(x, bottomY);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "white";
+    ctx.stroke();
+    ctx.restore();
+  },
 };

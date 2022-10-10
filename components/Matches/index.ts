@@ -5,3 +5,6 @@ export { default as Matches } from "./Live/Matches";
 
 export { default as Matchup } from "./Detail/Matchup/Matchup";
 export { default as Status } from "./Detail/Status/Status";
+export { default as TimeSeek } from "./Detail/TimeSeek";
+export { default as Draft } from "./Detail/Draft";
+export { default as BuildInfo } from "./Detail/BuildInfo/BuildInfo";

@@ -70,6 +70,53 @@ h5 {
     drop-shadow(rgb(214, 91, 46) 0px -1px 1px);
 }
 
+/* Input ranger */
+.input-ranger-custom {
+  -webkit-appearance: none; /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 3px; /* Specified height */
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
+  transition: opacity 0.2s;
+  cursor: pointer;
+}
+
+.input-ranger-custom:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+.input-ranger-custom::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 15px; /* Set a specific slider handle width */
+  height: 15px; /* Slider handle height */
+  border-radius: 100%;
+  background: white; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.input-ranger-custom::-moz-range-thumb {
+  width: 15px; /* Set a specific slider handle width */
+  height: 15px; /* Slider handle height */
+  border-radius: 100%;
+  background: white; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+/* baned img hint */
+.baned {
+  background-image: linear-gradient(
+    to right bottom,
+    transparent calc(50% - 2px),
+    rgb(210, 0, 0) calc(50% - 2px),
+    rgb(210, 0, 0) calc(50% + 2px),
+    transparent calc(50% + 2px)
+  );
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
