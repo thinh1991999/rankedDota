@@ -1,7 +1,13 @@
 import { GetServerSideProps } from "next";
 import React, { ReactElement, useEffect, useRef, useState } from "react";
 import Layout from "../../components/Layout";
-import { Status, Matchup } from "../../components/Matches";
+import {
+  Status,
+  Matchup,
+  TimeSeek,
+  Draft,
+  BuildInfo,
+} from "../../components/Matches";
 import { MatchDetail } from "../../interfaces/matches";
 import stratsApiService from "../../services/stratsApi.service";
 import { NextPageWithLayout } from "../_app";
@@ -28,9 +34,16 @@ const MatchPage: NextPageWithLayout = () => {
         {/* <div className="my-4">
           <Matchup />
         </div> */}
-        <div className="my-4">
+        {/* <div className="my-4">
           <Status />
+        </div> */}
+        {/* <div className="my-4">
+          <Draft />
+        </div> */}
+        <div className="my-4">
+          <BuildInfo />
         </div>
+        <TimeSeek />
       </div>
     </section>
   );

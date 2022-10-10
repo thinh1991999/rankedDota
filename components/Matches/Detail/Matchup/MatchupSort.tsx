@@ -10,11 +10,20 @@ import {
 } from "../../../../share/ultils";
 import RankIcon from "../../../RankIcon";
 import SortDetail from "./SortDetail";
-import { PlayerMatchDetail } from "../../../../interfaces/matches";
+import {
+  PlayerMatchDetail,
+  PlayerTimeline,
+} from "../../../../interfaces/matches";
 import { AiOutlineClose } from "react-icons/ai";
 
-const MatchupSort = () => {
-  const matchDetail = useAppSelector((state) => state.matchDetail.matchDetail);
+const MatchupSort = ({
+  currentInfo,
+}: {
+  currentInfo: {
+    radiant: PlayerTimeline[];
+    dire: PlayerTimeline[];
+  };
+}) => {
   const heroes = useAppSelector((state) => state.globalData.heroes);
   const [radiantHero, setRadiantHero] = useState<PlayerMatchDetail | null>(
     null
@@ -37,15 +46,12 @@ const MatchupSort = () => {
     }
   };
 
-  if (!matchDetail) return <></>;
-  const { players } = matchDetail;
   return (
     <section className="flex justify-between p-4 text-sm">
       <div className="flex-1 flex flex-col">
         <div className="flex flex-wrap -ml-2 -mr-2 -mt-2 -mb-2">
-          {players.map((player) => {
+          {currentInfo.radiant.map((player) => {
             const {
-              isRadiant,
               heroId,
               role,
               lane,
@@ -57,7 +63,6 @@ const MatchupSort = () => {
               imp,
               steamAccount: { name, seasonRank },
             } = player;
-            if (!isRadiant) return;
             const heroDetail = getDetaiHero(heroes, heroId);
             const imgHero = getImgStratsDota(
               `/heroes/${heroDetail?.shortName}_horz.png`
@@ -76,7 +81,7 @@ const MatchupSort = () => {
                   }}
                 >
                   <div
-                    onClick={() => handleRadiant(player)}
+                    // onClick={() => handleRadiant(player)}
                     className={`relative ${checkShow ? "" : "grayscale"}`}
                   >
                     <MyImage
@@ -114,7 +119,7 @@ const MatchupSort = () => {
                     )}
                   </div>
                   <div className={`${radiantHero ? "hidden" : "block"}`}>
-                    <div onClick={() => handleRadiant(player)}>
+                    <div>
                       <div className="py-3 bg-layer-dark flex items-center justify-center">
                         <span className="text-end w-1/5">
                           {imp > 0 ? `+${imp}` : imp}
@@ -164,7 +169,9 @@ const MatchupSort = () => {
                           height="10px"
                           alt="gold"
                         />
-                        <span className="ml-1">{formatNetword(networth)}</span>
+                        <span className="ml-1">
+                          {formatNetword(networth ? networth : 0)}
+                        </span>
                       </div>
                     </div>
                     <div className="py-2 border-t border-solid border-borderTender-dark">
@@ -190,9 +197,8 @@ const MatchupSort = () => {
       </div>
       <div className="flex-1 flex flex-col">
         <div className="flex flex-wrap -ml-2 -mr-2 -mt-2 -mb-2">
-          {players.map((player) => {
+          {currentInfo.dire.map((player) => {
             const {
-              isRadiant,
               heroId,
               role,
               lane,
@@ -204,7 +210,6 @@ const MatchupSort = () => {
               imp,
               steamAccount: { name, seasonRank },
             } = player;
-            if (isRadiant) return;
             const heroDetail = getDetaiHero(heroes, heroId);
             const imgHero = getImgStratsDota(
               `/heroes/${heroDetail?.shortName}_horz.png`
@@ -223,7 +228,7 @@ const MatchupSort = () => {
                   }}
                 >
                   <div
-                    onClick={() => handleDire(player)}
+                    // onClick={() => handleDire(player)}
                     className={`relative ${checkShow ? "" : "grayscale"}`}
                   >
                     <MyImage
@@ -261,7 +266,7 @@ const MatchupSort = () => {
                     )}
                   </div>
                   <div className={`${direHero ? "hidden" : "block"}`}>
-                    <div onClick={() => handleDire(player)}>
+                    <div>
                       <div className="py-3 bg-layer-dark flex items-center justify-center">
                         <span className="text-end w-1/5">
                           {imp > 0 ? `+${imp}` : imp}
@@ -311,7 +316,9 @@ const MatchupSort = () => {
                           height="10px"
                           alt="gold"
                         />
-                        <span className="ml-1">{formatNetword(networth)}</span>
+                        <span className="ml-1">
+                          {formatNetword(networth ? networth : 0)}
+                        </span>
                       </div>
                     </div>
                     <div className="py-2 border-t border-solid border-borderTender-dark">

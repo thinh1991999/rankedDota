@@ -1,10 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { MatchDetailData } from "../../interfaces/state";
-import _ from "lodash";
+import _, { isInteger } from "lodash";
 import { MatchDetail } from "../../interfaces/matches";
+import moment from "moment";
 
 const initialState: MatchDetailData = {
   matchDetail: null,
+  timeSeek: 0,
+  timesLabel: [],
 };
 
 export const matchDetailSlice = createSlice({
@@ -12,11 +15,22 @@ export const matchDetailSlice = createSlice({
   initialState,
   reducers: {
     setMatchDetail: (state, action: PayloadAction<MatchDetail>) => {
+      const { durationSeconds } = action.payload;
+      const arr: number[] = [];
+      const timeUtc = moment.duration(durationSeconds * 1000).asMinutes();
+      _.range(timeUtc).forEach((item) => {
+        arr.push(item);
+      });
+      if (!isInteger(timeUtc)) arr.push(timeUtc);
       state.matchDetail = action.payload;
+      state.timesLabel = arr;
+    },
+    setTimeSeek: (state, action: PayloadAction<number>) => {
+      state.timeSeek = action.payload;
     },
   },
 });
 
-export const { setMatchDetail } = matchDetailSlice.actions;
+export const { setMatchDetail, setTimeSeek } = matchDetailSlice.actions;
 
 export default matchDetailSlice.reducer;

@@ -25,4 +25,6 @@ export interface ComposData {
 
 export interface MatchDetailData {
   matchDetail: MatchDetail | null;
+  timeSeek: number;
+  timesLabel: number[];
 }

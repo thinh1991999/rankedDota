@@ -29,7 +29,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // dispatch(fetchDefaultData());
+    dispatch(fetchDefaultData());
     setMounted(true);
   }, [dispatch]);
 

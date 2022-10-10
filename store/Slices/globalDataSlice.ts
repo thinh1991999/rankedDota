@@ -7,9 +7,10 @@ import { RootState } from "../store";
 import { Item } from "../../interfaces/item";
 import { GameVersion } from "../../interfaces/gameVersion";
 import { heroes, items } from "../../share/data";
+import { abilities } from "../../share/data2";
 
 const initialState: GlobalData = {
-  abilitiesData: [],
+  abilitiesData: abilities,
   items: items,
   heroes: heroes,
   gameVersions: [],
@@ -29,7 +30,7 @@ export const fetchDefaultData = createAsyncThunk(
       return res.data.data.constants;
     });
     // return (await result) as resultType;
-    console.log(result.items);
+    // console.log(result.abilities);
   }
 );
 

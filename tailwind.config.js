@@ -50,6 +50,10 @@ module.exports = {
           dark: "rgba(255, 255, 255, 0.12)",
           light: "rgba(166 ,164, 164,0.3 )",
         },
+        layerSecondary: {
+          dark: "rgba(255, 255, 255, 0.04)",
+          light: "rgba(255, 255, 255, 0.04)",
+        },
         borderSecondary: {
           dark: "rgba(99, 100, 100, 1)",
           light: "rgba(0, 0, 0, 0.12)",

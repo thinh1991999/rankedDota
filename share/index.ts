@@ -6,6 +6,7 @@ export {
   getFixIndexHero,
   getDetailItem,
   getDetaiHero,
+  getDetaiAbility,
   getTimeBySeconds,
   getTypeOfHero,
   nFormatter,
@@ -15,6 +16,7 @@ export {
   formatNetword,
   formatTime,
   getGradient,
+  drawLinePluginChart,
 } from "./ultils";
 export {
   RADIANT_ICON,
