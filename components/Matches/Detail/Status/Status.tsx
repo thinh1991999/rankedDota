@@ -13,13 +13,13 @@ const MapStatus = () => {
         <div className="w-[300px] bg-layer-dark "></div>
       </div>
       <div className="flex-1 p-2">
-        <div className="h-[300px]">
-          {/* <ChartHead />
-          <ChartMain /> */}
+        <div className="h-[300px] bg-layer-dark rounded-md">
+          <ChartHead />
+          <ChartMain />
         </div>
       </div>
       <div className="p-2">
-        <div className="w-[200px] bg-layer-dark">
+        <div className="w-[200px] h-[300px]">
           <LaneStatus />
         </div>
       </div>

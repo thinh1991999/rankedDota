@@ -1,4 +1,6 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import React, { useEffect, useState } from "react";
+import moment from "moment";
+import { AiOutlineClockCircle } from "react-icons/ai";
 import {
   Chart as ChartJS,
   LinearScale,
@@ -26,15 +28,13 @@ import {
   DIRE_ICON,
   COLOR_EXP,
 } from "../../../../share/constant";
-import { nFormatter } from "../../../../share";
-import moment from "moment";
 import {
+  drawLinePluginChart,
+  nFormatter,
   formatTime,
   getGradient,
   formatNetword,
-  drawLinePluginChart,
-} from "../../../../share/ultils";
-import { AiOutlineClockCircle } from "react-icons/ai";
+} from "../../../../share";
 
 ChartJS.register(
   LinearScale,
@@ -239,18 +239,15 @@ const externalTooltipHandler = (context: any) => {
 };
 
 const ChartMain = () => {
-  const timeSeek = useAppSelector((state) => state.matchDetail.timeSeek);
   const matchDetail = useAppSelector((state) => state.matchDetail.matchDetail);
   const [show, setShow] = useState(false);
   const [dataChart, setDataChart] = useState<ChartData>();
   const [options, setOptions] = useState<ChartOptions>();
 
-  const pluginTimeSeek = {
-    id: "pluginTimeSeek",
+  const plug = {
+    id: "plug",
     beforeDraw: (chart: ChartJS, args: any, opts: any) => {
-      // console.log(opts);
       const labels = chart.data.labels as number[];
-      console.log(labels[timeSeek]);
       var ctx = chart.ctx;
       ctx.save();
       ctx.textAlign = "center";
@@ -291,7 +288,7 @@ const ChartMain = () => {
             if (!chartArea) {
               return;
             }
-            return getGradient(ctx, chartArea, scales, timeSeek);
+            return getGradient(ctx, chartArea, scales);
           },
           pointRadius: 0,
           tension: 0.5,
@@ -383,7 +380,8 @@ const ChartMain = () => {
         },
       });
     }
-  }, [matchDetail, timeSeek]);
+  }, [matchDetail]);
+  console.log(matchDetail);
   return (
     <>
       <button onClick={() => setShow(!show)}>click</button>
@@ -397,7 +395,7 @@ const ChartMain = () => {
             options={options}
             data={dataChart}
             redraw={true}
-            plugins={[drawLinePluginChart, pluginTimeSeek]}
+            plugins={[drawLinePluginChart, plug]}
           />
         )}
       </section>

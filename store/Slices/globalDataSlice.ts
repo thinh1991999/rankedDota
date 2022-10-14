@@ -8,12 +8,14 @@ import { Item } from "../../interfaces/item";
 import { GameVersion } from "../../interfaces/gameVersion";
 import { heroes, items } from "../../share/data";
 import { abilities } from "../../share/data2";
+import { talentsData } from "../../share/talentsData";
 
 const initialState: GlobalData = {
   abilitiesData: abilities,
   items: items,
   heroes: heroes,
   gameVersions: [],
+  talents: talentsData,
   loading: true,
 };
 

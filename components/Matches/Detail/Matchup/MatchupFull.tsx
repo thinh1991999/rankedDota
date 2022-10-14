@@ -1,7 +1,8 @@
 import _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import {
   BackPack0,
+  PlayerMatchDetail,
   PlayerTimeline,
   TeamTotalInfo,
 } from "../../../../interfaces/matches";
@@ -21,7 +22,6 @@ import Header from "./Header";
 
 const RowInfo = ({ info }: { info: PlayerTimeline }) => {
   const heroes = useAppSelector((state) => state.globalData.heroes);
-
   const {
     heroId,
     partyId,
@@ -53,7 +53,7 @@ const RowInfo = ({ info }: { info: PlayerTimeline }) => {
   ];
   const heroDetail = getDetaiHero(heroes, heroId);
   const imgHero = getImgStratsDota(`/heroes/${heroDetail?.shortName}_horz.png`);
-  const lvScore = (lv / 30) * 10;
+  const lvScore = (lv ? lv : 30 / 30) * 10;
   // const lvNw = networth / maxPlayerNw;
   const partyColor = getPartyColor(partyId);
   return (
@@ -224,6 +224,7 @@ const MatchupFull = ({
     dire: PlayerTimeline[];
   };
 }) => {
+  const matchDetail = useAppSelector((state) => state.matchDetail.matchDetail);
   const heroes = useAppSelector((state) => state.globalData.heroes);
   // const matchDetail = useAppSelector((state) => state.matchDetail.matchDetail);
   // const timeSeek = useAppSelector((state) => state.matchDetail.timeSeek);
@@ -371,4 +372,4 @@ const MatchupFull = ({
   );
 };
 
-export default MatchupFull;
+export default memo(MatchupFull);

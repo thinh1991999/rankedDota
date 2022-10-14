@@ -1,5 +1,5 @@
 export { headerNavs, homeCards, heroRankOptions } from "./data";
-export { usePageLoading } from "./customHooks";
+export { usePageLoading, useGetTimeCurrentMatchDetail } from "./customHooks";
 export {
   getImgOpenDota,
   getImgStratsDota,
@@ -16,8 +16,9 @@ export {
   formatNetword,
   formatTime,
   getGradient,
-  drawLinePluginChart,
+  sortRolesTeam,
 } from "./ultils";
+export { drawLinePluginChart } from "./chartjs";
 export {
   RADIANT_ICON,
   DIRE_ICON,

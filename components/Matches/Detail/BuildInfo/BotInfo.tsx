@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
-import MyImage from "../../../MyImage";
+import React from "react";
+import _ from "lodash";
 import uniqid from "uniqid";
-import { getImgStratsDota } from "../../../../share";
+import MyImage from "../../../MyImage";
+import {
+  getImgStratsDota,
+  useGetTimeCurrentMatchDetail,
+} from "../../../../share";
 import ToolTip from "../../../ToolTip";
 import { Item } from "../../../../interfaces/item";
-import { useAppSelector } from "../../../../store";
 import { getTimeBySeconds } from "../../../../share/ultils";
 
 const BotInfo = ({
@@ -12,22 +15,18 @@ const BotInfo = ({
   spItems,
 }: {
   itemsBuild: (Item & { time: number })[];
-  spItems: (Item & { count: number })[];
+  spItems: (Item & { times: number[] })[];
 }) => {
-  const timeSeek = useAppSelector((state) => state.matchDetail.timeSeek);
-  const timesLabel = useAppSelector((state) => state.matchDetail.timesLabel);
-
-  const currSeconds = timesLabel[timeSeek] * 60;
-
+  const currSeconds = useGetTimeCurrentMatchDetail();
   return (
     <section className="w-full">
       <div className="flex">
         <div className="w-10/12 flex overflow-hidden">
-          {itemsBuild.map((item) => {
-            const { displayName, id, time, shortName } = item;
+          {itemsBuild.map((item, idx) => {
+            const { displayName, time, shortName } = item;
             const itemIcon = getImgStratsDota(`/items/${shortName}.png`);
             return (
-              <div key={id} className="p-2 flex flex-col items-center">
+              <div key={idx} className="p-2 flex flex-col items-center">
                 <div className="">
                   <ToolTip
                     target={
@@ -73,15 +72,23 @@ const BotInfo = ({
               <div className="h-[22px] border-l border-solid border-borderTender-dark"></div>
             </div>
             <div className="flex">
-              {spItems.map((item) => {
-                const { displayName, count, id, shortName } = item;
+              {spItems.map((item, idx) => {
+                const { displayName, times, shortName } = item;
+                let count = 0;
+                _.forEach(times, (time) => {
+                  time <= currSeconds && count++;
+                });
                 const itemIcon = getImgStratsDota(`/items/${shortName}.png`);
                 return (
-                  <div key={id} className="p-2 flex flex-col items-center">
+                  <div key={idx} className="p-2 flex flex-col items-center">
                     <div className="">
                       <ToolTip
                         target={
-                          <div className={` flex justify-center items-center `}>
+                          <div
+                            className={`${
+                              count === 0 ? "grayscale" : ""
+                            } flex justify-center items-center `}
+                          >
                             <MyImage
                               src={itemIcon}
                               width="32px"

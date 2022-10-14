@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React from "react";
+import React, { memo } from "react";
 
 const myLoader = ({ src }: { src: string }) => {
   return src;
@@ -33,6 +33,8 @@ function MyImage({
         src={src}
         alt={alt}
         objectFit="cover"
+        unoptimized={true}
+        loading="lazy"
         style={{
           borderRadius: `${borderRadius}px`,
         }}
@@ -41,4 +43,4 @@ function MyImage({
   );
 }
 
-export default MyImage;
+export default memo(MyImage);
