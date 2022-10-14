@@ -8,12 +8,11 @@ const ToolTip = ({
   place,
 }: {
   target: ReactNode;
-  tooltip: ReactNode;
+  tooltip: ReactNode | boolean;
   id: string | number | undefined;
   place?: Place;
 }) => {
   const [showToolTip, setShowToolTip] = useState<boolean>(true);
-
   return (
     <>
       <div
@@ -30,7 +29,7 @@ const ToolTip = ({
       >
         {target}
       </div>
-      {showToolTip && (
+      {showToolTip && tooltip !== false && (
         <ReactTooltip
           arrowColor="transparent"
           place={place}

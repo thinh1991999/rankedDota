@@ -7,6 +7,7 @@ import {
   COLOR_CHART_RADIANT_BORDER,
   COLOR_CHART_DIRE_BORDER,
 } from "./constant";
+import { Team } from "../interfaces/matches";
 
 export const getImgOpenDota = (key: string) => {
   return "https://cdn.cloudflare.steamstatic.com" + key;
@@ -275,12 +276,7 @@ export const formatTime = (input: number) => {
   }
 };
 
-export const getGradient = (
-  ctx: any,
-  chartArea: any,
-  scales: any,
-  timeSeek: number
-) => {
+export const getGradient = (ctx: any, chartArea: any, scales: any) => {
   let width: number = 0,
     height: number = 0,
     gradient: any;
@@ -298,26 +294,34 @@ export const getGradient = (
     gradient.addColorStop(0.5, COLOR_CHART_DIRE_BORDER);
     gradient.addColorStop(0.5, COLOR_CHART_RADIANT_BORDER);
   }
-  console.log(gradient);
   return gradient;
 };
 
-export const drawLinePluginChart = {
-  id: "beforeDraw",
-  beforeDraw: (chart: ChartJS) => {
-    const activeEle = chart.getActiveElements();
-    if (activeEle.length <= 0) return;
-    const { ctx, scales } = chart;
-    const { x } = activeEle[0].element;
-    const topY = scales.y.top;
-    const bottomY = scales.y.bottom;
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(x, topY);
-    ctx.lineTo(x, bottomY);
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = "white";
-    ctx.stroke();
-    ctx.restore();
-  },
-};
+export function sortRolesTeam<T extends Team>(arr: T[]) {
+  const newArr = new Array<T>(5);
+  _.forEach(arr, (item) => {
+    const { role, lane } = item;
+    switch (item.role) {
+      case "CORE":
+        if (lane === "SAFE_LANE") {
+          newArr[0] = item;
+        } else if (lane === "MID_LANE") {
+          newArr[1] = item;
+        } else {
+          newArr[2] = item;
+        }
+        break;
+      case "LIGHT_SUPPORT": {
+        newArr[3] = item;
+        break;
+      }
+      case "HARD_SUPPORT": {
+        newArr[4] = item;
+        break;
+      }
+      default:
+        break;
+    }
+  });
+  return newArr;
+}

@@ -1,4 +1,4 @@
-import { AbilityDetail, Hero, HeroesStatus } from "./heroes";
+import { AbilityDetail, Hero, HeroesStatus, TreeBranchInfo } from "./heroes";
 import { Item } from "./item";
 import { GameVersion } from "./gameVersion";
 import { MatchDetail } from "./matches";
@@ -14,6 +14,7 @@ export interface GlobalData {
   items: Item[];
   heroes: Hero[];
   gameVersions: GameVersion[];
+  talents: TreeBranchInfo[];
   loading: boolean;
 }
 
@@ -24,6 +25,7 @@ export interface ComposData {
 }
 
 export interface MatchDetailData {
+  loading: boolean;
   matchDetail: MatchDetail | null;
   timeSeek: number;
   timesLabel: number[];

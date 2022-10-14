@@ -7,16 +7,17 @@ import {
   TimeSeek,
   Draft,
   BuildInfo,
+  KillBreakdown,
 } from "../../components/Matches";
 import { MatchDetail } from "../../interfaces/matches";
 import stratsApiService from "../../services/stratsApi.service";
 import { NextPageWithLayout } from "../_app";
-import { useAppDispatch } from "../../store/hook";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { setMatchDetail } from "../../store/Slices/matchDetailSlice";
 
 const MatchPage: NextPageWithLayout = () => {
+  const loading = useAppSelector((state) => state.matchDetail.loading);
   const dispatch = useAppDispatch();
-  // const [match, setMatch] = useState<MatchDetail>();
   useEffect(() => {
     stratsApiService
       .getMatchDetail({
@@ -27,24 +28,30 @@ const MatchPage: NextPageWithLayout = () => {
         dispatch(setMatchDetail(match));
       });
   }, [dispatch]);
-  // if (!match) return <></>;
   return (
     <section>
-      <div className="container m-auto">
-        {/* <div className="my-4">
-          <Matchup />
-        </div> */}
-        {/* <div className="my-4">
-          <Status />
-        </div> */}
-        {/* <div className="my-4">
-          <Draft />
-        </div> */}
-        <div className="my-4">
-          <BuildInfo />
+      {loading ? (
+        <p>Loading</p>
+      ) : (
+        <div className="container m-auto">
+          {/* <div className="my-4">
+            <Matchup />
+          </div> */}
+          <div className="my-4">
+            <Status />
+          </div>
+          {/* <div className="my-4">
+            <Draft />
+          </div>
+          <div className="my-4">
+            <BuildInfo />
+          </div>
+          <div className="my-4">
+            <KillBreakdown />
+          </div> */}
+          <TimeSeek />
         </div>
-        <TimeSeek />
-      </div>
+      )}
     </section>
   );
 };

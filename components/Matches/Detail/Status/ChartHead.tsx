@@ -42,7 +42,7 @@ const ChartHead = () => {
   }, [matchDetail]);
 
   return (
-    <section className="p-2 bg-layer-dark rounded-md">
+    <section className="p-2">
       <div className="flex justify-between">
         <div className="flex items-center">
           <MyImage

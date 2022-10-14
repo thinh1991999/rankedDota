@@ -5,6 +5,7 @@ import { MatchDetail } from "../../interfaces/matches";
 import moment from "moment";
 
 const initialState: MatchDetailData = {
+  loading: true,
   matchDetail: null,
   timeSeek: 0,
   timesLabel: [],
@@ -15,6 +16,7 @@ export const matchDetailSlice = createSlice({
   initialState,
   reducers: {
     setMatchDetail: (state, action: PayloadAction<MatchDetail>) => {
+      state.loading = true;
       const { durationSeconds } = action.payload;
       const arr: number[] = [];
       const timeUtc = moment.duration(durationSeconds * 1000).asMinutes();
@@ -24,6 +26,8 @@ export const matchDetailSlice = createSlice({
       if (!isInteger(timeUtc)) arr.push(timeUtc);
       state.matchDetail = action.payload;
       state.timesLabel = arr;
+      state.timeSeek = arr.length - 1;
+      state.loading = false;
     },
     setTimeSeek: (state, action: PayloadAction<number>) => {
       state.timeSeek = action.payload;

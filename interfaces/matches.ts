@@ -121,9 +121,9 @@ export interface MatchDetail {
   stats: WelcomeStats;
   players: PlayerMatchDetail[];
   __typename: string;
-  topLaneOutcome: null;
-  bottomLaneOutcome: null;
-  midLaneOutcome: null;
+  topLaneOutcome?: string;
+  bottomLaneOutcome?: string;
+  midLaneOutcome?: string;
   endDateTime: number;
   rank: number;
   radiantTeam: null;
@@ -444,9 +444,9 @@ export interface TeamTotalInfo {
 export interface PlayerTimeline {
   heroId: number;
   partyId: number | null;
-  lv: number;
   role: string;
   lane: string;
+  lv: number;
   kills: number;
   deaths: number;
   assists: number;
@@ -461,4 +461,9 @@ export interface PlayerTimeline {
   heroHealing: number;
   inventory: InventoryReport;
   steamAccount: SteamAccountMatchDetail;
+}
+
+export interface Team {
+  role: string;
+  lane: string;
 }

@@ -1,15 +1,21 @@
-import React from "react";
+import _ from "lodash";
+import React, { useEffect, useState, useMemo } from "react";
 import uniqid from "uniqid";
+import { AbilityDetail } from "../../../../interfaces/heroes";
 
 import { Ability } from "../../../../interfaces/matches";
 import {
   getDetaiAbility,
   getDetaiHero,
   getImgStratsDota,
+  useGetTimeCurrentMatchDetail,
 } from "../../../../share";
 import { useAppSelector } from "../../../../store";
 import MyImage from "../../../MyImage";
+import Talent from "../../../Talent";
 import ToolTip from "../../../ToolTip";
+import Abilities from "./Abilities";
+import TalentDetail from "./TalentDetail";
 
 const TopInfo = ({
   topInfo,
@@ -18,65 +24,98 @@ const TopInfo = ({
     heroId: number;
     name: string;
     abilities: Ability[];
+    lvArr: number[];
   };
 }) => {
   const heroes = useAppSelector((state) => state.globalData.heroes);
-  const timeSeek = useAppSelector((state) => state.matchDetail.timeSeek);
-  const timesLabel = useAppSelector((state) => state.matchDetail.timesLabel);
   const abilitiesData = useAppSelector(
     (state) => state.globalData.abilitiesData
   );
-  const { heroId, name, abilities } = topInfo;
-  const heroDetail = getDetaiHero(heroes, heroId);
-  const imgHero = getImgStratsDota(`/heroes/${heroDetail?.shortName}_horz.png`);
-  const currSeconds = timesLabel[timeSeek] * 60;
+  // console.log("TopInfo");
+  const [abiFull, setAbiFull] = useState<(AbilityDetail & { time: number })[]>(
+    []
+  );
+
+  const [talentIds, setTalentIds] = useState<Ability[]>([]);
+  const [talentInfo, setTalentInfo] = useState<{
+    actives: number[];
+    stats: number;
+  }>();
+  const imgInfo = useMemo(() => {
+    const heroDetail = getDetaiHero(heroes, topInfo.heroId);
+    return {
+      img: getImgStratsDota(`/heroes/${heroDetail?.shortName}_horz.png`),
+      name: heroDetail?.displayName,
+    };
+  }, [topInfo, heroes]);
+
+  const currentTime = useGetTimeCurrentMatchDetail();
+  useEffect(() => {
+    if (talentIds.length === 0) return;
+    const { lvArr, abilities } = topInfo;
+    let countLv = 1;
+    const activesTl: number[] = [];
+    _.forEach(lvArr, (time) => {
+      if (time <= currentTime && time > 0) countLv++;
+    });
+    _.forEach(talentIds, (tl) => {
+      const { time, abilityId } = tl;
+      if (time <= currentTime) activesTl.push(abilityId);
+    });
+    setTalentInfo({
+      actives: activesTl,
+      stats: countLv - abilities.length,
+    });
+  }, [currentTime, topInfo, talentIds]);
+
+  useEffect(() => {
+    const { abilities } = topInfo;
+    const abiFull: (AbilityDetail & { time: number })[] = [];
+    const tlIds: Ability[] = [];
+    _.forEach(abilities, (abi) => {
+      const { abilityId, time } = abi;
+      const detailAbility = getDetaiAbility(abilitiesData, abilityId);
+      if (!detailAbility) return;
+      const { isTalent } = detailAbility;
+      if (isTalent) {
+        tlIds.push(abi);
+      } else {
+        abiFull.push({ ...detailAbility, time });
+      }
+    });
+    setTalentIds(tlIds);
+    setAbiFull(abiFull);
+  }, [topInfo, abilitiesData]);
+
+  // const { heroId, name, abilities } = topInfo;
 
   return (
-    <section className="flex items-center w-full">
-      <div className="">
-        <MyImage
-          src={imgHero}
-          height="40px"
-          width="68px"
-          alt={heroDetail?.shortName || ""}
-          borderRadius={6}
-        />
+    <section className="flex items-center justify-between w-full">
+      <div className="w-[250px] flex items-center">
+        <div className="w-[68px]">
+          <MyImage
+            src={imgInfo.img}
+            height="40px"
+            width="68px"
+            alt={imgInfo.name || ""}
+            borderRadius={6}
+          />
+        </div>
+        <div className="ml-2 flex-1">
+          {/* <h6 className="one-line-max">{name}</h6> */}
+          <span>3-1-1 build</span>
+        </div>
       </div>
-      <div className="ml-2">
-        <h6>{name}</h6>
-        <span>3-1-1 build</span>
-      </div>
-      <div className="flex-1 flex ml-2 overflow-hidden">
-        {abilities.map((abi, idx) => {
-          const { abilityId, time } = abi;
-          const detailAbility = getDetaiAbility(abilitiesData, abilityId);
-          if (!detailAbility) return;
-          const {
-            name,
-            isTalent,
-            language: { displayName },
-          } = detailAbility;
-          if (isTalent) return;
-          return (
-            <div key={idx} className="p-1">
-              <ToolTip
-                target={
-                  <div className={`${time > currSeconds ? "grayscale" : ""}`}>
-                    <MyImage
-                      src={getImgStratsDota(`/abilities/${name}.png`)}
-                      alt={name}
-                      width="30px"
-                      height="30px"
-                      borderRadius={5}
-                    />
-                  </div>
-                }
-                tooltip={<span className="p-2 rounded-md">{displayName}</span>}
-                id={uniqid()}
-              />
-            </div>
-          );
-        })}
+      <div className="flex-1 flex items-center justify-end">
+        <div className="">
+          <Abilities abiFull={abiFull} />
+        </div>
+        <div className="w-[36px]">
+          <Talent
+            idHero={topInfo.heroId}
+            talentInfo={talentInfo ? talentInfo : null}
+          />
+        </div>
       </div>
     </section>
   );

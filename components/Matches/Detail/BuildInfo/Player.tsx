@@ -1,18 +1,9 @@
 import _ from "lodash";
 import React, { useState, useEffect } from "react";
 import { Ability, PlayerMatchDetail } from "../../../../interfaces/matches";
-import {
-  getDetaiHero,
-  getDetailItem,
-  getImgStratsDota,
-  getTimeBySeconds,
-} from "../../../../share";
-import ItemIcon from "../../../ItemIcon";
+import { getDetailItem } from "../../../../share";
 import { useAppSelector } from "../../../../store/hook";
 import { Item } from "../../../../interfaces/item";
-import MyImage from "../../../MyImage";
-import uniqid from "uniqid";
-import ToolTip from "../../../ToolTip";
 import BotInfo from "./BotInfo";
 import TopInfo from "./TopInfo";
 
@@ -20,13 +11,13 @@ const Player = ({ player }: { player: PlayerMatchDetail }) => {
   const items = useAppSelector((state) => state.globalData.items);
 
   const [itemsBuild, setItemsBuild] = useState<(Item & { time: number })[]>([]);
-  const [spItems, setSpItems] = useState<(Item & { count: number })[]>([]);
+  const [spItems, setSpItems] = useState<(Item & { times: number[] })[]>([]);
   const [topInfo, setTopInfo] = useState<{
     heroId: number;
     name: string;
     abilities: Ability[];
+    lvArr: number[];
   }>();
-
   useEffect(() => {
     const {
       heroId,
@@ -39,10 +30,10 @@ const Player = ({ player }: { player: PlayerMatchDetail }) => {
       item3Id,
       item4Id,
       item5Id,
-      stats: { itemPurchases, wards, abilities },
+      stats: { itemPurchases, wards, abilities, level: lvArr },
       steamAccount: { name },
     } = player;
-    const spItemsResult: (Item & { count: number })[] = [];
+    const spItemsResult: (Item & { times: number[] })[] = [];
     const arr: number[] = [];
     backpack0Id && arr.push(backpack0Id);
     backpack1Id && arr.push(backpack1Id);
@@ -57,17 +48,7 @@ const Player = ({ player }: { player: PlayerMatchDetail }) => {
     _.forEach(itemPurchases, (item) => {
       const detail = getDetailItem(items, item.itemId);
       if (!detail) return;
-      const {
-        behavior,
-        quality,
-        isRecipe,
-        itemResult,
-        isRequiresCharges,
-        isDisplayCharges,
-        isStackable,
-        cost,
-        isSupport,
-      } = detail.stat;
+      const { isStackable, cost, isSupport } = detail.stat;
       if (detail.stat.needsComponents && cost >= 1000) {
         itemsResult.push({ ...detail, time: item.time });
       }
@@ -77,9 +58,9 @@ const Player = ({ player }: { player: PlayerMatchDetail }) => {
           (item) => item.id === detail.id
         );
         if (checkIdx === -1) {
-          spItemsResult.push({ ...detail, count: 1 });
+          spItemsResult.push({ ...detail, times: [item.time] });
         } else {
-          spItemsResult[checkIdx].count++;
+          spItemsResult[checkIdx].times.push(item.time);
         }
       }
     });
@@ -89,8 +70,10 @@ const Player = ({ player }: { player: PlayerMatchDetail }) => {
       heroId,
       name,
       abilities,
+      lvArr,
     });
   }, [player, items]);
+
   return (
     <section className=" rounded-md bg-layerSecondary-dark border border-solid border-borderTender-dark">
       <div className="flex items-center p-2 border-b border-solid border-borderTender-dark">

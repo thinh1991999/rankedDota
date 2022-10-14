@@ -1,5 +1,6 @@
 import Router from "next/router";
-import react, { useEffect, useState } from "react";
+import react, { useEffect, useState, useMemo } from "react";
+import { useAppSelector } from "../store";
 
 export const usePageLoading = () => {
   const [isPageLoading, setIsPageLoading] = useState(false);
@@ -25,21 +26,13 @@ export const usePageLoading = () => {
   return { isPageLoading };
 };
 
-// function useOutsideAlerter(ref: React.reac) {
-//   useEffect(() => {
-//     /**
-//      * Alert if clicked on outside of element
-//      */
-//     function handleClickOutside(event: HTMLElementEventMap) {
-//       if (ref.current && !ref.current.contains(event.target)) {
-//         alert("You clicked outside of me!");
-//       }
-//     }
-//     // Bind the event listener
-//     document.addEventListener("mousedown", handleClickOutside);
-//     return () => {
-//       // Unbind the event listener on clean up
-//       document.removeEventListener("mousedown", handleClickOutside);
-//     };
-//   }, [ref]);
-// }
+// MatchDetail
+export const useGetTimeCurrentMatchDetail = () => {
+  const timeSeek = useAppSelector((state) => state.matchDetail.timeSeek);
+  const timesLabel = useAppSelector((state) => state.matchDetail.timesLabel);
+
+  const currentTime = useMemo(() => {
+    return timesLabel[timeSeek] * 60;
+  }, [timeSeek, timesLabel]);
+  return currentTime;
+};
