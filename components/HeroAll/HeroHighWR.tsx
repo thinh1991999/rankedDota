@@ -119,8 +119,8 @@ const HeroHighWR = ({ heroesStatus }: { heroesStatus: HeroesStatus }) => {
                     </div>
                     <MyImage
                       src={img}
-                      width={140}
-                      height={140}
+                      width="140px"
+                      height="140px"
                       alt={shortName}
                     />
                   </div>

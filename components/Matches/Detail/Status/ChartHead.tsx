@@ -7,6 +7,7 @@ import { formatNetword, nFormatter } from "../../../../share";
 
 const ChartHead = () => {
   const matchDetail = useAppSelector((state) => state.matchDetail.matchDetail);
+  const timeSeek = useAppSelector((state) => state.matchDetail.timeSeek);
   const [nwTotal, setNwTotal] = useState<{
     isRadiant: boolean;
     nw: number;
@@ -19,30 +20,21 @@ const ChartHead = () => {
   useEffect(() => {
     if (!matchDetail) return;
     const {
-      players,
-      stats: { radiantNetworthLeads, radiantExperienceLeads },
+      stats: { radiantExperienceLeads, radiantNetworthLeads },
     } = matchDetail;
-    let nwRadiant: number = 0;
-    let expRadiant: number = 0;
-    let nwDire: number = 0;
-    let expDire: number = 0;
-    _.forEach(players, (player) => {
-      const { isRadiant, networth, experiencePerMinute } = player;
-      if (isRadiant) {
-        nwRadiant += networth;
-      } else {
-        nwDire += networth;
-      }
-    });
-    const minusNw = nwRadiant - nwDire;
+    const expLead = radiantExperienceLeads[timeSeek];
+    const goldLead = radiantNetworthLeads[timeSeek];
     setNwTotal({
-      isRadiant: minusNw > 0 ? true : false,
-      nw: nwRadiant > nwDire ? minusNw : -minusNw,
+      isRadiant: goldLead >= 0,
+      nw: goldLead < 0 ? goldLead * -1 : goldLead || 0,
     });
-  }, [matchDetail]);
-
+    setExpTotal({
+      isRadiant: expLead >= 0,
+      exp: expLead < 0 ? expLead * -1 : expLead || 0,
+    });
+  }, [matchDetail, timeSeek]);
   return (
-    <section className="p-2">
+    <div className="p-2">
       <div className="flex justify-between">
         <div className="flex items-center">
           <MyImage
@@ -53,18 +45,38 @@ const ChartHead = () => {
             borderRadius={6}
           />
           <span className="text-green-500 text-xl ml-2">Radiant</span>
-          {nwTotal?.isRadiant && (
+          {nwTotal?.isRadiant && nwTotal?.nw !== 0 && (
             <div className="ml-2 flex items-center px-2  border border-solid border-yellow-500 rounded-md">
               <MyImage src="/gold.png" width="15px" height="10px" alt="gold" />
               <span className="ml-1 text-yellow-500">
-                {nFormatter(nwTotal?.nw || 0, 1)}
+                +{nFormatter(nwTotal?.nw || 0, 1)}
+              </span>
+            </div>
+          )}
+          {expTotal?.isRadiant && expTotal?.exp !== 0 && (
+            <div className="ml-2 flex items-center px-2 border border-solid border-white rounded-md">
+              <span className="text-textMain-dark">
+                +{nFormatter(expTotal?.exp || 0, 1)}
+              </span>
+              <span className="text-textSecondPrimary-dark text-sm ml-2">
+                XP
               </span>
             </div>
           )}
         </div>
         <div className="flex items-center">
-          {!nwTotal?.isRadiant && (
-            <div className="mr-2 flex items-center px-2  border border-solid border-yellow-500 rounded-sm">
+          {!expTotal?.isRadiant && expTotal?.exp !== 0 && (
+            <div className="mr-2 flex items-center px-2 border border-solid border-white rounded-md">
+              <span className="text-textMain-dark">
+                +{nFormatter(expTotal?.exp || 0, 1)}
+              </span>
+              <span className="text-textSecondPrimary-dark text-sm ml-2">
+                XP
+              </span>
+            </div>
+          )}
+          {!nwTotal?.isRadiant && nwTotal?.nw !== 0 && (
+            <div className="mr-2 flex items-center px-2  border border-solid border-yellow-500 rounded-md">
               <MyImage src="/gold.png" width="15px" height="10px" alt="gold" />
               <span className="ml-1 text-yellow-500">
                 {nFormatter(nwTotal?.nw || 0, 1)}
@@ -81,7 +93,7 @@ const ChartHead = () => {
           />
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

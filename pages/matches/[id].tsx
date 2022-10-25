@@ -8,8 +8,8 @@ import {
   Draft,
   BuildInfo,
   KillBreakdown,
+  HeadInfo,
 } from "../../components/Matches";
-import { MatchDetail } from "../../interfaces/matches";
 import stratsApiService from "../../services/stratsApi.service";
 import { NextPageWithLayout } from "../_app";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
@@ -33,23 +33,26 @@ const MatchPage: NextPageWithLayout = () => {
       {loading ? (
         <p>Loading</p>
       ) : (
-        <div className="container m-auto">
-          {/* <div className="my-4">
-            <Matchup />
-          </div> */}
-          <div className="my-4">
-            <Status />
+        <div className="">
+          <HeadInfo />
+          <div className="container m-auto">
+            <div className="my-4">
+              <Matchup />
+            </div>
+            <div className="my-4">
+              <Status />
+            </div>
+            <div className="my-4">
+              <Draft />
+            </div>
+            <div className="my-4">
+              <BuildInfo />
+            </div>
+            <div className="my-4">
+              <KillBreakdown />
+            </div>
+            <TimeSeek />
           </div>
-          {/* <div className="my-4">
-            <Draft />
-          </div>
-          <div className="my-4">
-            <BuildInfo />
-          </div>
-          <div className="my-4">
-            <KillBreakdown />
-          </div> */}
-          <TimeSeek />
         </div>
       )}
     </section>

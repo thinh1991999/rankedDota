@@ -7,9 +7,11 @@ import uniqid from "uniqid";
 const RankIcon = ({
   rank,
   size = 32,
+  top = false,
 }: {
   rank: number | null;
   size?: number;
+  top?: boolean;
 }) => {
   const [medal, setMedal] = useState<string | null>(null);
   const [star, setStar] = useState<string | null>(null);
@@ -47,20 +49,24 @@ const RankIcon = ({
         default:
           break;
       }
-      setMedal(getImgStratsDota(`/seasonal_rank/medal_${nb}.png`));
+      setMedal(
+        getImgStratsDota(`/seasonal_rank/medal_${nb}${top ? "c" : ""}.png`)
+      );
       if (surplus > 0)
         setStar(getImgStratsDota(`/seasonal_rank/star_${surplus}.png`));
     } else {
       setMedal(getImgStratsDota(`/seasonal_rank/medal_0.png`));
     }
-  }, [rank]);
+  }, [rank, top]);
 
   return (
     <ToolTip
       target={
         <svg viewBox="0 0 256 256" width={size} height={size}>
           {medal && <image href={medal} height="100%" width="100%"></image>}
-          {star && <image href={star} height="100%" width="100%"></image>}
+          {star && !top && (
+            <image href={star} height="100%" width="100%"></image>
+          )}
         </svg>
       }
       tooltip={
