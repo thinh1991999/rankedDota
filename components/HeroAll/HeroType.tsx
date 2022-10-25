@@ -23,10 +23,10 @@ const HeroType = ({
   return (
     <section>
       <div className="flex items-center">
-        <MyImage src={img} alt="int" width={15} height={15} />
+        <MyImage src={img} alt="int" width="15px" height="15px" />
         <h6 className="ml-2">{title}</h6>
       </div>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(42px,1fr))] gap-2 mt-3">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(44px,1fr))] gap-2 mt-3">
         {data.map((item) => {
           const { displayName, id, shortName, name } = item;
           const isMeta = metaHeroes.includes(id);
@@ -52,7 +52,7 @@ const HeroType = ({
                       data-for={id.toString()}
                       className={`${
                         isMeta && checkSearch
-                          ? "border-yellow-500 border rounded-[5px]"
+                          ? "border-yellow-500 border border-solid rounded-[5px]"
                           : ""
                       } block hover:scale-125 hover:z-10 relative cursor-pointer transition-all ease-linear duration-[0.2s]`}
                     >
@@ -61,8 +61,8 @@ const HeroType = ({
                           src={getImgStratsDota(
                             `/heroes/${shortName}_vert.png`
                           )}
-                          width={42}
-                          height={60}
+                          width="42px"
+                          height="60px"
                           alt={name}
                           borderRadius={5}
                         />
@@ -71,8 +71,8 @@ const HeroType = ({
                         <div className="absolute top-0 right-0">
                           <MyImage
                             src="metaIcon.svg"
-                            width={15}
-                            height={15}
+                            width="15px"
+                            height="15px"
                             alt="meta"
                           />
                         </div>

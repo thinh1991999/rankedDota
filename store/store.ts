@@ -5,14 +5,17 @@ import {
   Reducer,
   combineReducers,
   ThunkAction,
+  AnyAction,
+  CombinedState,
 } from "@reduxjs/toolkit";
-import { createWrapper } from "next-redux-wrapper";
+import { createWrapper, HYDRATE } from "next-redux-wrapper";
 import languageSlice from "./Slices/languageSlice";
 import rootSlice from "./Slices/rootSlice";
 import globalDataSlice from "./Slices/globalDataSlice";
 import { GlobalData, Root } from "../interfaces/state";
 import composSlice from "./Slices/composSlice";
 import matchDetailSlice from "./Slices/matchDetailSlice";
+import lenguesSlice from "./Slices/lenguesSlice";
 
 export const makeStore = () => {
   const isServer = typeof window === "undefined";
@@ -20,7 +23,27 @@ export const makeStore = () => {
     globalData: globalDataSlice,
     compos: composSlice,
     matchDetail: matchDetailSlice,
+    lengues: lenguesSlice,
   });
+  // return configureStore({
+  //   reducer: (state, action) => {
+  //     const a: Root = action.payload;
+  //     const b: Root = state;
+  //     const c: Root = { ...a, ...b };
+  //     // return combinedReducer(state, action);
+  //     // if (action.type === HYDRATE) {
+  //     //   // console.log("***********HYDRATE***********");
+  //     //   return { ...state, ...action.payload };
+  //     // } else {
+  //     //   // console.log("**********************");
+
+  //     //   console.log(state);
+
+  //     //   return combinedReducer(state, action);
+  //     // }
+  //     return c;
+  //   },
+  // });
   if (isServer) {
     return configureStore({
       reducer: combinedReducer,
@@ -65,4 +88,12 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >;
-export const wrapper = createWrapper(makeStore, { debug: true });
+export const wrapper = createWrapper(makeStore, {
+  debug: false,
+  // serializeState(state) {
+  //   JSON.stringify(state);
+  // },
+  // deserializeState(state) {
+  //   JSON.parse(state) as Root;
+  // },
+});

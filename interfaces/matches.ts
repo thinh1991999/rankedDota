@@ -1,116 +1,116 @@
-// export interface MatchGraph {
-//   month: number;
-//   matchCount: number;
-//   __typename: string;
-// }
+export interface MatchGraph {
+  month: number;
+  matchCount: number;
+  __typename: string;
+}
 
-// export interface MatchLive {
-//   matchId: number;
-//   spectators: number;
-//   gameTime: number;
-//   averageRank: number;
-//   league: null;
-//   players: Player[];
-//   playbackData: WelcomePlaybackData;
-//   isParsing: boolean;
-//   __typename: string;
-//   radiantScore: number;
-//   direScore: number;
-//   radiantTeam: null;
-//   direTeam: null;
-//   serverSteamId: string;
-//   winRateValues: number[];
-//   durationValues: number[];
-//   liveWinRateValues: LiveWinRateValue[];
-// }
+export interface MatchLive {
+  matchId: number;
+  spectators: number;
+  gameTime: number;
+  averageRank: number;
+  league: null;
+  players: Player[];
+  playbackData: WelcomePlaybackData;
+  isParsing: boolean;
+  __typename: string;
+  radiantScore: number;
+  direScore: number;
+  radiantTeam: null;
+  direTeam: null;
+  serverSteamId: string;
+  winRateValues: number[];
+  durationValues: number[];
+  liveWinRateValues: LiveWinRateValue[];
+}
 
-// export interface LiveWinRateValue {
-//   winRate: number;
-//   __typename: string;
-// }
+export interface LiveWinRateValue {
+  winRate: number;
+  __typename: string;
+}
 
-// export interface WelcomePlaybackData {
-//   buildingEvents: BuildingEvent[];
-//   __typename: string;
-//   radiantScore: any[];
-//   direScore: any[];
-// }
+export interface WelcomePlaybackData {
+  buildingEvents: BuildingEvent[];
+  __typename: string;
+  radiantScore: any[];
+  direScore: any[];
+}
 
-// export interface BuildingEvent {
-//   npcId: number;
-//   isAlive: boolean;
-//   __typename: string;
-//   isRadiant: boolean;
-//   type: string;
-//   indexId: number;
-//   time: number;
-//   positionX: number;
-//   positionY: number;
-// }
+export interface BuildingEvent {
+  npcId: number;
+  isAlive: boolean;
+  __typename: string;
+  isRadiant: boolean;
+  type: string;
+  indexId: number;
+  time: number;
+  positionX: number;
+  positionY: number;
+}
 
-// export enum BuildingEventTypename {
-//   MatchLiveBuildingDetailType = "MatchLiveBuildingDetailType",
-// }
+export enum BuildingEventTypename {
+  MatchLiveBuildingDetailType = "MatchLiveBuildingDetailType",
+}
 
-// export interface Player {
-//   heroId: number;
-//   numKills: number;
-//   numDeaths: number;
-//   numAssists: number;
-//   steamAccount: SteamAccount;
-//   __typename: PlayerTypename;
-//   isRadiant: boolean;
-//   playbackData: PlayerPlaybackData;
-//   level: number;
-//   networth: number;
-// }
+export interface Player {
+  heroId: number;
+  numKills: number;
+  numDeaths: number;
+  numAssists: number;
+  steamAccount: SteamAccount;
+  __typename: PlayerTypename;
+  isRadiant: boolean;
+  playbackData: PlayerPlaybackData;
+  level: number;
+  networth: number;
+}
 
-// export enum PlayerTypename {
-//   MatchLivePlayerType = "MatchLivePlayerType",
-// }
+export enum PlayerTypename {
+  MatchLivePlayerType = "MatchLivePlayerType",
+}
 
-// export interface PlayerPlaybackData {
-//   positionEvents: PositionEvent[];
-//   __typename: PlaybackDataTypename;
-// }
+export interface PlayerPlaybackData {
+  positionEvents: PositionEvent[];
+  __typename: PlaybackDataTypename;
+}
 
-// export enum PlaybackDataTypename {
-//   MatchPlayerLivePlaybackDataType = "MatchPlayerLivePlaybackDataType",
-// }
+export enum PlaybackDataTypename {
+  MatchPlayerLivePlaybackDataType = "MatchPlayerLivePlaybackDataType",
+}
 
-// export interface PositionEvent {
-//   x: number;
-//   y: number;
-//   time: number;
-//   __typename: PositionEventTypename;
-// }
+export interface PositionEvent {
+  x: number;
+  y: number;
+  time: number;
+  __typename: PositionEventTypename;
+}
 
-// export enum PositionEventTypename {
-//   MatchLivePlayerPositionDetailType = "MatchLivePlayerPositionDetailType",
-// }
+export enum PositionEventTypename {
+  MatchLivePlayerPositionDetailType = "MatchLivePlayerPositionDetailType",
+}
 
-// export interface SteamAccount {
-//   id: number;
-//   name: string;
-//   proSteamAccount?: ProSteamAccount;
-//   avatar: string;
-//   isAnonymous: boolean;
-//   smurfFlag: number;
-//   __typename: string;
-// }
+export interface SteamAccount {
+  id: number;
+  name: string;
+  proSteamAccount?: ProSteamAccount;
+  avatar: string;
+  isAnonymous: boolean;
+  smurfFlag: number;
+  __typename: string;
+}
 
-// export interface ProSteamAccount {
-//   name: string;
-//   team: Team;
-//   __typename: string;
-// }
+export interface ProSteamAccount {
+  name: string;
+  team: Team;
+  __typename: string;
+}
 
-// export interface Team {
-//   id: number;
-//   tag: string;
-//   name: string;
-//   __typename: string;
-// }
+export interface Team {
+  id: number;
+  tag: string;
+  name: string;
+  __typename: string;
+}
 
 // Match Detail
 export interface MatchDetail {

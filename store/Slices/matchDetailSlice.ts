@@ -9,6 +9,7 @@ const initialState: MatchDetailData = {
   matchDetail: null,
   timeSeek: 0,
   timesLabel: [],
+  currSeconds: 0,
 };
 
 export const matchDetailSlice = createSlice({
@@ -27,6 +28,7 @@ export const matchDetailSlice = createSlice({
       state.matchDetail = action.payload;
       state.timesLabel = arr;
       state.timeSeek = arr.length - 1;
+      state.currSeconds = arr[arr.length - 1];
       state.loading = false;
     },
     setTimeSeek: (state, action: PayloadAction<number>) => {

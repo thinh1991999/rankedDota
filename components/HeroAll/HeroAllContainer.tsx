@@ -82,12 +82,12 @@ const HeroAllContainer = ({ heroesStatus }: { heroesStatus: HeroesStatus }) => {
                 onClick={() => setSearchMeta(!searchMeta)}
                 className={`${
                   searchMeta ? "" : "grayscale"
-                } h-full w-[44px] ml-2 rounded-md bg-neutral-dark `}
+                } h-full w-[44px] ml-2 rounded-md bg-neutral-dark flex justify-center items-center`}
               >
                 <MyImage
                   src="/metaIcon.svg"
-                  width={20}
-                  height={20}
+                  width="20px"
+                  height="20px"
                   alt="meta"
                 />
               </button>

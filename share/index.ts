@@ -1,4 +1,6 @@
 export { headerNavs, homeCards, heroRankOptions } from "./data";
+export { mathDetailNav } from "./navData";
+
 export { usePageLoading, useGetTimeCurrentMatchDetail } from "./customHooks";
 export {
   getImgOpenDota,
@@ -13,10 +15,11 @@ export {
   normalizeCoords,
   romanize,
   getPartyColor,
-  formatNetword,
+  formatNumber,
   formatTime,
   getGradient,
   sortRolesTeam,
+  getRankName,
 } from "./ultils";
 export { drawLinePluginChart } from "./chartjs";
 export {
@@ -29,4 +32,6 @@ export {
   CLOCK_ICON_HTML,
   COLOR_GOLD_NW,
   COLOR_EXP,
+  COLOR_GRAY_STRONG,
+  COLOR_GRAY_WEAK,
 } from "./constant";

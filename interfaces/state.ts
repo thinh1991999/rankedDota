@@ -2,11 +2,13 @@ import { AbilityDetail, Hero, HeroesStatus, TreeBranchInfo } from "./heroes";
 import { Item } from "./item";
 import { GameVersion } from "./gameVersion";
 import { MatchDetail } from "./matches";
+import { Data, Lengue, Live } from "./lengues";
 
 export interface Root {
   globalData: GlobalData;
   compos: ComposData;
   matchDetail: MatchDetailData;
+  lengues: Lengues;
 }
 
 export interface GlobalData {
@@ -29,4 +31,11 @@ export interface MatchDetailData {
   matchDetail: MatchDetail | null;
   timeSeek: number;
   timesLabel: number[];
+  currSeconds: number;
+}
+
+export interface Lengues {
+  lengues: Lengue[] | null;
+  data: Data[] | null;
+  live: Live | null;
 }

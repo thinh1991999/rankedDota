@@ -2114,6 +2114,243 @@ class StratsApiService {
       variables,
     });
   }
+
+  // Lengues
+  getActiveLengues() {
+    return this.axios.post("", {
+      query: `
+          fragment LeagueSeriesRowLeague on LeagueType {
+            id
+            displayName
+            region
+            nodeGroups {
+              ...LeagueSeriesRowNodeGroup
+              __typename
+            }
+            __typename
+          }
+          fragment LeagueSeriesRowNodeGroup on LeagueNodeGroupType {
+            id
+            name
+            nodes {
+              ...LeagueSeriesRowNode
+              __typename
+            }
+            __typename
+          }
+          fragment LeagueSeriesRowNode on LeagueNodeType {
+            id
+            scheduledTime
+            actualTime
+            teamOne {
+              ...LeagueSeriesRowTeam
+              __typename
+            }
+            teamTwo {
+              ...LeagueSeriesRowTeam
+              __typename
+            }
+            teamOneWins
+            teamTwoWins
+            hasStarted
+            isCompleted
+            nodeType
+            matches {
+              id
+              __typename
+            }
+            __typename
+          }
+          fragment LeagueSeriesRowTeam on TeamType {
+            id
+            name
+            tag
+            __typename
+          }
+          query GetActiveLeagues($leaguesRequest: LeagueRequestType!) {
+            leagues(request: $leaguesRequest) {
+              ...LeagueSeriesRowLeague
+              __typename
+            }
+          }
+     `,
+      variables: {
+        leaguesRequest: {
+          tiers: [
+            "MINOR",
+            "MAJOR",
+            "INTERNATIONAL",
+            "DPC_QUALIFIER",
+            "DPC_LEAGUE_QUALIFIER",
+            "DPC_LEAGUE",
+            "DPC_LEAGUE_FINALS",
+          ],
+          betweenStartDateTime: 1666544400,
+          betweenEndDateTime: 1667235600,
+          orderBy: "LAST_MATCH_TIME_THEN_TIER",
+        },
+      },
+    });
+  }
+
+  getLeaguesOverviewLeagueCard() {
+    return this.axios.post("", [
+      {
+        operationName: "GetLeaguesOverviewLeagueCard",
+        variables: {
+          leagueId: 14268,
+        },
+        query:
+          "query GetLeaguesOverviewLeagueCard($leagueId: Int!) {\n  league(id: $leagueId) {\n    id\n    displayName\n    prizePool\n    startDateTime\n    endDateTime\n    __typename\n  }\n}\n",
+      },
+      {
+        operationName: "GetLeaguesSchedule",
+        variables: {
+          request: {
+            tiers: [
+              "AMATEUR",
+              "PROFESSIONAL",
+              "MINOR",
+              "MAJOR",
+              "INTERNATIONAL",
+              "DPC_QUALIFIER",
+              "DPC_LEAGUE_QUALIFIER",
+              "DPC_LEAGUE",
+              "DPC_LEAGUE_FINALS",
+            ],
+            betweenStartDateTime: 1666198800,
+            betweenEndDateTime: 1668013200,
+            take: 1000,
+          },
+        },
+        query:
+          "query GetLeaguesSchedule($request: LeagueRequestType!) {\n  leagues(request: $request) {\n    ...LeaguesScheduleLeague\n    __typename\n  }\n}\n\nfragment LeaguesScheduleLeague on LeagueType {\n  id\n  region\n  tier\n  nodeGroups {\n    nodes {\n      scheduledTime\n      actualTime\n      teamOneWins\n      teamTwoWins\n      nodeType\n      __typename\n    }\n    __typename\n  }\n  ...LeagueSeriesRowLeague\n  __typename\n}\n\nfragment LeagueSeriesRowLeague on LeagueType {\n  id\n  displayName\n  region\n  nodeGroups {\n    ...LeagueSeriesRowNodeGroup\n    __typename\n  }\n  __typename\n}\n\nfragment LeagueSeriesRowNodeGroup on LeagueNodeGroupType {\n  id\n  name\n  nodes {\n    ...LeagueSeriesRowNode\n    __typename\n  }\n  __typename\n}\n\nfragment LeagueSeriesRowNode on LeagueNodeType {\n  id\n  scheduledTime\n  actualTime\n  teamOne {\n    ...LeagueSeriesRowTeam\n    __typename\n  }\n  teamTwo {\n    ...LeagueSeriesRowTeam\n    __typename\n  }\n  teamOneWins\n  teamTwoWins\n  hasStarted\n  isCompleted\n  nodeType\n  matches {\n    id\n    __typename\n  }\n  __typename\n}\n\nfragment LeagueSeriesRowTeam on TeamType {\n  id\n  name\n  tag\n  __typename\n}\n",
+      },
+      {
+        operationName: "GetLeaguesOverviewLeagueList",
+        variables: {
+          ongoingRequest: {
+            take: 13,
+            tiers: [
+              "MINOR",
+              "MAJOR",
+              "DPC_QUALIFIER",
+              "DPC_LEAGUE_QUALIFIER",
+              "DPC_LEAGUE",
+              "DPC_LEAGUE_FINALS",
+              "INTERNATIONAL",
+            ],
+            leagueEnded: false,
+            isFutureLeague: false,
+          },
+          upcomingRequest: {
+            take: 13,
+            tiers: [
+              "MINOR",
+              "MAJOR",
+              "DPC_QUALIFIER",
+              "DPC_LEAGUE_QUALIFIER",
+              "DPC_LEAGUE",
+              "DPC_LEAGUE_FINALS",
+              "INTERNATIONAL",
+            ],
+            leagueEnded: false,
+            isFutureLeague: true,
+          },
+          completedRequest: {
+            take: 13,
+            tiers: [
+              "MINOR",
+              "MAJOR",
+              "DPC_QUALIFIER",
+              "DPC_LEAGUE_QUALIFIER",
+              "DPC_LEAGUE",
+              "DPC_LEAGUE_FINALS",
+              "INTERNATIONAL",
+            ],
+            leagueEnded: true,
+            isFutureLeague: false,
+          },
+        },
+        query:
+          "query GetLeaguesOverviewLeagueList($ongoingRequest: LeagueRequestType!, $upcomingRequest: LeagueRequestType!, $completedRequest: LeagueRequestType!) {\n  ongoing: leagues(request: $ongoingRequest) {\n    ...LeaguesOverviewLeagueFragment\n    __typename\n  }\n  upcoming: leagues(request: $upcomingRequest) {\n    ...LeaguesOverviewLeagueFragment\n    __typename\n  }\n  completed: leagues(request: $completedRequest) {\n    ...LeaguesOverviewLeagueFragment\n    __typename\n  }\n}\n\nfragment LeaguesOverviewLeagueFragment on LeagueType {\n  id\n  displayName\n  startDateTime\n  endDateTime\n  prizePool\n  liveMatches {\n    matchId\n    __typename\n  }\n  standings {\n    standing\n    team {\n      ...LeaguesOverviewLeagueTeamFragment\n      __typename\n    }\n    __typename\n  }\n  matches(request: {take: 1, skip: 0}) {\n    id\n    radiantTeam {\n      ...LeaguesOverviewLeagueTeamFragment\n      __typename\n    }\n    direTeam {\n      ...LeaguesOverviewLeagueTeamFragment\n      __typename\n    }\n    didRadiantWin\n    __typename\n  }\n  matchesGroupBy(request: {groupBy: TEAM, playerList: SINGLE, take: 100}) {\n    id\n    __typename\n  }\n  nodeGroups {\n    nodeGroupType\n    __typename\n  }\n  __typename\n}\n\nfragment LeaguesOverviewLeagueTeamFragment on TeamType {\n  id\n  name\n  __typename\n}\n",
+      },
+      {
+        operationName: "GetLeaguesOverviewLeagueList",
+        variables: {
+          ongoingRequest: {
+            take: 13,
+            tiers: ["PROFESSIONAL"],
+            leagueEnded: false,
+            isFutureLeague: false,
+          },
+          upcomingRequest: {
+            take: 13,
+            tiers: ["PROFESSIONAL"],
+            leagueEnded: false,
+            isFutureLeague: true,
+          },
+          completedRequest: {
+            take: 13,
+            tiers: ["PROFESSIONAL"],
+            leagueEnded: true,
+            isFutureLeague: false,
+          },
+        },
+        query:
+          "query GetLeaguesOverviewLeagueList($ongoingRequest: LeagueRequestType!, $upcomingRequest: LeagueRequestType!, $completedRequest: LeagueRequestType!) {\n  ongoing: leagues(request: $ongoingRequest) {\n    ...LeaguesOverviewLeagueFragment\n    __typename\n  }\n  upcoming: leagues(request: $upcomingRequest) {\n    ...LeaguesOverviewLeagueFragment\n    __typename\n  }\n  completed: leagues(request: $completedRequest) {\n    ...LeaguesOverviewLeagueFragment\n    __typename\n  }\n}\n\nfragment LeaguesOverviewLeagueFragment on LeagueType {\n  id\n  displayName\n  startDateTime\n  endDateTime\n  prizePool\n  liveMatches {\n    matchId\n    __typename\n  }\n  standings {\n    standing\n    team {\n      ...LeaguesOverviewLeagueTeamFragment\n      __typename\n    }\n    __typename\n  }\n  matches(request: {take: 1, skip: 0}) {\n    id\n    radiantTeam {\n      ...LeaguesOverviewLeagueTeamFragment\n      __typename\n    }\n    direTeam {\n      ...LeaguesOverviewLeagueTeamFragment\n      __typename\n    }\n    didRadiantWin\n    __typename\n  }\n  matchesGroupBy(request: {groupBy: TEAM, playerList: SINGLE, take: 100}) {\n    id\n    __typename\n  }\n  nodeGroups {\n    nodeGroupType\n    __typename\n  }\n  __typename\n}\n\nfragment LeaguesOverviewLeagueTeamFragment on TeamType {\n  id\n  name\n  __typename\n}\n",
+      },
+      {
+        operationName: "GetLeaguesOverviewLeagueList",
+        variables: {
+          ongoingRequest: {
+            take: 13,
+            tiers: ["AMATEUR"],
+            leagueEnded: false,
+            isFutureLeague: false,
+          },
+          upcomingRequest: {
+            take: 13,
+            tiers: ["AMATEUR"],
+            leagueEnded: false,
+            isFutureLeague: true,
+          },
+          completedRequest: {
+            take: 13,
+            tiers: ["AMATEUR"],
+            leagueEnded: true,
+            isFutureLeague: false,
+          },
+        },
+        query:
+          "query GetLeaguesOverviewLeagueList($ongoingRequest: LeagueRequestType!, $upcomingRequest: LeagueRequestType!, $completedRequest: LeagueRequestType!) {\n  ongoing: leagues(request: $ongoingRequest) {\n    ...LeaguesOverviewLeagueFragment\n    __typename\n  }\n  upcoming: leagues(request: $upcomingRequest) {\n    ...LeaguesOverviewLeagueFragment\n    __typename\n  }\n  completed: leagues(request: $completedRequest) {\n    ...LeaguesOverviewLeagueFragment\n    __typename\n  }\n}\n\nfragment LeaguesOverviewLeagueFragment on LeagueType {\n  id\n  displayName\n  startDateTime\n  endDateTime\n  prizePool\n  liveMatches {\n    matchId\n    __typename\n  }\n  standings {\n    standing\n    team {\n      ...LeaguesOverviewLeagueTeamFragment\n      __typename\n    }\n    __typename\n  }\n  matches(request: {take: 1, skip: 0}) {\n    id\n    radiantTeam {\n      ...LeaguesOverviewLeagueTeamFragment\n      __typename\n    }\n    direTeam {\n      ...LeaguesOverviewLeagueTeamFragment\n      __typename\n    }\n    didRadiantWin\n    __typename\n  }\n  matchesGroupBy(request: {groupBy: TEAM, playerList: SINGLE, take: 100}) {\n    id\n    __typename\n  }\n  nodeGroups {\n    nodeGroupType\n    __typename\n  }\n  __typename\n}\n\nfragment LeaguesOverviewLeagueTeamFragment on TeamType {\n  id\n  name\n  __typename\n}\n",
+      },
+    ]);
+  }
+
+  getLiveMatchesLengues() {
+    return this.axios.post("", {
+      operationName: "GetLiveMatches",
+      variables: {
+        liveMatchesRequest: {
+          take: 100,
+          orderBy: "SPECTATOR_COUNT",
+          isParsing: true,
+        },
+      },
+      query:
+        "query GetLiveMatches($liveMatchesRequest: MatchLiveRequestType!) {\n  live {\n    matches(request: $liveMatchesRequest) {\n      matchId\n      radiantTeamId\n      direTeamId\n      ...HighlightsBarLive\n      ...LeagueSeriesRowLiveMatch\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment HighlightsBarLive on MatchLiveType {\n  matchId\n  gameTime\n  spectators\n  createdDateTime\n  averageRank\n  radiantTeam {\n    ...LeagueSeriesRowTeam\n    __typename\n  }\n  direTeam {\n    ...LeagueSeriesRowTeam\n    __typename\n  }\n  league {\n    ...LeagueSeriesRowLeague\n    __typename\n  }\n  players {\n    ...HighlightsBarLiveMatchPlayer\n    __typename\n  }\n  ...HighlightsBarLeagueLiveMatch\n  __typename\n}\n\nfragment LeagueSeriesRowTeam on TeamType {\n  id\n  name\n  tag\n  __typename\n}\n\nfragment HighlightsBarLiveMatchPlayer on MatchLivePlayerType {\n  isRadiant\n  steamAccount {\n    id\n    seasonLeaderboardRank\n    proSteamAccount {\n      name\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment HighlightsBarLeagueLiveMatch on MatchLiveType {\n  matchId\n  radiantTeamId\n  direTeamId\n  radiantScore\n  direScore\n  gameTime\n  completed\n  __typename\n}\n\nfragment LeagueSeriesRowLeague on LeagueType {\n  id\n  displayName\n  region\n  nodeGroups {\n    ...LeagueSeriesRowNodeGroup\n    __typename\n  }\n  __typename\n}\n\nfragment LeagueSeriesRowNodeGroup on LeagueNodeGroupType {\n  id\n  name\n  nodes {\n    ...LeagueSeriesRowNode\n    __typename\n  }\n  __typename\n}\n\nfragment LeagueSeriesRowNode on LeagueNodeType {\n  id\n  scheduledTime\n  actualTime\n  teamOne {\n    ...LeagueSeriesRowTeam\n    __typename\n  }\n  teamTwo {\n    ...LeagueSeriesRowTeam\n    __typename\n  }\n  teamOneWins\n  teamTwoWins\n  hasStarted\n  isCompleted\n  nodeType\n  matches {\n    id\n    __typename\n  }\n  __typename\n}\n\nfragment LeagueSeriesRowLiveMatch on MatchLiveType {\n  matchId\n  gameTime\n  radiantTeamId\n  direTeamId\n  playbackData {\n    pickBans {\n      heroId\n      isPick\n      isRadiant\n      __typename\n    }\n    __typename\n  }\n  players {\n    heroId\n    __typename\n  }\n  __typename\n}\n",
+    });
+  }
+  // players
+  getPlayersRanks() {
+    return this.axios.post("", {
+      operationName: "PlayersRanks",
+      variables: {},
+      query:
+        "query PlayersRanks {\n  stratz {\n    page {\n      players {\n        steamAccountByRank {\n          rank\n          playerCount\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n",
+    });
+  }
 }
 
 export default new StratsApiService();

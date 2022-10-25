@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
-import { AiOutlineClockCircle } from "react-icons/ai";
 import {
   Chart as ChartJS,
   LinearScale,
@@ -15,6 +14,8 @@ import {
   ChartOptions,
   Filler,
   ChartData,
+  ScriptableLineSegmentContext,
+  ChartDataset,
 } from "chart.js";
 import { Chart, ChartProps } from "react-chartjs-2";
 import { useAppSelector } from "../../../../store";
@@ -33,7 +34,6 @@ import {
   nFormatter,
   formatTime,
   getGradient,
-  formatNetword,
 } from "../../../../share";
 
 ChartJS.register(
@@ -52,6 +52,7 @@ ChartJS.register(
 const externalTooltipHandler = (context: any) => {
   // Tooltip Element
   const { chart, tooltip } = context;
+  if (tooltip.dataPoints.length !== 2) return;
   const {
     dataset: { data: dataNw },
     dataIndex: idxNw,
@@ -62,9 +63,7 @@ const externalTooltipHandler = (context: any) => {
   } = tooltip.dataPoints[1];
   const vlNw: number = dataNw[idxNw];
   const vlExp: number = dataExp[idxExp];
-
   let tooltipEl = chart.canvas.parentNode.querySelector("div");
-
   if (!tooltipEl) {
     tooltipEl = document.createElement("div");
     tooltipEl.style.background = "#0d1b21";
@@ -238,27 +237,138 @@ const externalTooltipHandler = (context: any) => {
   tooltipEl.style.font = tooltip.options.bodyFont.string;
 };
 
+const pluginSeekTime = {
+  id: "plug",
+  beforeDraw: (chart: ChartJS) => {
+    var ctx = chart.ctx;
+    const labels = chart.data.labels as number[];
+    const currTime = chart.data.datasets[0].data[0] || 0;
+    var xAxis = chart.scales.x;
+    var yAxis = chart.scales.y;
+    ctx.save();
+    const topY = chart.scales.y.top;
+    const bottomY = chart.scales.y.bottom;
+    var xCurr = xAxis.getPixelForValue(Number(currTime));
+    labels.forEach((l, i) => {
+      var x = xAxis.getPixelForValue(i);
+      if (
+        (x && (i % 5 === 0 || i === labels.length - 1) && i <= currTime) ||
+        i === 0 ||
+        i === labels.length - 1
+      ) {
+        ctx.beginPath();
+        ctx.moveTo(x, topY);
+        ctx.lineTo(x, bottomY);
+        ctx.lineWidth = 0.5;
+        ctx.strokeStyle = "gray";
+        ctx.stroke();
+      }
+    });
+    yAxis.ticks.forEach((t, i) => {
+      var x = yAxis.getPixelForTick(i);
+      ctx.beginPath();
+      if (i === 0 || i === yAxis.ticks.length - 1) {
+        ctx.moveTo(xAxis.left, x);
+        ctx.lineTo(xAxis.right, x);
+      } else {
+        ctx.moveTo(xAxis.left, x);
+        ctx.lineTo(xCurr, x);
+      }
+      ctx.lineWidth = 0.5;
+      ctx.strokeStyle = "gray";
+      ctx.stroke();
+    });
+    if (currTime < labels.length - 1) {
+      ctx.beginPath();
+      ctx.moveTo(xCurr, topY);
+      ctx.lineTo(xCurr, bottomY);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = "white";
+      ctx.stroke();
+    }
+    ctx.restore();
+  },
+};
+
+const overTimeSeek = (ctx: ScriptableLineSegmentContext, timeSeek: number) => {
+  return ctx.p1DataIndex <= timeSeek ? undefined : "rgba(162, 161, 161, 0.4)";
+};
+
 const ChartMain = () => {
   const matchDetail = useAppSelector((state) => state.matchDetail.matchDetail);
-  const [show, setShow] = useState(false);
-  const [dataChart, setDataChart] = useState<ChartData>();
+  const timeSeek = useAppSelector((state) => state.matchDetail.timeSeek);
+  const [dataChart, setDataChart] = useState<ChartData | null>(null);
   const [options, setOptions] = useState<ChartOptions>();
+  const [hoverIdx, setHoverIdx] = useState<number | null>(null);
 
-  const plug = {
-    id: "plug",
-    beforeDraw: (chart: ChartJS, args: any, opts: any) => {
-      const labels = chart.data.labels as number[];
-      var ctx = chart.ctx;
-      ctx.save();
-      ctx.textAlign = "center";
-      ctx.font = "12px Arial";
-      labels.forEach((l, i) => {
-        var value = chart.data.datasets[0].data[i];
-        // var x = xAxis.getPixelForValue(l);
-        ctx.fillStyle = "red";
-        ctx.fillText("123", 0, 123);
+  const htmlLegendPlugin = {
+    id: "htmlLegend",
+    getNewDatasets: (
+      chartData: ChartData | null,
+      clear: boolean,
+      index: number
+    ): ChartData | null => {
+      if (chartData) {
+        const newChartData = { ...chartData };
+        _.forEach(newChartData.datasets, (item: ChartDataset, idx) => {
+          if (clear) {
+            item.hidden = false;
+          } else {
+            if (idx !== index) {
+              item.hidden = false;
+            } else {
+              item.hidden = true;
+            }
+          }
+        });
+        return newChartData;
+      }
+      return null;
+    },
+    beforeRender(chart: any) {
+      const items = chart.options.plugins.legend.labels.generateLabels(chart);
+      const ul = document.createElement("ul");
+      ul.style.display = "flex";
+      ul.style.justifyContent = "end";
+      items.forEach((item: any, idx: number) => {
+        if (idx === 0) return;
+        const img = document.createElement("img");
+        img.src =
+          idx === 1 ? "/ExtendIcon/networth.svg" : "/ExtendIcon/exp.svg";
+        img.style.marginRight = "4px";
+        const li = document.createElement("li");
+        li.style.display = "flex";
+        li.style.alignItems = "center";
+        li.style.fontSize = "0.9rem";
+        li.style.marginLeft = "20px";
+        li.style.cursor = "pointer";
+        li.style.padding = "5px 10px";
+        li.addEventListener("mouseenter", () => {
+          li.style.border = "1px solid rgba(176, 176, 176, 0.2)";
+          li.style.borderRadius = "4px";
+          const newData = this.getNewDatasets(dataChart, false, idx);
+          newData &&
+            idx !== hoverIdx && [
+              setDataChart(_.cloneDeep(newData)),
+              setHoverIdx(idx),
+            ];
+        });
+        li.addEventListener("mouseleave", () => {
+          li.style.border = "unset";
+          li.style.borderRadius = "0";
+          const newData = this.getNewDatasets(dataChart, true, idx);
+          console.log(newData);
+          newData && [setDataChart(_.cloneDeep(newData)), setHoverIdx(null)];
+        });
+        li.appendChild(img);
+        li.appendChild(document.createTextNode(item.text));
+        ul.appendChild(li);
       });
-      ctx.restore();
+      const jsLegend = document.getElementById("graphs-match-detail");
+      if (jsLegend) {
+        jsLegend.innerHTML = "";
+        jsLegend.appendChild(ul);
+      }
     },
   };
 
@@ -279,7 +389,12 @@ const ChartMain = () => {
       labels: arr,
       datasets: [
         {
-          label: "Netword",
+          label: "CurrTime",
+          data: [timeSeek],
+          showLine: false,
+        },
+        {
+          label: "Net Worth",
           data: radiantNetworthLeads,
           borderWidth: 1,
           borderColor: function (context: any) {
@@ -292,6 +407,14 @@ const ChartMain = () => {
           },
           pointRadius: 0,
           tension: 0.5,
+          segment: {
+            borderColor: (ctx) => {
+              return overTimeSeek(ctx, timeSeek);
+            },
+            backgroundColor: (ctx) => {
+              return overTimeSeek(ctx, timeSeek);
+            },
+          },
           fill: {
             target: {
               value: 0,
@@ -300,21 +423,29 @@ const ChartMain = () => {
             below: COLOR_CHART_DIRE_BG,
           },
         },
-        // {
-        //   label: "Experience",
-        //   data: [10000, 20000, 30000],
-        //   borderWidth: 1,
-        //   tension: 0.5,
-        //   borderColor: "gray",
-        //   pointRadius: 10,
-        //   backgroundColor: ["blue", "yellow", "red"],
-        //   fill: true,
-        //   // fill: {
-        //   //   target: 0,
-        //   //   above: "rgba(48, 47, 47, 0.8)",
-        //   //   below: "rgba(48, 47, 47, 0.8)",
-        //   // },
-        // },
+        {
+          label: "Experience",
+          data: radiantExperienceLeads,
+          borderWidth: 1,
+          tension: 0.5,
+          borderColor: "gray",
+          pointRadius: 0,
+          segment: {
+            borderColor: (ctx) => {
+              return overTimeSeek(ctx, timeSeek);
+            },
+            backgroundColor: (ctx) => {
+              return overTimeSeek(ctx, timeSeek);
+            },
+          },
+          fill: {
+            target: {
+              value: 0,
+            },
+            above: "rgba(48, 47, 47, 1)",
+            below: "rgba(48, 47, 47, 1)",
+          },
+        },
       ],
     });
     if (maxY) {
@@ -322,17 +453,17 @@ const ChartMain = () => {
         responsive: true,
         plugins: {
           legend: {
-            display: true,
+            display: false,
           },
           title: {
-            display: true,
+            display: false,
           },
           tooltip: {
             mode: "index",
             intersect: false,
             displayColors: false,
             enabled: false,
-            // external: externalTooltipHandler,
+            external: externalTooltipHandler,
           },
         },
         hover: {
@@ -344,15 +475,25 @@ const ChartMain = () => {
           x: {
             ticks: {
               display: true,
-              callback: (value) => {
+              callback: (value, idx, ticks) => {
                 const nbVl = Number(value);
-                if (nbVl % 5 === 0) return formatTime(nbVl * 60 * 1000);
+                if (idx === ticks.length - 1) {
+                  if (nbVl % 5 === 0) {
+                    return formatTime(nbVl * 60 * 1000);
+                  } else {
+                    return "";
+                  }
+                } else {
+                  if (nbVl % 5 === 0) return formatTime(nbVl * 60 * 1000);
+                }
               },
               padding: 10,
             },
             grid: {
               color: "rgba(107, 107, 107, 0.5)",
               tickLength: 0,
+              display: false,
+              // drawTicks:false
             },
           },
           y: {
@@ -375,30 +516,30 @@ const ChartMain = () => {
             grid: {
               color: "rgba(107, 107, 107, 0.5)",
               tickLength: 0,
+              display: false,
             },
           },
         },
       });
     }
-  }, [matchDetail]);
-  console.log(matchDetail);
+  }, [matchDetail, timeSeek]);
+
   return (
     <>
-      <button onClick={() => setShow(!show)}>click</button>
-      <AiOutlineClockCircle />
-      <section className="h-[200px] relative">
-        {dataChart && show && (
+      <div className="h-[200px] p-5 relative">
+        {dataChart && (
           <Chart
             type="line"
             width={50}
             height={50}
             options={options}
             data={dataChart}
+            plugins={[drawLinePluginChart, pluginSeekTime, htmlLegendPlugin]}
             redraw={true}
-            plugins={[drawLinePluginChart, plug]}
           />
         )}
-      </section>
+      </div>
+      <div id="graphs-match-detail" className="flex justify-center "></div>
     </>
   );
 };

@@ -131,6 +131,7 @@ export const getTypeOfHero = (
 };
 
 export const nFormatter = (num: number, digits: number) => {
+  const numCl = num < 0 ? -num : num;
   const lookup = [
     { value: 1, symbol: "" },
     { value: 1e3, symbol: "k" },
@@ -145,11 +146,12 @@ export const nFormatter = (num: number, digits: number) => {
     .slice()
     .reverse()
     .find(function (item) {
-      return num >= item.value;
+      return numCl >= item.value;
     });
-  return item
-    ? (num / item.value).toFixed(digits).replace(rx, "$1") + item.symbol
+  const result = item
+    ? (numCl / item.value).toFixed(digits).replace(rx, "$1") + item.symbol
     : "0";
+  return num < 0 ? "-" + result : result;
 };
 
 export const normalizeCoords = (
@@ -260,7 +262,8 @@ export const getPartyColor = (
   }
 };
 
-export const formatNetword = (value: number): string => {
+export const formatNumber = (value: number): string => {
+  if (value === 0) return "0";
   return value.toFixed().replace(/./g, function (c, i, a) {
     return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
   });
@@ -325,3 +328,28 @@ export function sortRolesTeam<T extends Team>(arr: T[]) {
   });
   return newArr;
 }
+
+export const getRankName = (rank: number): string => {
+  if (rank <= 20) {
+    return "Guardian";
+  }
+  if (rank <= 30) {
+    return "Guardian";
+  }
+  if (rank <= 40) {
+    return "Crusader";
+  }
+  if (rank <= 50) {
+    return "Archon";
+  }
+  if (rank <= 60) {
+    return "Legend";
+  }
+  if (rank <= 70) {
+    return "Ancient";
+  }
+  if (rank <= 80) {
+    return "Divine";
+  }
+  return "Immortal";
+};

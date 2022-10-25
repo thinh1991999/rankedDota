@@ -7,6 +7,8 @@ import { wrapper } from "../store/store";
 import { useAppDispatch, useAppSelector } from "../store";
 import { fetchDefaultData } from "../store/Slices/globalDataSlice";
 import "../styles/globals.css";
+import { usePageLoading } from "../share";
+import PageLoading from "../components/PageLoading";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -24,10 +26,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const dispatch = useAppDispatch();
 
   const loading = useAppSelector((state) => state.globalData.loading);
-
-  const [pageLoaded, setPageLoaded] = useState(false);
+  const { isPageLoading } = usePageLoading();
   const [mounted, setMounted] = useState(false);
-
   useEffect(() => {
     dispatch(fetchDefaultData());
     setMounted(true);
@@ -46,7 +46,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   }
   return (
     <ThemeProvider attribute="class">
-      {getLayout(<Component {...pageProps} />)}
+      {getLayout(
+        isPageLoading ? <PageLoading /> : <Component {...pageProps} />
+      )}
     </ThemeProvider>
   );
 }
