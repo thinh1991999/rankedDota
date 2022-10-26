@@ -330,26 +330,35 @@ export function sortRolesTeam<T extends Team>(arr: T[]) {
 }
 
 export const getRankName = (rank: number): string => {
-  if (rank <= 20) {
+  if (rank < 20) {
+    return "Herald";
+  }
+  if (rank < 30) {
     return "Guardian";
   }
-  if (rank <= 30) {
-    return "Guardian";
-  }
-  if (rank <= 40) {
+  if (rank < 40) {
     return "Crusader";
   }
-  if (rank <= 50) {
+  if (rank < 50) {
     return "Archon";
   }
-  if (rank <= 60) {
+  if (rank < 60) {
     return "Legend";
   }
-  if (rank <= 70) {
+  if (rank < 70) {
     return "Ancient";
   }
-  if (rank <= 80) {
+  if (rank < 80) {
     return "Divine";
   }
   return "Immortal";
 };
+
+export function makeArray<T>(size: number, value: T | null = null): T[] {
+  const arr = new Array<T>(size);
+  if (value !== null)
+    for (let i = 0; i < arr.length; i++) {
+      arr[i] = value;
+    }
+  return arr;
+}

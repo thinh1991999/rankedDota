@@ -46,6 +46,8 @@ h2 {
 h5 {
   font-size: 1.6rem;
   font-weight: 700;
+  /* justify-content: space-between; */
+  /* align-items: center; */
 }
 
 .ReactTooltip {

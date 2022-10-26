@@ -20,7 +20,9 @@ const RankPage: NextPageWithLayout<Props> = (props) => {
   return (
     <div className="container m-auto">
       <Chart stratz={props.stratz} />
-      <RankInfor stratz={props.stratz} />
+      <div className="mt-5">
+        <RankInfor stratz={props.stratz} />
+      </div>
     </div>
   );
 };

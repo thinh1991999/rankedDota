@@ -20,6 +20,7 @@ export {
   getGradient,
   sortRolesTeam,
   getRankName,
+  makeArray,
 } from "./ultils";
 export { drawLinePluginChart } from "./chartjs";
 export {
