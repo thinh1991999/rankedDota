@@ -1,5 +1,4 @@
 import React, { memo, useEffect, useState } from "react";
-import MyImage from "./MyImage";
 import { getImgStratsDota } from "../share/ultils";
 import ToolTip from "./ToolTip";
 import uniqid from "uniqid";
