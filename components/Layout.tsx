@@ -30,6 +30,7 @@ function Layout({ children }: { children: React.ReactNode }) {
         />
       </Head>
       <section
+        id="main"
         className={`bg-background-light dark:bg-background-dark  overflow-y-scroll h-screen w-screen text-textPrimary-light dark:text-textPrimary-dark`}
         // onScroll={handleScroll}
       >
