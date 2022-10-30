@@ -2351,6 +2351,27 @@ class StratsApiService {
         "query PlayersRanks {\n  stratz {\n    page {\n      players {\n        steamAccountByRank {\n          rank\n          playerCount\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n",
     });
   }
+
+  getPlayersQueue() {
+    return this.axios.post("", {
+      operationName: "GetPlayersQueue",
+      variables: {},
+      query:
+        "query GetPlayersQueue {\n  stratz {\n    page {\n      matches {\n        matchmakingStats {\n          ...PlayersQueueMatchmakingStatsFragment\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment PlayersQueueMatchmakingStatsFragment on MatchmakingStatsType {\n  timestamp: time\n  australia\n  austria\n  brazil\n  chile\n  dubai\n  europe\n  india\n  japan\n  perfectWorldTelecom\n  perfectWorldTelecomGuangdong\n  perfectWorldTelecomWuhan\n  perfectWorldTelecomZhejiang\n  perfectWorldUnicom\n  perfectWorldUnicomTianjin\n  peru\n  singapore\n  southAfrica\n  stockholm\n  taiwan\n  usEast: uSEast\n  usWest: uSWest\n  __typename\n}\n",
+    });
+  }
+
+  getCoachesLeaderboard(skip: number = 0) {
+    return this.axios.post("", {
+      operationName: "GetCoachesLeaderboard",
+      variables: {
+        take: 20,
+        skip,
+      },
+      query:
+        "query GetCoachesLeaderboard($skip: Int, $take: Int) {\n  leaderboard {\n    coaching {\n      players(take: $take, skip: $skip) {\n        steamAccount {\n          id\n          seasonRank\n          seasonLeaderboardRank\n          avatar\n          lastMatchRegionId\n          ...PlayerNameColSteamAccountTypeFragment\n          __typename\n        }\n        matchCount\n        winCount\n        rating\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment PlayerNameColSteamAccountTypeFragment on SteamAccountType {\n  id\n  name\n  proSteamAccount {\n    name\n    __typename\n  }\n  isAnonymous\n  smurfFlag\n  __typename\n}\n",
+    });
+  }
 }
 
 export default new StratsApiService();

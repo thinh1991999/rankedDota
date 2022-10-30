@@ -1,3 +1,4 @@
+import { GOLD_ICON } from "./constant";
 export { headerNavs, homeCards, heroRankOptions } from "./data";
 export { mathDetailNav } from "./navData";
 
@@ -21,9 +22,11 @@ export {
   sortRolesTeam,
   getRankName,
   makeArray,
+  getRandomRgba,
 } from "./ultils";
 export { drawLinePluginChart } from "./chartjs";
 export {
+  GOLD_ICON,
   RADIANT_ICON,
   DIRE_ICON,
   COLOR_CHART_DIRE_BG,

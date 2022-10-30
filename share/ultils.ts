@@ -362,3 +362,34 @@ export function makeArray<T>(size: number, value: T | null = null): T[] {
     }
   return arr;
 }
+
+export function getRandomRgba(): {
+  strong: string;
+  layer: string;
+} {
+  var o = Math.round,
+    r = Math.random,
+    s = 255;
+  return {
+    strong:
+      "rgba(" +
+      o(r() * s) +
+      "," +
+      o(r() * s) +
+      "," +
+      o(r() * s) +
+      "," +
+      1 +
+      ")",
+    layer:
+      "rgba(" +
+      o(r() * s) +
+      "," +
+      o(r() * s) +
+      "," +
+      o(r() * s) +
+      "," +
+      0.5 +
+      ")",
+  };
+}
