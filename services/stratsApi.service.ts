@@ -2372,6 +2372,32 @@ class StratsApiService {
         "query GetCoachesLeaderboard($skip: Int, $take: Int) {\n  leaderboard {\n    coaching {\n      players(take: $take, skip: $skip) {\n        steamAccount {\n          id\n          seasonRank\n          seasonLeaderboardRank\n          avatar\n          lastMatchRegionId\n          ...PlayerNameColSteamAccountTypeFragment\n          __typename\n        }\n        matchCount\n        winCount\n        rating\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment PlayerNameColSteamAccountTypeFragment on SteamAccountType {\n  id\n  name\n  proSteamAccount {\n    name\n    __typename\n  }\n  isAnonymous\n  smurfFlag\n  __typename\n}\n",
     });
   }
+
+  getPlayersLeaderboards(divisionIdNb: number) {
+    let leaderBoardDivision = "AMERICAS";
+    if (divisionIdNb === 1) {
+      leaderBoardDivision = "SE_ASIA";
+    }
+    if (divisionIdNb === 2) {
+      leaderBoardDivision = "EUROPE";
+    }
+    if (divisionIdNb === 3) {
+      leaderBoardDivision = "CHINA";
+    }
+    return this.axios.post("", {
+      operationName: "GetPlayersLeaderboards",
+      variables: {
+        leaderboardRequestVariable: {
+          leaderBoardDivision,
+          skip: 0,
+          take: 10000,
+        },
+        skipUserFollowingData: false,
+      },
+      query:
+        "query GetPlayersLeaderboards($leaderboardRequestVariable: FilterSeasonLeaderboardRequestType, $skipUserFollowingData: Boolean!) {\n  leaderboard {\n    season(request: $leaderboardRequestVariable) {\n      steamAccountId\n      steamAccount {\n        ...LeaderboardSteamAccount\n        __typename\n      }\n      rank\n      rankShift\n      position\n      __typename\n    }\n    __typename\n  }\n  stratz @skip(if: $skipUserFollowingData) {\n    user {\n      following {\n        steamAccount {\n          ...FollowingSteamAccount\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment LeaderboardSteamAccount on SteamAccountType {\n  id\n  countryCode\n  isAnonymous\n  proSteamAccount {\n    countries\n    __typename\n  }\n  ...TeamTagPlayerNameColSteamAccountTypeFragment\n  __typename\n}\n\nfragment TeamTagPlayerNameColSteamAccountTypeFragment on SteamAccountType {\n  id\n  name\n  proSteamAccount {\n    name\n    team {\n      tag\n      id\n      name\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment FollowingSteamAccount on SteamAccountType {\n  seasonLeaderboardRank\n  seasonLeaderboardDivisionId\n  proSteamAccount {\n    position\n    __typename\n  }\n  ...LeaderboardSteamAccount\n  __typename\n}\n",
+    });
+  }
 }
 
 export default new StratsApiService();

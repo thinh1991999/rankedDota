@@ -16,6 +16,7 @@ import { GlobalData, Root } from "../interfaces/state";
 import composSlice from "./Slices/composSlice";
 import matchDetailSlice from "./Slices/matchDetailSlice";
 import lenguesSlice from "./Slices/lenguesSlice";
+import playersLeaderboardSlice from "./Slices/playersLeaderboardSlice";
 
 export const makeStore = () => {
   const isServer = typeof window === "undefined";
@@ -24,6 +25,7 @@ export const makeStore = () => {
     compos: composSlice,
     matchDetail: matchDetailSlice,
     lengues: lenguesSlice,
+    playersLeaderboard: playersLeaderboardSlice,
   });
   // return configureStore({
   //   reducer: (state, action) => {

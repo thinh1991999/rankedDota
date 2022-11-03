@@ -13,7 +13,7 @@ const IconTypeRole = ({
   filterClass,
 }: {
   role: string;
-  lane: string;
+  lane?: string;
   gray?: boolean;
   width?: number;
   height?: number;
