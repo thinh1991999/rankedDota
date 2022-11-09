@@ -6,7 +6,8 @@ export const usePageLoading = () => {
   const [isPageLoading, setIsPageLoading] = useState(false);
 
   useEffect(() => {
-    const routeEventStart = () => {
+    const routeEventStart = (url: any, { shallow }: { shallow: boolean }) => {
+      if (shallow) return;
       setIsPageLoading(true);
     };
     const routeEventEnd = () => {

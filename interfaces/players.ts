@@ -80,3 +80,43 @@ export interface SteamAccount {
   smurfFlag: number | null;
   __typename: string;
 }
+
+export interface Season {
+  steamAccountId: number;
+  steamAccount: SteamAccountSeason;
+  rank: number;
+  rankShift: number | null;
+  position: Position | null;
+  __typename: string;
+}
+
+export enum Position {
+  Position1 = "POSITION_1",
+  Position2 = "POSITION_2",
+  Position3 = "POSITION_3",
+  Position4 = "POSITION_4",
+  Position5 = "POSITION_5",
+}
+
+export interface SteamAccountSeason {
+  id: number;
+  countryCode: null | string;
+  isAnonymous: boolean;
+  proSteamAccount: ProSteamAccount | null;
+  name: string;
+  __typename: string;
+}
+
+export interface ProSteamAccount {
+  countries: string[];
+  __typename: string;
+  name: string;
+  team: Team | null;
+}
+
+export interface Team {
+  tag: null | string;
+  id: number;
+  name: string;
+  __typename: string;
+}

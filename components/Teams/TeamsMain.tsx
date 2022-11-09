@@ -64,25 +64,25 @@ const TeamsMain = ({ teams }: { teams: Team[] }) => {
             .unix(last_match_time)
             .format("MMMM D, YYYY");
           return (
-            <div key={team_id} className="lg:w-1/4 p-2">
+            <div key={team_id} className="lg:w-1/4 p-2 text-textMain-dark">
               <Link href={"/teams/" + team_id} className="">
                 <a className="block p-2 h-[360px] rounded-md bg-layer-dark ">
                   <div className="flex justify-end">
                     <span>{`#${idx + 1}`}</span>
                   </div>
-                  <div className="">
+                  <div className="flex justify-center">
                     {logo_url ? (
                       <MyImage
                         src={logo_url}
-                        width={100}
-                        height={100}
+                        width="100px"
+                        height="100px"
                         alt={name}
                       />
                     ) : (
                       <div className="w-[100px] h-[100px]"></div>
                     )}
                   </div>
-                  <div className="flex flex-col justify-center items-center">
+                  <div className="flex flex-col justify-center items-center ">
                     <span className="text-xl ">{name}</span>
                     <span className="text-textSecondPrimary-dark">{tag}</span>
                     <div className="my-5 flex justify-center">

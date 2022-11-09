@@ -125,7 +125,7 @@ export const getTypeOfHero = (
     default:
       return {
         name: "Safe lane",
-        icon: "",
+        icon: "/HeroType/carry.svg",
       };
   }
 };

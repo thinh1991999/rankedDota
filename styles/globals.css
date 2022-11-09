@@ -124,6 +124,10 @@ h5 {
   );
 }
 
+/* React-select */
+
+/* End React-select */
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
