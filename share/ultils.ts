@@ -8,6 +8,7 @@ import {
   COLOR_CHART_DIRE_BORDER,
 } from "./constant";
 import { Team } from "../interfaces/matches";
+import { COLOR_CHART_BLUE_BORDER } from "./constant";
 
 export const getImgOpenDota = (key: string) => {
   return "https://cdn.cloudflare.steamstatic.com" + key;
@@ -279,7 +280,16 @@ export const formatTime = (input: number) => {
   }
 };
 
-export const getGradient = (ctx: any, chartArea: any, scales: any) => {
+export const formatFullDayTime = (input: number) => {
+  return moment.unix(input).format("MMMM DD, YYYY");
+};
+
+export const getGradient = (
+  ctx: any,
+  chartArea: any,
+  scales: any,
+  blue?: boolean
+) => {
   let width: number = 0,
     height: number = 0,
     gradient: any;
@@ -295,7 +305,10 @@ export const getGradient = (ctx: any, chartArea: any, scales: any) => {
     height = chartHeight;
     gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
     gradient.addColorStop(0.5, COLOR_CHART_DIRE_BORDER);
-    gradient.addColorStop(0.5, COLOR_CHART_RADIANT_BORDER);
+    gradient.addColorStop(
+      0.5,
+      blue ? COLOR_CHART_BLUE_BORDER : COLOR_CHART_RADIANT_BORDER
+    );
   }
   return gradient;
 };
@@ -392,4 +405,15 @@ export function getRandomRgba(): {
       0.5 +
       ")",
   };
+}
+
+export function removeEmpty(obj: object) {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([_, v]) => {
+      if (typeof v === "object") {
+        return v?.length > 0;
+      }
+      return v != null && v;
+    })
+  );
 }

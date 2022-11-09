@@ -1,4 +1,6 @@
 import axios from "axios";
+import _ from "lodash";
+import { removeEmpty } from "../share/ultils";
 class StratsApiService {
   axiosConfig: any;
   axios = axios.create({
@@ -14,7 +16,7 @@ class StratsApiService {
       ...config,
     };
   }
-
+  // Hero
   getHeroesPaths() {
     return this.axios.post("", {
       query: `{
@@ -827,6 +829,31 @@ class StratsApiService {
         }
       }
       `,
+    });
+  }
+  // Hero/meta/trends
+  getHeroesMetaTrends(
+    bracketIds?: string | null | undefined,
+    positionIds?: string[] | null,
+    regionIds?: string | null | undefined,
+    gameModeIds?: string | null | undefined
+  ) {
+    let variables: {
+      bracketIds?: string[];
+      positionIds?: string[];
+      regionIds?: string[];
+      gameModeIds?: string[];
+    } = {};
+    if (bracketIds) variables["bracketIds"] = [bracketIds];
+    if (positionIds && positionIds.length > 0)
+      variables["positionIds"] = positionIds.filter((p) => p);
+    if (regionIds) variables["regionIds"] = [regionIds];
+    if (gameModeIds) variables["gameModeIds"] = [gameModeIds];
+    return this.axios.post("", {
+      operationName: "HeroesMetaTrends",
+      variables,
+      query:
+        "query HeroesMetaTrends($bracketIds: [RankBracket], $positionIds: [MatchPlayerPositionType], $regionIds: [BasicRegionType], $gameModeIds: [GameModeEnumType]) {\n  heroStats {\n    winDay(\n      take: 8\n      bracketIds: $bracketIds\n      positionIds: $positionIds\n      regionIds: $regionIds\n      gameModeIds: $gameModeIds\n    ) {\n      timestamp: day\n      heroId\n      matchCount\n      winCount\n      __typename\n    }\n    winGameVersion(\n      take: 3\n      bracketIds: $bracketIds\n      positionIds: $positionIds\n      regionIds: $regionIds\n      gameModeIds: $gameModeIds\n    ) {\n      gameVersionId\n      heroId\n      matchCount\n      winCount\n      __typename\n    }\n    winHour(\n      take: 32\n      bracketIds: $bracketIds\n      positionIds: $positionIds\n      regionIds: $regionIds\n      gameModeIds: $gameModeIds\n    ) {\n      timestamp: hour\n      heroId\n      matchCount\n      winCount\n      __typename\n    }\n    __typename\n  }\n}\n",
     });
   }
 

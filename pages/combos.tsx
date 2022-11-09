@@ -2,7 +2,7 @@ import React, { ReactElement, useEffect } from "react";
 import Layout from "../components/Layout";
 import { NextPageWithLayout } from "./_app";
 import { useAppSelector, useAppDispatch } from "../store/hook";
-import HeroAllContainer from "../components/HeroAll/HeroAllContainer";
+import HeroAllContainer from "../components/Heroes/Overview/HeroAllContainer";
 import { GetStaticProps } from "next";
 import stratsApiService from "../services/stratsApi.service";
 import { HeroesStatus } from "../interfaces/heroes";

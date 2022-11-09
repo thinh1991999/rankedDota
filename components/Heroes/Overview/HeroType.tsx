@@ -1,9 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import MyImage from "../MyImage";
-import { Hero } from "../../interfaces/heroes";
-import { getImgStratsDota } from "../../share";
-import ToolTip from "../ToolTip";
+import MyImage from "../../MyImage";
+import { Hero } from "../../../interfaces/heroes";
+import { getImgStratsDota } from "../../../share";
+import ToolTip from "../../ToolTip";
 
 const HeroType = ({
   data,

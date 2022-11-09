@@ -17,6 +17,7 @@ import composSlice from "./Slices/composSlice";
 import matchDetailSlice from "./Slices/matchDetailSlice";
 import lenguesSlice from "./Slices/lenguesSlice";
 import playersLeaderboardSlice from "./Slices/playersLeaderboardSlice";
+import heroesTrendsSlice from "./Slices/heroesTrendsSlice";
 
 export const makeStore = () => {
   const isServer = typeof window === "undefined";
@@ -26,6 +27,7 @@ export const makeStore = () => {
     matchDetail: matchDetailSlice,
     lengues: lenguesSlice,
     playersLeaderboard: playersLeaderboardSlice,
+    heroesTrends: heroesTrendsSlice,
   });
   // return configureStore({
   //   reducer: (state, action) => {

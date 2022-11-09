@@ -13,7 +13,7 @@ type Props = {
   statusCode: number;
 };
 
-const RankPage: NextPageWithLayout<Props> = (props) => {
+const RanksPage: NextPageWithLayout<Props> = (props) => {
   if (props.statusCode !== 200) {
     return <Error statusCode={props.statusCode} />;
   }
@@ -27,7 +27,7 @@ const RankPage: NextPageWithLayout<Props> = (props) => {
   );
 };
 
-RankPage.getLayout = function getLayout(page: ReactElement) {
+RanksPage.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
@@ -59,4 +59,4 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
   }
 };
 
-export default RankPage;
+export default RanksPage;

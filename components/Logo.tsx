@@ -22,7 +22,7 @@ function Logo() {
     <Link href={"/"}>
       <a className="flex items-center">
         <span className="font-bold uppercase">Ranked</span>
-        <MyImage src={link} alt="logo" height={30} width={30} />
+        <MyImage src={link} alt="logo" height="30px" width="30px" />
       </a>
     </Link>
   );

@@ -252,7 +252,6 @@ const PlayerList = () => {
       </div>
     );
   }
-  console.log(season);
   return (
     <div>
       <div className="mb-5">
