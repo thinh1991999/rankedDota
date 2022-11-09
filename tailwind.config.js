@@ -62,6 +62,14 @@ module.exports = {
           dark: "rgba(99, 100, 100, 0.5)",
           light: "rgba(0, 0, 0, 0.12)",
         },
+        borderTenderStrong: {
+          dark: "rgba(99, 100, 100, 0.2)",
+          light: "rgba(0, 0, 0, 0.12)",
+        },
+        navBg: {
+          dark: "rgba(27, 26, 27, 0.8)",
+          light: "rgba(0, 0, 0, 0.12)",
+        },
       },
       width: {
         player: "1024px",

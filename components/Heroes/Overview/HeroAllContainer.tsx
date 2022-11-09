@@ -1,10 +1,10 @@
 import _ from "lodash";
 import React, { useState, useEffect } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
-import { Hero, HeroesStatus, HeroStatus } from "../../interfaces/heroes";
-import { useAppSelector } from "../../store";
-import MyImage from "../MyImage";
-import ToolTip from "../ToolTip";
+import { Hero, HeroesStatus, HeroStatus } from "../../../interfaces/heroes";
+import { useAppSelector } from "../../../store";
+import MyImage from "../../MyImage";
+import ToolTip from "../../ToolTip";
 import HeroType from "./HeroType";
 
 type HeroPageAll = {

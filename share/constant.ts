@@ -3,6 +3,10 @@ export const GOLD_ICON =
 export const DIRE_ICON = "https://cdn.stratz.com/images/dota2/dire_square.png";
 export const RADIANT_ICON =
   "https://cdn.stratz.com/images/dota2/radiant_square.png";
+export const COLOR_CHART_PINK = "rgba(245, 40, 145, 0.5)";
+export const COLOR_CHART_PINK_BORDER = "rgba(245, 40, 145, 0.9)";
+export const COLOR_CHART_BLUE = "rgba(39, 115, 245, 0.5)";
+export const COLOR_CHART_BLUE_BORDER = "rgba(39, 115, 245, 0.95)";
 export const COLOR_CHART_RADIANT_BG = "rgba(2, 250, 87, 0.7)";
 export const COLOR_CHART_RADIANT_BORDER = "rgba(2, 250, 87, 1)";
 export const COLOR_CHART_DIRE_BG = "rgba(250, 2, 21, 0.7)";

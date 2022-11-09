@@ -5,11 +5,11 @@ import Head from "next/head";
 import _ from "lodash";
 import { HeroesStatus } from "../../interfaces/heroes";
 import stratsApiService from "../../services/stratsApi.service";
-import HeroAllContainer from "../../components/HeroAll/HeroAllContainer";
+import HeroAllContainer from "../../components/Heroes/Overview/HeroAllContainer";
 import Layout from "../../components/Layout";
 import { NextPageWithLayout } from "../_app";
-import HeroHighWR from "../../components/HeroAll/HeroHighWR";
 import MyImage from "../../components/MyImage";
+import { HeroHighWR } from "../../components/Heroes";
 
 type Props = {
   heroesStatus: HeroesStatus;
@@ -27,7 +27,7 @@ const HeroesPage: NextPageWithLayout<Props> = (props) => {
       <section className="container m-auto">
         <div className="flex items-center justify-start  py-5">
           <div className="p-5 bg-neutral-dark">
-            <MyImage src="/hero.svg" height={30} width={30} alt="hero" />
+            <MyImage src="/hero.svg" height="30px" width="30px" alt="hero" />
           </div>
           <h5 className="text-2xl font-bold ml-2">Heroes</h5>
         </div>

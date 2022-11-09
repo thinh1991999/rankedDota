@@ -1,5 +1,7 @@
+import { useTheme } from "next-themes";
 import Router from "next/router";
 import react, { useEffect, useState, useMemo } from "react";
+import { StylesConfig } from "react-select";
 import { useAppSelector } from "../store";
 
 export const usePageLoading = () => {
@@ -36,4 +38,56 @@ export const useGetTimeCurrentMatchDetail = () => {
     return timesLabel[timeSeek] * 60;
   }, [timeSeek, timesLabel]);
   return currentTime;
+};
+
+// get color react-select
+
+export const useGetStylesReactSelect = () => {
+  const { theme } = useTheme();
+  const [styles, setStyles] = useState<StylesConfig<any>>({
+    option: (provided: any, state: any) => ({
+      ...provided,
+      borderBottom: "1px dotted pink",
+      color: state.isSelected ? "red" : "blue",
+      padding: 20,
+    }),
+  });
+  useEffect(() => {
+    if (theme === "dark") {
+      setStyles({
+        option: (provided, state) => ({
+          ...provided,
+          borderBottom: "1px dotted black",
+          color: "white",
+          backgroundColor: state.isSelected ? "rgba(255, 255, 255, 0.2)" : "",
+          padding: "8px 8px",
+          borderRadius: "5px",
+          cursor: "pointer",
+          ":hover": {
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
+          },
+        }),
+        menu: (provided, state) => ({
+          ...provided,
+          backgroundColor: "black",
+          padding: "8px 10px",
+          minWidth: "180px",
+          border: "1px solid rgba(99, 100, 100, 0.5)",
+        }),
+        control: () => ({
+          // none of react-select's styles are passed to <Control />
+          backgroundColor: "rgba(255, 255, 255, 0.12)",
+          display: "flex",
+          border: "1px solid rgba(99, 100, 100, 0.5)",
+          borderRadius: "5px",
+          color: "white",
+        }),
+        singleValue: (provided, state) => ({
+          ...provided,
+          color: "white",
+        }),
+      });
+    }
+  }, [theme]);
+  return { styles };
 };

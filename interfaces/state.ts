@@ -1,4 +1,12 @@
-import { AbilityDetail, Hero, HeroesStatus, TreeBranchInfo } from "./heroes";
+import {
+  AbilityDetail,
+  Hero,
+  HeroesStatus,
+  TreeBranchInfo,
+  HeroesMetaTrends,
+  HeroTrends,
+  SortedType,
+} from "./heroes";
 import { Item } from "./item";
 import { GameVersion } from "./gameVersion";
 import { MatchDetail } from "./matches";
@@ -11,6 +19,7 @@ export interface Root {
   matchDetail: MatchDetailData;
   lengues: Lengues;
   playersLeaderboard: PlayersLeaderboardData;
+  heroesTrends: HeroesTrendsData;
 }
 
 export interface GlobalData {
@@ -45,4 +54,21 @@ export interface Lengues {
 export interface PlayersLeaderboardData {
   season: Season[];
   loading: boolean;
+}
+
+export interface HeroesTrendsData {
+  heroesTrends: HeroesMetaTrends | null;
+  loading: boolean;
+  dataHandled: HeroTrends[];
+  sorted: {
+    type: SortedType;
+    status: boolean;
+  };
+  searchName: string;
+  maxPr: number;
+  errMess: string | null;
+  dataRange: {
+    begin: number;
+    end: number;
+  };
 }

@@ -1,10 +1,10 @@
 import _ from "lodash";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { Hero, HeroesStatus, HeroStatus } from "../../interfaces/heroes";
-import { getDetaiHero, getImgStratsDota } from "../../share";
-import { useAppSelector } from "../../store/hook";
-import MyImage from "../MyImage";
+import { Hero, HeroesStatus, HeroStatus } from "../../../interfaces/heroes";
+import { getDetaiHero, getImgStratsDota } from "../../../share";
+import { useAppSelector } from "../../../store";
+import MyImage from "../../MyImage";
 
 type HeroArr = {
   pos: number;

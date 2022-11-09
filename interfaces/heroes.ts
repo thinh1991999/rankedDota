@@ -264,3 +264,56 @@ export interface TreeBranchInfo {
   }[];
   dPath: string;
 }
+
+// Hero/Meta/Trends
+export interface HeroesMetaTrends {
+  winDay: Win[];
+  winGameVersion: Win[];
+  winHour: Win[];
+  __typename: string;
+}
+
+export interface Win {
+  timestamp?: number;
+  heroId: number;
+  matchCount: number;
+  winCount: number;
+  __typename: string;
+  gameVersionId?: number;
+}
+
+export interface HeroTrends {
+  id: number;
+  winRate: {
+    data: {
+      time: number;
+      wr: number;
+      matchCount: number;
+    }[];
+  };
+  pickRate: {
+    data: {
+      time: number;
+      pr: number;
+      matchCount: number;
+    }[];
+  };
+  winGameVersion?: {
+    id: number;
+    wr: number;
+    pr: number;
+    matches: number;
+  }[];
+  matches: number;
+}
+
+export type SortedType =
+  | "START_WR"
+  | "CURRENT_WR"
+  | "DIFFER_WR"
+  | "START_PR"
+  | "CURRENT_PR"
+  | "DIFFER_PR"
+  | "RATING"
+  | "MATCHES"
+  | null;
