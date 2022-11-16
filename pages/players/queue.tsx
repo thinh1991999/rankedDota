@@ -6,7 +6,12 @@ import { GetServerSideProps } from "next";
 import stratsApiService from "../../services/stratsApi.service";
 import { Matches, Stratz } from "../../interfaces/players";
 import Error from "next/error";
-import { Chart, QueueChart, RankInfor } from "../../components/Players";
+import {
+  Chart,
+  PlayersSubHeader,
+  QueueChart,
+  RankInfor,
+} from "../../components/Players";
 
 type Props = {
   matches: Matches | null;
@@ -25,7 +30,11 @@ const QueuePage: NextPageWithLayout<Props> = (props) => {
 };
 
 QueuePage.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>;
+  return (
+    <Layout subHeader={<PlayersSubHeader />} imgSrc="/playersBg.jpg">
+      {page}
+    </Layout>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {

@@ -6,7 +6,7 @@ import HeroAllContainer from "../components/Heroes/Overview/HeroAllContainer";
 import { GetStaticProps } from "next";
 import stratsApiService from "../services/stratsApi.service";
 import { HeroesStatus } from "../interfaces/heroes";
-import { ComposContainer } from "../components/Compos";
+import { ComposContainer, ComposSubHeader } from "../components/Compos";
 import { setHeroesStatus } from "../store/Slices/composSlice";
 
 type Props = {
@@ -32,7 +32,11 @@ const ComposPage: NextPageWithLayout<Props> = (props) => {
 };
 
 ComposPage.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>;
+  return (
+    <Layout subHeader={<ComposSubHeader />} imgSrc="/card2.jpg">
+      {page}
+    </Layout>
+  );
 };
 
 export const getStaticProps: GetStaticProps<Props> = async () => {

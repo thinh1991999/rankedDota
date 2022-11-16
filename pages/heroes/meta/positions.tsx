@@ -1,31 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NextPageWithLayout } from "../../_app";
-import { ReactElement } from "react";
-import Layout from "../../../components/Layout";
 import { GetServerSideProps } from "next";
-import stratsApiService from "../../../services/stratsApi.service";
-import { HeroesMetaTrends } from "../../../interfaces/heroes";
-import Error from "next/error";
-import { useAppDispatch } from "../../../store/hook";
-import {
-  setErrMess,
-  setHeroesTrends,
-  setLoading,
-} from "../../../store/Slices/heroesTrendsSlice";
 import {
   HeroesSubHeader,
-  TrendsHeroesData,
-  TrendsSearchHandle,
+  PositionsDataInfo,
+  PositionsHeader,
+  PositionsSearchHandle,
 } from "../../../components/Heroes";
-import _ from "lodash";
+import Layout from "../../../components/Layout";
+import { ReactElement } from "react";
+import stratsApiService from "../../../services/stratsApi.service";
+import { MetaPositions } from "../../../interfaces/heroes";
+import Error from "next/error";
+import { useAppDispatch } from "../../../store";
+import {
+  setErrMess,
+  setHeroesPositions,
+  setLoading,
+} from "../../../store/Slices/heroesPositionsSlice";
 
 type Props = {
-  heroesTrends: HeroesMetaTrends;
+  heroesPositions: MetaPositions;
   statusCode: number;
   error: string | null;
 };
 
-const TrendsPage: NextPageWithLayout<Props> = (props) => {
+const PositionsPage: NextPageWithLayout<Props> = (props) => {
   const dispatch = useAppDispatch();
   const [mounted, setMounted] = useState<boolean>(false);
   useEffect(() => {
@@ -34,75 +34,55 @@ const TrendsPage: NextPageWithLayout<Props> = (props) => {
       dispatch(setLoading(true));
       props.error
         ? dispatch(setErrMess(props.error))
-        : dispatch(setHeroesTrends(props.heroesTrends));
+        : dispatch(setHeroesPositions(props.heroesPositions));
       dispatch(setLoading(false));
     }
     setMounted(true);
   }, [props, dispatch, mounted]);
-
   if (props.statusCode !== 200) {
     return <Error statusCode={props.statusCode} />;
   }
   return (
     <div className="container m-auto">
-      <div className="my-5">
-        <TrendsSearchHandle />
-      </div>
+      <PositionsSearchHandle />
       <div className="">
-        <TrendsHeroesData />
+        <PositionsDataInfo />
       </div>
     </div>
   );
 };
 
-TrendsPage.getLayout = function getLayout(page: ReactElement) {
+PositionsPage.getLayout = function getLayout(page: ReactElement) {
   return <Layout subHeader={<HeroesSubHeader />}>{page}</Layout>;
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (
   context
 ) => {
-  const { bracketIds, regionIds, gameModeIds, positionIds } = context.query;
+  const { bracketIds, regionIds } = context.query;
   let finalBracketIds = null;
   let finalRegionIds = null;
-  let finalGameModeIds = null;
-  let finalPositionIds = null;
   if (bracketIds && typeof bracketIds === "string")
     finalBracketIds = bracketIds;
   if (regionIds && typeof regionIds === "string") finalRegionIds = regionIds;
-  if (gameModeIds && typeof gameModeIds === "string")
-    finalGameModeIds = gameModeIds;
-  if (positionIds) {
-    if (typeof positionIds === "object") {
-      finalPositionIds = positionIds;
-    } else {
-      finalPositionIds = [positionIds];
-    }
-  }
   try {
-    const res = await stratsApiService.getHeroesMetaTrends(
+    const res = await stratsApiService.getHeroMetaPositions(
       finalBracketIds,
-      finalPositionIds,
-      finalRegionIds,
-      finalGameModeIds
+      finalRegionIds
     );
     if (res.status >= 400) {
       return {
         props: {
-          heroesTrends: null,
+          heroesPositions: null,
           statusCode: res.status,
           error: null,
         },
       };
     }
-    const {
-      data: { heroStats },
-      errors,
-    } = res.data;
-
+    const { data, errors } = res.data;
     return {
       props: {
-        heroesTrends: heroStats,
+        heroesPositions: data,
         error: errors ? errors[0].message : null,
         statusCode: 200,
       },
@@ -110,7 +90,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   } catch (error) {
     return {
       props: {
-        heroesTrends: null,
+        heroesPositions: null,
         statusCode: 500,
         error: null,
       },
@@ -118,4 +98,4 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
   }
 };
 
-export default TrendsPage;
+export default PositionsPage;

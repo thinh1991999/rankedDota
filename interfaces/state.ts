@@ -6,6 +6,7 @@ import {
   HeroesMetaTrends,
   HeroTrends,
   SortedType,
+  MetaPositions,
 } from "./heroes";
 import { Item } from "./item";
 import { GameVersion } from "./gameVersion";
@@ -20,6 +21,7 @@ export interface Root {
   lengues: Lengues;
   playersLeaderboard: PlayersLeaderboardData;
   heroesTrends: HeroesTrendsData;
+  heroesPositions: HeroesPositionsData;
 }
 
 export interface GlobalData {
@@ -71,4 +73,10 @@ export interface HeroesTrendsData {
     begin: number;
     end: number;
   };
+}
+
+export interface HeroesPositionsData {
+  heroesPositions: MetaPositions | null;
+  loading: boolean;
+  errMess: string | null;
 }

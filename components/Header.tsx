@@ -14,7 +14,7 @@ import { AiOutlineDown, AiOutlineRight } from "react-icons/ai";
 export default function Navbar() {
   return (
     <header
-      className={`bg-component-light text-textMain-light dark:bg-component-dark dark:text-textMain-dark fixed z-50 top-0 left-0 right-0 h-[80px] px-[20px]`}
+      className={`border-b border-solid border-borderTender-dark text-textMain-light  dark:text-textMain-dark fixed z-50 top-0 left-0 right-0 h-[80px] px-[20px]`}
     >
       <div className="h-full flex justify-between items-center container m-auto">
         <div className="w-2/12">

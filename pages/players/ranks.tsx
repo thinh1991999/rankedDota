@@ -6,7 +6,7 @@ import { GetServerSideProps } from "next";
 import stratsApiService from "../../services/stratsApi.service";
 import { Stratz } from "../../interfaces/players";
 import Error from "next/error";
-import { Chart, RankInfor } from "../../components/Players";
+import { Chart, PlayersSubHeader, RankInfor } from "../../components/Players";
 
 type Props = {
   stratz: Stratz | null;
@@ -28,7 +28,11 @@ const RanksPage: NextPageWithLayout<Props> = (props) => {
 };
 
 RanksPage.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>;
+  return (
+    <Layout subHeader={<PlayersSubHeader />} imgSrc="/playersBg.jpg">
+      {page}
+    </Layout>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
