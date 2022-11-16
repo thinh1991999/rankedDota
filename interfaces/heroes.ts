@@ -317,3 +317,23 @@ export type SortedType =
   | "RATING"
   | "MATCHES"
   | null;
+
+export interface MetaPositions {
+  heroesPos1: HeroesPos;
+  heroesPos2: HeroesPos;
+  heroesPos3: HeroesPos;
+  heroesPos4: HeroesPos;
+  heroesPos5: HeroesPos;
+}
+
+export interface HeroesPos {
+  winDay: WinDay[];
+  __typename: string;
+}
+
+export interface WinDay {
+  heroId: number;
+  matchCount: number;
+  winCount: number;
+  __typename: Typename;
+}

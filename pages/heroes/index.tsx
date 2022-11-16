@@ -9,7 +9,7 @@ import HeroAllContainer from "../../components/Heroes/Overview/HeroAllContainer"
 import Layout from "../../components/Layout";
 import { NextPageWithLayout } from "../_app";
 import MyImage from "../../components/MyImage";
-import { HeroHighWR } from "../../components/Heroes";
+import { HeroesSubHeader, HeroHighWR } from "../../components/Heroes";
 
 type Props = {
   heroesStatus: HeroesStatus;
@@ -25,12 +25,6 @@ const HeroesPage: NextPageWithLayout<Props> = (props) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="container m-auto">
-        <div className="flex items-center justify-start  py-5">
-          <div className="p-5 bg-neutral-dark">
-            <MyImage src="/hero.svg" height="30px" width="30px" alt="hero" />
-          </div>
-          <h5 className="text-2xl font-bold ml-2">Heroes</h5>
-        </div>
         <HeroHighWR heroesStatus={heroesStatus} />
         <div className="mt-5">
           <HeroAllContainer heroesStatus={heroesStatus} />
@@ -41,7 +35,7 @@ const HeroesPage: NextPageWithLayout<Props> = (props) => {
 };
 
 HeroesPage.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>;
+  return <Layout subHeader={<HeroesSubHeader />}>{page}</Layout>;
 };
 
 export const getStaticProps: GetStaticProps = async () => {

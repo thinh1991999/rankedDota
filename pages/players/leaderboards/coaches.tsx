@@ -7,7 +7,7 @@ import Layout from "../../../components/Layout";
 import stratsApiService from "../../../services/stratsApi.service";
 import { Leaderboard } from "../../../interfaces/players";
 import { NextPageWithLayout } from "../../_app";
-import { CoachesPage } from "../../../components/Players";
+import { CoachesPage, PlayersSubHeader } from "../../../components/Players";
 
 type Props = {
   leaderboard: Leaderboard | null;
@@ -26,7 +26,11 @@ const CoachPage: NextPageWithLayout<Props> = (props) => {
 };
 
 CoachPage.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>;
+  return (
+    <Layout subHeader={<PlayersSubHeader />} imgSrc="/playersBg.jpg">
+      {page}
+    </Layout>
+  );
 };
 
 export const getStaticProps: GetStaticProps<Props> = async () => {

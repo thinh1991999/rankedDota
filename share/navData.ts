@@ -1,9 +1,10 @@
-type HeaderNav = {
+export interface HeaderNav {
   name: string;
+  fatherLink?: string;
   link: string;
   sub?: string;
   childs?: HeaderNav[];
-};
+}
 
 export const headerNavs: HeaderNav[] = [
   {
@@ -89,6 +90,63 @@ export const headerNavs: HeaderNav[] = [
   {
     name: "Teams",
     link: "/teams",
+  },
+];
+
+export const heroesNavs: HeaderNav[] = [
+  {
+    name: "Overview",
+    link: "/heroes",
+  },
+  {
+    name: "Meta",
+    link: "/heroes/meta",
+    childs: [
+      {
+        name: "Trends",
+        link: "/heroes/meta/trends",
+        sub: "Win and pick rate leaderboard",
+      },
+      {
+        name: "Positions",
+        link: "/heroes/meta/positions",
+        sub: "Success rating by positions",
+      },
+    ],
+  },
+  {
+    name: "Guides",
+    link: "/heroes/guides",
+  },
+];
+
+export const playersNavs: HeaderNav[] = [
+  {
+    name: "Rank",
+    link: "/players/ranks",
+  },
+  {
+    name: "Queue",
+    link: "/players/queue",
+  },
+  {
+    name: "Highlights",
+    link: "/players/highlights",
+  },
+  {
+    name: "Leaderboard",
+    fatherLink: "/players/leaderboards",
+    link: "/players/leaderboards/world?divisionId=0",
+    childs: [
+      {
+        name: "World",
+        link: "/players/leaderboards/world?divisionId=0",
+      },
+      {
+        name: "Coaches",
+        link: "/players/leaderboards/coaches",
+      },
+    ],
   },
 ];
 

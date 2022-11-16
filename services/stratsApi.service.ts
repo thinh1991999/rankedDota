@@ -857,6 +857,26 @@ class StratsApiService {
     });
   }
 
+  // Hero/meta/positions
+
+  getHeroMetaPositions(
+    bracketIds?: string | null | undefined,
+    regionIds?: string | null | undefined
+  ) {
+    let variables: {
+      bracketIds?: string[];
+      regionIds?: string[];
+    } = {};
+    if (bracketIds) variables["bracketIds"] = [bracketIds];
+    if (regionIds) variables["regionIds"] = [regionIds];
+    return this.axios.post("", {
+      operationName: "HeroesMetaPositions",
+      variables,
+      query:
+        "query HeroesMetaPositions($bracketIds: [RankBracket], $gameModeIds: [GameModeEnumType]) {\n  heroesPos1: heroStats {\n    winDay(\n      take: 1\n      positionIds: [POSITION_1]\n      bracketIds: $bracketIds\n      gameModeIds: $gameModeIds\n    ) {\n      heroId\n      matchCount\n      winCount\n      __typename\n    }\n    __typename\n  }\n  heroesPos2: heroStats {\n    winDay(\n      take: 1\n      positionIds: [POSITION_2]\n      bracketIds: $bracketIds\n      gameModeIds: $gameModeIds\n    ) {\n      heroId\n      matchCount\n      winCount\n      __typename\n    }\n    __typename\n  }\n  heroesPos3: heroStats {\n    winDay(\n      take: 1\n      positionIds: [POSITION_3]\n      bracketIds: $bracketIds\n      gameModeIds: $gameModeIds\n    ) {\n      heroId\n      matchCount\n      winCount\n      __typename\n    }\n    __typename\n  }\n  heroesPos4: heroStats {\n    winDay(\n      take: 1\n      positionIds: [POSITION_4]\n      bracketIds: $bracketIds\n      gameModeIds: $gameModeIds\n    ) {\n      heroId\n      matchCount\n      winCount\n      __typename\n    }\n    __typename\n  }\n  heroesPos5: heroStats {\n    winDay(\n      take: 1\n      positionIds: [POSITION_5]\n      bracketIds: $bracketIds\n      gameModeIds: $gameModeIds\n    ) {\n      heroId\n      matchCount\n      winCount\n      __typename\n    }\n    __typename\n  }\n}\n",
+    });
+  }
+
   // Matches/graphs
   getMatchesGraphsGameMode() {
     return this.axios.post("", {

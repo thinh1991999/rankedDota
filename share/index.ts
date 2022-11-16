@@ -1,6 +1,6 @@
 import { GOLD_ICON } from "./constant";
 export { homeCards, heroRankOptions } from "./data";
-export { mathDetailNav } from "./navData";
+export { mathDetailNav, headerNavs, playersNavs, heroesNavs } from "./navData";
 
 export {
   usePageLoading,

@@ -66,50 +66,53 @@ const TeamsMain = ({ teams }: { teams: Team[] }) => {
           return (
             <div key={team_id} className="lg:w-1/4 p-2 text-textMain-dark">
               <Link href={"/teams/" + team_id} className="">
-                <a className="block p-2 h-[360px] rounded-md bg-layer-dark ">
-                  <div className="flex justify-end">
-                    <span>{`#${idx + 1}`}</span>
-                  </div>
-                  <div className="flex justify-center">
-                    {logo_url ? (
-                      <MyImage
-                        src={logo_url}
-                        width="100px"
-                        height="100px"
-                        alt={name}
-                      />
-                    ) : (
-                      <div className="w-[100px] h-[100px]"></div>
-                    )}
-                  </div>
-                  <div className="flex flex-col justify-center items-center ">
-                    <span className="text-xl ">{name}</span>
-                    <span className="text-textSecondPrimary-dark">{tag}</span>
-                    <div className="my-5 flex justify-center">
-                      <div className="mx-2 flex flex-col items-center justify-center">
-                        <span className="text-textSecondPrimary-dark text-xs">
-                          Rating
-                        </span>
-                        <span>{rating}</span>
-                      </div>
-                      <div className="mx-2 flex flex-col items-center justify-center">
-                        <span className="text-textSecondPrimary-dark text-xs">
-                          Wins
-                        </span>
-                        <span>{wins}</span>
-                      </div>
-                      <div className="mx-2 flex flex-col items-center justify-center">
-                        <span className="text-textSecondPrimary-dark text-xs">
-                          Losses
-                        </span>
-                        <span>{losses}</span>
-                      </div>
+                <a className="group relative block p-2 h-[360px] rounded-md bg-layer-dark border border-solid border-borderTender-dark">
+                  <div className="absolute top-0 left-0 bottom-0 right-0 bg-black opacity-20 group-hover:opacity-0"></div>
+                  <div className="relative">
+                    <div className="flex justify-end">
+                      <span>{`#${idx + 1}`}</span>
                     </div>
-                    <div className="flex flex-col justify-center items-center">
-                      <span className="text-textSecondPrimary-dark text-xs">
-                        Last Match
-                      </span>
-                      <span>{lastMatchTime}</span>
+                    <div className="flex justify-center">
+                      {logo_url ? (
+                        <MyImage
+                          src={logo_url}
+                          width="100px"
+                          height="100px"
+                          alt={name}
+                        />
+                      ) : (
+                        <div className="w-[100px] h-[100px]"></div>
+                      )}
+                    </div>
+                    <div className="flex flex-col justify-center items-center ">
+                      <span className="text-xl ">{name}</span>
+                      <span className="text-textSecondPrimary-dark">{tag}</span>
+                      <div className="my-5 flex justify-center">
+                        <div className="mx-2 flex flex-col items-center justify-center">
+                          <span className="text-textSecondPrimary-dark text-xs">
+                            Rating
+                          </span>
+                          <span>{rating}</span>
+                        </div>
+                        <div className="mx-2 flex flex-col items-center justify-center">
+                          <span className="text-textSecondPrimary-dark text-xs">
+                            Wins
+                          </span>
+                          <span>{wins}</span>
+                        </div>
+                        <div className="mx-2 flex flex-col items-center justify-center">
+                          <span className="text-textSecondPrimary-dark text-xs">
+                            Losses
+                          </span>
+                          <span>{losses}</span>
+                        </div>
+                      </div>
+                      <div className="flex flex-col justify-center items-center">
+                        <span className="text-textSecondPrimary-dark text-xs">
+                          Last Match
+                        </span>
+                        <span>{lastMatchTime}</span>
+                      </div>
                     </div>
                   </div>
                 </a>

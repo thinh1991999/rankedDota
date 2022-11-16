@@ -9,6 +9,7 @@ import Error from "next/error";
 import {
   MapHandle,
   PlayerList,
+  PlayersSubHeader,
   SearchHandle,
 } from "../../../components/Players";
 import { useAppDispatch } from "../../../store/hook";
@@ -57,7 +58,11 @@ const WorldPage: NextPageWithLayout<Props> = (props) => {
 };
 
 WorldPage.getLayout = function getLayout(page: ReactElement) {
-  return <Layout>{page}</Layout>;
+  return (
+    <Layout subHeader={<PlayersSubHeader />} imgSrc="/playersBg.jpg">
+      {page}
+    </Layout>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (

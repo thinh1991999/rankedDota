@@ -18,10 +18,6 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
-function Test({ children }: { children: React.ReactNode }) {
-  return <div className="">{children}</div>;
-}
-
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const dispatch = useAppDispatch();
 
