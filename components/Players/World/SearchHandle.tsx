@@ -2,6 +2,7 @@ import _ from "lodash";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import Select, { SingleValue } from "react-select";
+import { useGetStylesReactSelect } from "../../../share";
 import { useAppDispatch, useAppSelector } from "../../../store/hook";
 import { fetchPlayersLeaderboard } from "../../../store/Slices/playersLeaderboardSlice";
 
@@ -37,6 +38,8 @@ const customStyles = {
 const SearchHandle = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+
+  const { styles } = useGetStylesReactSelect();
   const [division, setDivision] = useState<{
     value: string;
     label: string;
@@ -79,6 +82,7 @@ const SearchHandle = () => {
       <div className="w-[150px] text-sm mr-2">
         <Select
           value={division}
+          styles={styles}
           onChange={handleChooseDivition}
           options={divisionIdsValue}
         />

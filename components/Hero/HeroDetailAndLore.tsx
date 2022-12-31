@@ -19,7 +19,12 @@ const HeroDetailAndLore = ({ hero }: { hero: Hero }) => {
             <h5>Details</h5>
             <p className="text-sm mt-2 w-[calc(100%_-_200px)]">{parse(hype)}</p>
             <div className="absolute bottom-0 right-0">
-              <MyImage src={img} width={200} height={150} alt={displayName} />
+              <MyImage
+                src={img}
+                width="200px"
+                height="150px"
+                alt={displayName}
+              />
             </div>
           </div>
           <div className="px-3 pb-3 pt-10">

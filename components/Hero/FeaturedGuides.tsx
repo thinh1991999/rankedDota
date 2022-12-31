@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 import { Guide, GuideSymbol, ItemPurchase } from "../../interfaces/guide";
-import { Hero } from "../../interfaces/heroes";
+import { Hero, HeroStatsGuide } from "../../interfaces/heroes";
 import { useAppSelector } from "../../store/hook";
 import MyImage from "../MyImage";
 import { RADIANT_ICON, DIRE_ICON } from "../../share/constant";
@@ -18,7 +18,7 @@ const FeaturedGuides = ({
   guide,
 }: {
   hero: Hero;
-  guide: GuideSymbol;
+  guide: HeroStatsGuide;
 }) => {
   const { guides } = guide;
   const { abilities: abilitiesHero } = hero;
@@ -35,8 +35,7 @@ const FeaturedGuides = ({
               isRadiant,
               deaths,
               assists,
-              role,
-              lane,
+              position,
               kills,
               item0Id,
               item1Id,
@@ -45,7 +44,8 @@ const FeaturedGuides = ({
               item4Id,
               item5Id,
               neutral0Id,
-              stats: { itemPurchases, abilities },
+              abilities,
+              stats: { itemPurchases },
             },
           } = guide;
           let checkedScepter = false;
@@ -83,7 +83,7 @@ const FeaturedGuides = ({
             .utc(durationSeconds * 1000)
             .format(durationSeconds >= 3600 ? "HH:mm:ss" : "mm:ss");
           const itemNeutral = getDetailItem(items, neutral0Id);
-          const typeHero = getTypeOfHero(role, lane);
+          const typeHero = getTypeOfHero(position);
           let upgrageImg = "/atriFullScepNorShard.svg";
           if (checkedScepter && checkShard) {
             upgrageImg = "/atriFullScepNorShard.svg";
@@ -98,7 +98,12 @@ const FeaturedGuides = ({
               className="my-3 px-3 py-3 rounded-md bg-layerStrong-dark flex items-center"
             >
               <div className="w-[20px]">
-                <MyImage src={typeHero.icon} width={20} height={20} alt="sp" />
+                <MyImage
+                  src={typeHero.icon}
+                  width="20px"
+                  height="20px"
+                  alt="sp"
+                />
               </div>
               <div className="w-[200px] flex flex-col ml-2">
                 <span className=" one-line-max text-lg font-bold">{name}</span>
@@ -107,8 +112,8 @@ const FeaturedGuides = ({
                   <div className="mx-5">
                     <MyImage
                       src={isRadiant ? RADIANT_ICON : DIRE_ICON}
-                      width={20}
-                      height={20}
+                      width="20px"
+                      height="20px"
                       alt=""
                       borderRadius={5}
                     />
@@ -120,12 +125,12 @@ const FeaturedGuides = ({
                 {abilitiesHero.map((abi) => {
                   const { abilityId, ability } = abi;
                   const {
-                    drawMatchPage,
                     name,
                     language: { displayName },
                     stat: { isUltimate },
+                    uri,
                   } = ability;
-                  if (!drawMatchPage) return;
+                  if (!uri) return;
                   let countLv = 0;
                   _.forEach(abilities, (abili) => {
                     if (abili.abilityId === abi.abilityId) countLv++;
@@ -141,8 +146,8 @@ const FeaturedGuides = ({
                               <MyImage
                                 src={getImgStratsDota(`/abilities/${name}.png`)}
                                 alt={name}
-                                width={40}
-                                height={30}
+                                width="40px"
+                                height="30px"
                                 borderRadius={5}
                               />
                             </div>
@@ -175,8 +180,8 @@ const FeaturedGuides = ({
                             <MyImage
                               src={getImgStratsDota(`/abilities/${name}.png`)}
                               alt={name}
-                              width={40}
-                              height={40}
+                              width="40px"
+                              height="40px"
                               borderRadius={5}
                             />
                             <div className="flex flex-col ml-1 ">
@@ -195,8 +200,8 @@ const FeaturedGuides = ({
                 <div className="ml-1">
                   <MyImage
                     src={upgrageImg}
-                    width={20}
-                    height={36}
+                    width="20px"
+                    height="36px"
                     alt={"upgrade"}
                   />
                 </div>
@@ -228,8 +233,8 @@ const FeaturedGuides = ({
                             <div className="">
                               <MyImage
                                 src={img}
-                                width={40}
-                                height={30}
+                                width="40px"
+                                height="30px"
                                 borderRadius={5}
                                 alt={vl?.displayName || " "}
                               />
@@ -241,8 +246,8 @@ const FeaturedGuides = ({
                           <div className="flex items-center px-2 py-1 rounded-sm">
                             <MyImage
                               src={img}
-                              width={50}
-                              height={40}
+                              width="50px"
+                              height="40px"
                               borderRadius={5}
                               alt={vl?.displayName || " "}
                             />
@@ -265,8 +270,8 @@ const FeaturedGuides = ({
                           src={getImgStratsDota(
                             "/items/" + itemNeutral?.shortName + ".png"
                           )}
-                          width={30}
-                          height={30}
+                          width="30px"
+                          height="30px"
                           borderRadius={999}
                           alt={itemNeutral?.displayName || " "}
                         />
@@ -278,8 +283,8 @@ const FeaturedGuides = ({
                           src={getImgStratsDota(
                             "/items/" + itemNeutral?.shortName + ".png"
                           )}
-                          width={50}
-                          height={40}
+                          width="50px"
+                          height="40px"
                           borderRadius={5}
                           alt={itemNeutral?.displayName || " "}
                         />

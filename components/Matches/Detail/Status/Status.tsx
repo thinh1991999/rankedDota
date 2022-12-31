@@ -10,12 +10,12 @@ const MapStatus = () => {
   return (
     <section className=" rounded-md flex flex-wrap -ml-2 -mr-2">
       <div className="p-2">
-        <div className="w-[300px] bg-layer-dark ">
+        <div className="w-[300px] bg-layer-light dark:bg-layer-dark ">
           <Map />
         </div>
       </div>
       <div className="flex-1 p-2">
-        <div className="h-[300px] bg-layer-dark rounded-md">
+        <div className="h-[300px] bg-layer-light dark:bg-layer-dark rounded-md">
           <ChartHead />
           <ChartMain />
         </div>

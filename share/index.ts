@@ -1,11 +1,19 @@
 import { GOLD_ICON } from "./constant";
 export { homeCards, heroRankOptions } from "./data";
-export { mathDetailNav, headerNavs, playersNavs, heroesNavs } from "./navData";
+export {
+  mathDetailNav,
+  headerNavs,
+  playersNavs,
+  heroesNavs,
+  matchesNav,
+} from "./navData";
 
 export {
   usePageLoading,
   useGetTimeCurrentMatchDetail,
   useGetStylesReactSelect,
+  useCheckChangeRouter,
+  useGetStylesTheme,
 } from "./customHooks";
 export {
   getImgOpenDota,
@@ -29,6 +37,8 @@ export {
   getRandomRgba,
   removeEmpty,
   formatFullDayTime,
+  getFlagImgLink,
+  getDetaiRegion,
 } from "./ultils";
 export { drawLinePluginChart } from "./chartjs";
 export {

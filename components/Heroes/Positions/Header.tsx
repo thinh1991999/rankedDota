@@ -25,9 +25,7 @@ const PosHeader = ({
             alt=""
           />
         </div>
-        <span className="ml-3 text-xl text-textMain-dark font-bold capitalize">
-          {title}
-        </span>
+        <span className="ml-3 text-xl  font-bold capitalize">{title}</span>
       </div>
     </div>
   );

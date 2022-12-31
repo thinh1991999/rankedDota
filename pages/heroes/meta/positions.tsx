@@ -18,6 +18,10 @@ import {
   setHeroesPositions,
   setLoading,
 } from "../../../store/Slices/heroesPositionsSlice";
+import {
+  setHeaderImg,
+  setSubHeaderMain,
+} from "../../../store/Slices/globalDataSlice";
 
 type Props = {
   heroesPositions: MetaPositions;
@@ -39,6 +43,12 @@ const PositionsPage: NextPageWithLayout<Props> = (props) => {
     }
     setMounted(true);
   }, [props, dispatch, mounted]);
+
+  useEffect(() => {
+    dispatch(setSubHeaderMain(<HeroesSubHeader title="Positions" />));
+    dispatch(setHeaderImg("/card1.jpg"));
+  }, [dispatch]);
+
   if (props.statusCode !== 200) {
     return <Error statusCode={props.statusCode} />;
   }
@@ -53,7 +63,7 @@ const PositionsPage: NextPageWithLayout<Props> = (props) => {
 };
 
 PositionsPage.getLayout = function getLayout(page: ReactElement) {
-  return <Layout subHeader={<HeroesSubHeader />}>{page}</Layout>;
+  return <Layout>{page}</Layout>;
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (

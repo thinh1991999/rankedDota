@@ -82,20 +82,38 @@ export interface SteamAccount {
 }
 
 export interface Season {
+  playerCount?: number;
+  players: PlayerSeason[];
+  countryData?: CountryDatum[];
+  positionData?: PositionDatum[];
+  teamData?: Team[];
+  __typename?: string;
+  name?: string;
+  founded?: number;
+  members?: string[];
+}
+
+export interface CountryDatum {
+  countryCode: null | string;
+  playerCount: number;
+  __typename: CountryDatumTypename;
+}
+
+export enum CountryDatumTypename {
+  SteamAccountSeasonActiveLeaderboardCountryDataType = "SteamAccountSeasonActiveLeaderboardCountryDataType",
+}
+
+export interface PlayerSeason {
   steamAccountId: number;
   steamAccount: SteamAccountSeason;
   rank: number;
-  rankShift: number | null;
-  position: Position | null;
+  rankShift: number;
+  position: null | string;
   __typename: string;
 }
 
-export enum Position {
-  Position1 = "POSITION_1",
-  Position2 = "POSITION_2",
-  Position3 = "POSITION_3",
-  Position4 = "POSITION_4",
-  Position5 = "POSITION_5",
+export enum PlayerTypename {
+  SteamAccountSeasonActiveLeaderboardRankType = "SteamAccountSeasonActiveLeaderboardRankType",
 }
 
 export interface SteamAccountSeason {
@@ -104,19 +122,54 @@ export interface SteamAccountSeason {
   isAnonymous: boolean;
   proSteamAccount: ProSteamAccount | null;
   name: string;
-  __typename: string;
+  __typename: SteamAccountTypename;
+}
+
+export enum SteamAccountTypename {
+  SteamAccountType = "SteamAccountType",
 }
 
 export interface ProSteamAccount {
   countries: string[];
-  __typename: string;
+  __typename: ProSteamAccountTypename;
   name: string;
-  team: Team | null;
+  team: Team;
+}
+
+export enum ProSteamAccountTypename {
+  ProSteamAccountType = "ProSteamAccountType",
 }
 
 export interface Team {
-  tag: null | string;
+  tag?: string;
   id: number;
   name: string;
+  __typename: TeamDatumTypename;
+}
+
+export enum TeamDatumTypename {
+  TeamType = "TeamType",
+}
+
+export interface PositionDatum {
+  position: string;
+  playerCount: number;
   __typename: string;
+}
+
+export interface Album {
+  name: string;
+  artist: ArtistClass;
+  tracks: Track[];
+}
+
+export interface ArtistClass {
+  name: string;
+  founded: number;
+  members: string[];
+}
+
+export interface Track {
+  name: string;
+  duration: number;
 }

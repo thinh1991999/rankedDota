@@ -90,7 +90,7 @@ const HeroHighWR = ({ heroesStatus }: { heroesStatus: HeroesStatus }) => {
 
   return (
     <section>
-      <div className="flex -ml-2 -mr-2">
+      <div className="flex flex-wrap -ml-2 -mr-2">
         {heroArr.map((item) => {
           const { pos, namePos, hero, status, bgFrom, bgTo } = item;
           if (!hero) return;
@@ -99,9 +99,9 @@ const HeroHighWR = ({ heroesStatus }: { heroesStatus: HeroesStatus }) => {
           const wr = (winCount * 100) / matchCount;
           const img = getImgStratsDota("/heroes/" + shortName + "_model.png");
           return (
-            <div key={pos} className="w-1/5 px-2 ">
+            <div key={pos} className="lg:w-1/5 md:w-1/3 sm:w-1/2 w-full p-2 ">
               <Link href={"/heroes/" + id}>
-                <a className="group relative block rounded-md overflow-hidden">
+                <a className="group relative block rounded-md overflow-hidden border border-borderSecondary-light dark:border-borderSecondary-dark">
                   <div
                     className={`bg-gradient-to-l ${bgFrom} ${bgTo} group-hover:opacity-50 opacity-30 absolute top-0 left-0 right-0 bottom-0 `}
                   ></div>

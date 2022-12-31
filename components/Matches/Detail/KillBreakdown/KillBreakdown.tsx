@@ -15,29 +15,29 @@ const KillBreakdown = () => {
 
   useEffect(() => {
     if (!matchDetail) return;
-    const { players } = matchDetail;
+    const { players, durationSeconds } = matchDetail;
     const arrRadi: PlayerMatchDetail[] = [];
     const arrDire: PlayerMatchDetail[] = [];
     const arrEneRad: number[] = [];
     const arrEneDire: number[] = [];
-    _.forEach(matchDetail.players, (player) => {
-      player.isRadiant ? arrRadi.push(player) : arrDire.push(player);
-    });
+    _.forEach(players, (player) =>
+      player.isRadiant
+        ? arrEneDire.push(player.heroId)
+        : arrEneRad.push(player.heroId)
+    );
+    _.forEach(players, (player) =>
+      player.isRadiant ? arrRadi.push(player) : arrDire.push(player)
+    );
     const sortRad = sortRolesTeam(arrRadi);
-    _.forEach(sortRad, (vl) => {
-      arrEneDire.push(vl.heroId);
-    });
     const sortDire = sortRolesTeam(arrDire);
-    _.forEach(sortDire, (vl) => {
-      arrEneRad.push(vl.heroId);
-    });
     setRadiants(sortRad);
     setDires(sortDire);
     setEnemiesRad(arrEneRad);
     setEnemiesDire(arrEneDire);
   }, [matchDetail]);
+
   return (
-    <section className="p-2 rounded-md bg-layer-dark">
+    <section className="p-2 rounded-md bg-layer-light dark:bg-layer-dark">
       <h5>KillBreakdown</h5>
       <div className="flex flex-wrap -ml-2 -mr-2">
         <div className="w-1/2 p-2">

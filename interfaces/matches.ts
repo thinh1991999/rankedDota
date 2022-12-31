@@ -24,6 +24,12 @@ export interface MatchLive {
   liveWinRateValues: LiveWinRateValue[];
 }
 
+export interface MatchLiveCal {
+  match: MatchLive;
+  netWorth: any;
+  wrr: any;
+}
+
 export interface LiveWinRateValue {
   winRate: number;
   __typename: string;
@@ -116,36 +122,30 @@ export interface Team {
 export interface MatchDetail {
   id: number;
   durationSeconds: number;
-  didRadiantWin: boolean;
-  statsDateTime: number | null;
-  stats: WelcomeStats;
-  players: PlayerMatchDetail[];
-  __typename: string;
-  topLaneOutcome?: string;
-  bottomLaneOutcome?: string;
-  midLaneOutcome?: string;
   endDateTime: number;
-  rank: number;
-  radiantTeam: null;
-  direTeam: null;
-  series: null;
-  analysisOutcome: null;
-  lobbyType: string;
   gameMode: string;
-  regionId: number;
-  league: null;
-}
-
-export interface WelcomeStats {
+  didRadiantWin: boolean;
+  statsDateTime: number;
   radiantKills: number[];
   direKills: number[];
+  players: PlayerMatchDetail[];
   __typename: string;
   winRates: number[];
   radiantNetworthLeads: number[];
-  towerStatus: TowerStatus[];
   towerDeaths: TowerDeath[];
   chatEvents: ChatEvent[];
+  rank: number;
   pickBans: PickBan[];
+  radiantTeam: null;
+  direTeam: null;
+  series: null;
+  analysisOutcome: string;
+  lobbyType: string;
+  regionId: number;
+  league: null;
+  bottomLaneOutcome: string;
+  midLaneOutcome: string;
+  topLaneOutcome: string;
   radiantExperienceLeads: number[];
 }
 
@@ -178,45 +178,19 @@ export enum PickBanTypename {
   MatchStatsPickBanType = "MatchStatsPickBanType",
 }
 
-export interface TowerDeath {
-  attacker: number | null;
-  npcId: number;
-  time: number;
-  isRadiant: boolean;
-  __typename: TowerDeathTypename;
-}
-
-export enum TowerDeathTypename {
-  MatchStatsTowerDeathType = "MatchStatsTowerDeathType",
-}
-
-export interface TowerStatus {
-  towers: Tower[];
-  __typename: string;
-}
-
-export interface Tower {
-  npcId: number;
-  hp: number;
-  __typename: TowerTypename;
-}
-
-export enum TowerTypename {
-  MatchStatsTowerReportObjectType = "MatchStatsTowerReportObjectType",
-}
-
 export interface PlayerMatchDetail {
-  role: string;
-  lane: string;
+  isRadiant: boolean;
+  position: string;
   heroId: number;
   level: number;
   neutral0Id: number;
   steamAccount: SteamAccountMatchDetail;
   stats: Stats;
-  __typename: string;
-  isRadiant: boolean;
+  abilities: Ability[];
+  __typename: PlayerTypename;
   award: string;
   imp: number;
+  lane: Lane;
   additionalUnit: null;
   item0Id: number;
   item1Id: number;
@@ -237,57 +211,15 @@ export interface PlayerMatchDetail {
   heroAverage: HeroAverage[];
   playerSlot: number;
   heroHealing: number;
-  partyId: null;
-  position: string;
-  backpack0Id: null;
-  backpack1Id: null;
-  backpack2Id: null;
+  partyId: number | null;
+  backpack0Id: number | null;
+  backpack1Id: number | null;
+  backpack2Id: number | null;
   dotaPlus: null;
 }
 
-export interface HeroAverage {
-  time: number;
-  kills: number;
-  deaths: number;
-  assists: number;
-  networth: number;
-  xp: number;
-  cs: number;
-  dn: number;
-  heroDamage: number;
-  towerDamage: number;
-  __typename: string;
-}
-
-export interface Stats {
-  abilities: Ability[];
-  itemPurchases: ItemPurchase[];
-  __typename: string;
-  level: number[];
-  lastHitsPerMinute: number[];
-  networthPerMinute: number[];
-  actionsPerMinute: number[];
-  tripsFountainPerMinute: number[];
-  farmDistributionReport: FarmDistributionReport[];
-  assistEvents: AssistEvent[];
-  runes: Rune[];
-  allTalks: any[];
-  chatWheels: ChatWheel[];
-  killEvents: KillEvent[];
-  deathEvents: DeathEvent[];
-  impPerMinute2: number[];
-  campStack: number[];
-  heroDamageReceivedPerMinute: number[];
-  inventoryReport: InventoryReport[];
-  spiritBearInventoryReport: null;
-  goldPerMinute: number[];
-  experiencePerMinute: number[];
-  deniesPerMinute: number[];
-  matchPlayerBuffEvent: MatchPlayerBuffEvent[];
-  wards: Ward[];
-  healPerMinute: number[];
-  heroDamagePerMinute: number[];
-  towerDamagePerMinute: number[];
+export enum PlayerTypename {
+  MatchPlayerType = "MatchPlayerType",
 }
 
 export interface Ability {
@@ -301,54 +233,105 @@ export enum AbilityTypename {
   PlayerAbilityType = "PlayerAbilityType",
 }
 
-export interface AssistEvent {
-  target: number;
-  __typename: string;
+export interface HeroAverage {
   time: number;
+  kills: number;
+  deaths: number;
+  assists: number;
+  networth: number;
+  xp: number;
+  cs: number;
+  dn: number;
+  heroDamage: number;
+  towerDamage: number;
+  __typename: HeroAverageTypename;
+}
+
+export enum HeroAverageTypename {
+  HeroPositionTimeDetailType = "HeroPositionTimeDetailType",
+}
+
+export enum Lane {
+  MidLane = "MID_LANE",
+  OffLane = "OFF_LANE",
+  SafeLane = "SAFE_LANE",
+}
+
+export interface Stats {
+  inventoryReport: InventoryReport[];
+  itemPurchases: ItemPurchase[];
+  level: number[];
+  __typename: StatsTypename;
+  lastHitsPerMinute: number[];
+  networthPerMinute: number[];
+  actionsPerMinute: number[];
+  runes: Rune[];
+  allTalks: AllTalk[];
+  chatWheels: ChatWheel[];
+  killEvents: KillEvent[];
+  deathEvents: DeathEvent[];
+  impPerMinute: number[];
+  campStack: number[];
+  heroDamageReceivedPerMinute: number[];
+  assistEvents: AssistEvent[];
+  spiritBearInventoryReport: null;
+  goldPerMinute: number[];
+  experiencePerMinute: number[];
+  deniesPerMinute: number[];
+  matchPlayerBuffEvent: MatchPlayerBuffEvent[];
+  wards: Ward[];
+  healPerMinute: number[];
+  heroDamagePerMinute: number[];
+  towerDamagePerMinute: number[];
+}
+
+export enum StatsTypename {
+  MatchPlayerStatsType = "MatchPlayerStatsType",
+}
+
+export interface AllTalk {
+  time: number;
+  message: string;
+  pausedTick: number;
+  __typename: string;
+}
+
+export interface AssistEvent {
+  time: number;
+  __typename: AssistEventTypename;
+}
+
+export enum AssistEventTypename {
+  MatchPlayerStatsAssistEventType = "MatchPlayerStatsAssistEventType",
 }
 
 export interface ChatWheel {
   time: number;
   chatWheelId: number;
-  __typename: string;
+  __typename: ChatWheelTypename;
+}
+
+export enum ChatWheelTypename {
+  MatchPlayerStatsChatWheelEventType = "MatchPlayerStatsChatWheelEventType",
 }
 
 export interface DeathEvent {
   time: number;
-  attacker: number;
+  attacker: number | null;
   target: number;
-  __typename: string;
+  __typename: DeathEventTypename;
   timeDead: number;
   goldLost: number;
 }
 
-export interface FarmDistributionReport {
-  other: CreepType[];
-  creepType: CreepType[];
-  neutralLocation: NeutralLocation[];
-  ancientLocation: any[];
-  __typename: string;
-}
-
-export interface CreepType {
-  id: number;
-  count: number;
-  __typename: CreepTypeTypename;
-}
-
-export enum CreepTypeTypename {
-  MatchPlayerStatsFarmDistributionObjectType = "MatchPlayerStatsFarmDistributionObjectType",
-}
-
-export interface NeutralLocation {
-  count: number;
-  __typename: CreepTypeTypename;
+export enum DeathEventTypename {
+  MatchPlayerStatsDeathEventType = "MatchPlayerStatsDeathEventType",
 }
 
 export interface InventoryReport {
   backPack0: BackPack0 | null;
-  backPack1: null;
-  backPack2: null;
+  backPack1: BackPack0 | null;
+  backPack2: BackPack0 | null;
   item0: BackPack0 | null;
   item1: BackPack0 | null;
   item2: BackPack0 | null;
@@ -365,8 +348,8 @@ export enum InventoryReportTypename {
 
 export interface BackPack0 {
   itemId: number;
-  charges?: number | null;
-  __typename?: BackPack0Typename;
+  charges: number | null;
+  __typename: BackPack0Typename;
 }
 
 export enum BackPack0Typename {
@@ -386,24 +369,36 @@ export enum ItemPurchaseTypename {
 export interface KillEvent {
   time: number;
   target: number;
-  __typename: string;
+  __typename: KillEventTypename;
   gold: number;
-  xp: number;
+  xp: number | null;
+}
+
+export enum KillEventTypename {
+  MatchPlayerStatsKillEventType = "MatchPlayerStatsKillEventType",
 }
 
 export interface MatchPlayerBuffEvent {
   abilityId: null;
-  itemId: null;
+  itemId: number | null;
   time: number;
-  stackCount: null;
+  stackCount: number | null;
   __typename: string;
 }
 
 export interface Rune {
   time: number;
   rune: string;
-  action: string;
-  __typename: string;
+  action: Action;
+  __typename: RuneTypename;
+}
+
+export enum RuneTypename {
+  MatchPlayerStatsRuneEventType = "MatchPlayerStatsRuneEventType",
+}
+
+export enum Action {
+  Pickup = "PICKUP",
 }
 
 export interface Ward {
@@ -411,37 +406,46 @@ export interface Ward {
   positionY: number;
   time: number;
   type: number;
-  __typename: string;
+  __typename: WardTypename;
+}
+
+export enum WardTypename {
+  MatchPlayerStatsWardEventType = "MatchPlayerStatsWardEventType",
 }
 
 export interface SteamAccountMatchDetail {
   id: number;
   name: string;
-  isAnonymous: boolean;
-  smurfFlag: number;
   proSteamAccount: null;
-  __typename: string;
-  seasonRank: number;
+  isAnonymous: boolean;
+  smurfFlag: number | null;
+  __typename: SteamAccountTypename;
+  seasonRank: number | null;
   seasonLeaderboardRank: null;
 }
 
-export interface TeamTotalInfo {
-  lv: number;
-  kills: number;
-  deaths: number;
-  assists: number;
-  nw: number;
-  imp: number;
-  lh: number;
-  dn: number;
-  gpm: number;
-  xpm: number;
-  hd: number;
-  td: number;
-  hh: number;
+export enum SteamAccountTypename {
+  SteamAccountType = "SteamAccountType",
 }
 
-export interface PlayerTimeline {
+export interface TowerDeath {
+  attacker: number | null;
+  npcId: number;
+  time: number;
+  isRadiant: boolean;
+  __typename: TowerDeathTypename;
+}
+
+export enum TowerDeathTypename {
+  MatchStatsTowerDeathType = "MatchStatsTowerDeathType",
+}
+
+export interface Track {
+  name: string;
+  duration: number;
+}
+
+export interface PlayerTimeline extends TeamSort {
   heroId: number;
   partyId: number | null;
   role: string;
@@ -463,7 +467,8 @@ export interface PlayerTimeline {
   steamAccount: SteamAccountMatchDetail;
 }
 
-export interface Team {
-  role: string;
+export interface TeamSort {
+  position?: string;
+  role?: string;
   lane: string;
 }

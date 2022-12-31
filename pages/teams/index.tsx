@@ -5,6 +5,11 @@ import Layout from "../../components/Layout";
 import { TeamsMain, TeamsSubHeader } from "../../components/Teams";
 import { Team } from "../../interfaces/teamsPage";
 import openDotaApiService from "../../services/openDotaApi.service";
+import { useAppDispatch } from "../../store";
+import {
+  setHeaderImg,
+  setSubHeaderMain,
+} from "../../store/Slices/globalDataSlice";
 import { NextPageWithLayout } from "../_app";
 
 type Props = {
@@ -13,6 +18,12 @@ type Props = {
 };
 
 const TeamsPage: NextPageWithLayout<Props> = (props) => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setSubHeaderMain(<TeamsSubHeader />));
+    dispatch(setHeaderImg("/card3.jpg"));
+  }, [dispatch]);
   if (props.statusCode !== 200) {
     return <Error statusCode={props.statusCode} />;
   }
@@ -24,11 +35,7 @@ const TeamsPage: NextPageWithLayout<Props> = (props) => {
 };
 
 TeamsPage.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <Layout subHeader={<TeamsSubHeader />} imgSrc="/card3.jpg">
-      {page}
-    </Layout>
-  );
+  return <Layout>{page}</Layout>;
 };
 
 export const getStaticProps: GetStaticProps<Props> = async () => {

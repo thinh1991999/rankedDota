@@ -4,14 +4,14 @@ import IconTypeRole from "../../../IconTypeRole";
 import MyImage from "../../../MyImage";
 import RankIcon from "../../../RankIcon";
 import {
-  formatNetword,
+  formatNumber,
   getTypeOfHero,
   nFormatter,
 } from "../../../../share/ultils";
 
 const SortDetail = ({ player }: { player: PlayerMatchDetail }) => {
   const {
-    role,
+    position,
     lane,
     imp,
     level,
@@ -26,7 +26,7 @@ const SortDetail = ({ player }: { player: PlayerMatchDetail }) => {
     heroDamage,
     steamAccount: { name, seasonRank },
   } = player;
-  const herotype = getTypeOfHero(role, lane);
+  const herotype = getTypeOfHero(position, lane);
   const lvScore = (level / 30) * 10;
   return (
     <section className="pt-4 h-full w-full">
@@ -43,7 +43,12 @@ const SortDetail = ({ player }: { player: PlayerMatchDetail }) => {
           <div className="w-1/4 p-2 ">
             <div className="p-2 h-12 flex items-center justify-center border border-solid border-borderTender-dark rounded-md">
               <div className="w-[18px] h-[18px]">
-                <IconTypeRole height={18} width={18} role={role} lane={lane} />
+                <IconTypeRole
+                  height={18}
+                  width={18}
+                  role={position}
+                  lane={lane}
+                />
               </div>
               <div className="ml-1">
                 <span>{herotype.name}</span>
@@ -117,7 +122,7 @@ const SortDetail = ({ player }: { player: PlayerMatchDetail }) => {
                   alt="gold"
                 />
                 <span className="ml-1 text-yellow-500">
-                  {formatNetword(networth)}
+                  {formatNumber(networth)}
                 </span>
               </div>
             </div>
@@ -172,7 +177,7 @@ const SortDetail = ({ player }: { player: PlayerMatchDetail }) => {
             <div className="flex flex-col justify-center items-center">
               <span className="text-textSecondPrimary-dark">HD</span>
               <div className="">
-                <span>{formatNetword(heroDamage)}</span>
+                <span>{formatNumber(heroDamage)}</span>
               </div>
             </div>
           </div>

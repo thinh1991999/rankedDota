@@ -10,7 +10,7 @@ const DataInfo = () => {
   const errMess = useAppSelector((state) => state.heroesPositions.errMess);
 
   return (
-    <div className="container lg:overflow-hidden overflow-x-scroll">
+    <div className=" overflow-x-scroll">
       <Header />
       {loading ? (
         <div className="flex justify-center py-10">

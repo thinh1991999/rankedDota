@@ -12,8 +12,8 @@ const TimeSeek = () => {
     dispatch(setTimeSeek(Number(e.target.value)));
   };
   return (
-    <section className="fixed bottom-0 left-0 right-0 ">
-      <div className="container m-auto h-[50px] bg-black flex items-center justify-center px-5">
+    <div className="fixed bottom-0 left-0 right-0 ">
+      <div className="container m-auto h-[50px] backdrop-blur-lg  flex items-center justify-center px-5">
         <span>{getTimeBySeconds(timesLabel[timeSeek] * 60)}</span>
         <input
           type="range"
@@ -26,7 +26,7 @@ const TimeSeek = () => {
         />
         <span>{getTimeBySeconds(timesLabel[timesLabel.length - 1] * 60)}</span>
       </div>
-    </section>
+    </div>
   );
 };
 

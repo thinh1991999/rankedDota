@@ -7,8 +7,9 @@ import {
   COLOR_CHART_RADIANT_BORDER,
   COLOR_CHART_DIRE_BORDER,
 } from "./constant";
-import { Team } from "../interfaces/matches";
+import { Team, TeamSort } from "../interfaces/matches";
 import { COLOR_CHART_BLUE_BORDER } from "./constant";
+import { Region } from "../interfaces/region";
 
 export const getImgOpenDota = (key: string) => {
   return "https://cdn.cloudflare.steamstatic.com" + key;
@@ -52,6 +53,17 @@ export const getDetaiAbility = (
   _.forEach(arr, (abi) => {
     if (abi.id === id) {
       result = abi;
+      return;
+    }
+  });
+  return result;
+};
+
+export const getDetaiRegion = (arr: Region[], id: number): Region | null => {
+  let result: Region | null = null;
+  _.forEach(arr, (re) => {
+    if (re.id === id) {
+      result = re;
       return;
     }
   });
@@ -313,11 +325,27 @@ export const getGradient = (
   return gradient;
 };
 
-export function sortRolesTeam<T extends Team>(arr: T[]) {
+export function sortRolesTeam<T extends TeamSort>(arr: T[]): T[] {
   const newArr = new Array<T>(5);
   _.forEach(arr, (item) => {
-    const { role, lane } = item;
-    switch (item.role) {
+    const { role, lane, position } = item;
+    const keyCheck = role ? role : position;
+    switch (keyCheck) {
+      case "POSITION_1":
+        newArr[0] = item;
+        break;
+      case "POSITION_2":
+        newArr[1] = item;
+        break;
+      case "POSITION_3":
+        newArr[2] = item;
+        break;
+      case "POSITION_4":
+        newArr[3] = item;
+        break;
+      case "POSITION_5":
+        newArr[4] = item;
+        break;
       case "CORE":
         if (lane === "SAFE_LANE") {
           newArr[0] = item;
@@ -416,4 +444,8 @@ export function removeEmpty(obj: object) {
       return v != null && v;
     })
   );
+}
+
+export function getFlagImgLink(flag: string) {
+  return `https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/${flag}.svg`;
 }

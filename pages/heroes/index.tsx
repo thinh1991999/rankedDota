@@ -1,5 +1,5 @@
 import React from "react";
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import { GetServerSideProps, GetStaticProps } from "next";
 import Head from "next/head";
 import _ from "lodash";
@@ -10,6 +10,11 @@ import Layout from "../../components/Layout";
 import { NextPageWithLayout } from "../_app";
 import MyImage from "../../components/MyImage";
 import { HeroesSubHeader, HeroHighWR } from "../../components/Heroes";
+import { useAppDispatch } from "../../store/hook";
+import {
+  setHeaderImg,
+  setSubHeaderMain,
+} from "../../store/Slices/globalDataSlice";
 
 type Props = {
   heroesStatus: HeroesStatus;
@@ -17,6 +22,11 @@ type Props = {
 
 const HeroesPage: NextPageWithLayout<Props> = (props) => {
   const { heroesStatus } = props;
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(setSubHeaderMain(<HeroesSubHeader />));
+    dispatch(setHeaderImg("/card1.jpg"));
+  }, [dispatch]);
   return (
     <>
       <Head>
@@ -35,7 +45,7 @@ const HeroesPage: NextPageWithLayout<Props> = (props) => {
 };
 
 HeroesPage.getLayout = function getLayout(page: ReactElement) {
-  return <Layout subHeader={<HeroesSubHeader />}>{page}</Layout>;
+  return <Layout>{page}</Layout>;
 };
 
 export const getStaticProps: GetStaticProps = async () => {

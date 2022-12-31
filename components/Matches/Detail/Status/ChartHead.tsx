@@ -3,7 +3,7 @@ import _ from "lodash";
 import MyImage from "../../../MyImage";
 import { RADIANT_ICON, DIRE_ICON } from "../../../../share/constant";
 import { useAppSelector } from "../../../../store/hook";
-import { formatNetword, nFormatter } from "../../../../share";
+import { nFormatter } from "../../../../share";
 
 const ChartHead = () => {
   const matchDetail = useAppSelector((state) => state.matchDetail.matchDetail);
@@ -19,9 +19,7 @@ const ChartHead = () => {
 
   useEffect(() => {
     if (!matchDetail) return;
-    const {
-      stats: { radiantExperienceLeads, radiantNetworthLeads },
-    } = matchDetail;
+    const { radiantExperienceLeads, radiantNetworthLeads } = matchDetail;
     const expLead = radiantExperienceLeads[timeSeek];
     const goldLead = radiantNetworthLeads[timeSeek];
     setNwTotal({
@@ -54,11 +52,9 @@ const ChartHead = () => {
             </div>
           )}
           {expTotal?.isRadiant && expTotal?.exp !== 0 && (
-            <div className="ml-2 flex items-center px-2 border border-solid border-white rounded-md">
-              <span className="text-textMain-dark">
-                +{nFormatter(expTotal?.exp || 0, 1)}
-              </span>
-              <span className="text-textSecondPrimary-dark text-sm ml-2">
+            <div className="ml-2 flex items-center px-2 border border-solid dark:border-white border-black rounded-md">
+              <span>+{nFormatter(expTotal?.exp || 0, 1)}</span>
+              <span className="text-textSecondPrimary-light dark:text-textSecondPrimary-dark text-sm ml-2">
                 XP
               </span>
             </div>
@@ -66,11 +62,9 @@ const ChartHead = () => {
         </div>
         <div className="flex items-center">
           {!expTotal?.isRadiant && expTotal?.exp !== 0 && (
-            <div className="mr-2 flex items-center px-2 border border-solid border-white rounded-md">
-              <span className="text-textMain-dark">
-                +{nFormatter(expTotal?.exp || 0, 1)}
-              </span>
-              <span className="text-textSecondPrimary-dark text-sm ml-2">
+            <div className="mr-2 flex items-center px-2 border border-solid dark:border-white border-black rounded-md">
+              <span>+{nFormatter(expTotal?.exp || 0, 1)}</span>
+              <span className="text-textSecondPrimary-light dark:text-textSecondPrimary-dark text-sm ml-2">
                 XP
               </span>
             </div>

@@ -15,8 +15,8 @@ const HeroesData = () => {
   return (
     <div>
       <div className=" rounded-md  my-5 overflow-hidden">
-        <div className="p-3 bg-layer-dark  flex items-center">
-          <div className="w-[40px]">
+        <div className="p-3 bg-layer-light dark:bg-layer-dark  flex items-center">
+          <div className="w-[40px] md:block md:mr-2 hidden">
             <MyImage
               src="/ExtendIcon/question.svg"
               width="40px"
@@ -24,7 +24,7 @@ const HeroesData = () => {
               alt=""
             />
           </div>
-          <p className="text-base text-textSecondPrimary-dark ml-2">
+          <p className="text-base text-textSecondPrimary-light dark:text-textSecondPrimary-dark ">
             Below is a table of all heroes with their win and pick rates charted
             over time. Change the time range, bracket, or positions of heroes
             using the controls above. Click the “+” icon to the right side of
@@ -33,7 +33,7 @@ const HeroesData = () => {
         </div>
         <div className=" bg-layerStrong-dark p-3 flex items-center">
           <div className="flex items-center">
-            <span className="text-sm text-textSecondPrimary-light">
+            <span className="text-sm text-textSecondPrimary-light dark:text-textSecondPrimary-dark">
               Data range :
             </span>
           </div>
@@ -42,7 +42,7 @@ const HeroesData = () => {
               <BeatLoader color="#fff" size={5} className="ml-3" />
             </div>
           ) : (
-            <span className="text-textMain-dark font-bold ml-3">
+            <span className=" md:font-bold ml-3 md:text-base text-sm font-medium">
               {formatFullDayTime(dataRange.begin)} -{" "}
               {formatFullDayTime(dataRange.end)}
             </span>

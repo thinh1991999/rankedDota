@@ -30,7 +30,8 @@ const Player = ({ player }: { player: PlayerMatchDetail }) => {
       item3Id,
       item4Id,
       item5Id,
-      stats: { itemPurchases, wards, abilities, level: lvArr },
+      stats: { itemPurchases, wards, level: lvArr },
+      abilities,
       steamAccount: { name },
     } = player;
     const spItemsResult: (Item & { times: number[] })[] = [];
@@ -48,19 +49,21 @@ const Player = ({ player }: { player: PlayerMatchDetail }) => {
     _.forEach(itemPurchases, (item) => {
       const detail = getDetailItem(items, item.itemId);
       if (!detail) return;
-      const { isStackable, cost, isSupport } = detail.stat;
-      if (detail.stat.needsComponents && cost >= 1000) {
-        itemsResult.push({ ...detail, time: item.time });
-      }
-      if (isSupport && isStackable) {
-        const checkIdx = _.findIndex(
-          spItemsResult,
-          (item) => item.id === detail.id
-        );
-        if (checkIdx === -1) {
-          spItemsResult.push({ ...detail, times: [item.time] });
-        } else {
-          spItemsResult[checkIdx].times.push(item.time);
+      if (detail.stat) {
+        const { isStackable, cost, isSupport } = detail.stat;
+        if (detail.stat.needsComponents && cost >= 1000) {
+          itemsResult.push({ ...detail, time: item.time });
+        }
+        if (isSupport && isStackable) {
+          const checkIdx = _.findIndex(
+            spItemsResult,
+            (item) => item.id === detail.id
+          );
+          if (checkIdx === -1) {
+            spItemsResult.push({ ...detail, times: [item.time] });
+          } else {
+            spItemsResult[checkIdx].times.push(item.time);
+          }
         }
       }
     });
@@ -75,7 +78,7 @@ const Player = ({ player }: { player: PlayerMatchDetail }) => {
   }, [player, items]);
 
   return (
-    <section className=" rounded-md bg-layerSecondary-dark border border-solid border-borderTender-dark">
+    <section className=" rounded-md bg-layerSecondary-light dark:bg-layerSecondary-dark border border-solid border-borderTender-dark">
       <div className="flex items-center p-2 border-b border-solid border-borderTender-dark">
         {topInfo && <TopInfo topInfo={topInfo} />}
       </div>

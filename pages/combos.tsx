@@ -8,6 +8,10 @@ import stratsApiService from "../services/stratsApi.service";
 import { HeroesStatus } from "../interfaces/heroes";
 import { ComposContainer, ComposSubHeader } from "../components/Compos";
 import { setHeroesStatus } from "../store/Slices/composSlice";
+import {
+  setHeaderImg,
+  setSubHeaderMain,
+} from "../store/Slices/globalDataSlice";
 
 type Props = {
   heroesStatus: HeroesStatus;
@@ -16,11 +20,14 @@ type Props = {
 const ComposPage: NextPageWithLayout<Props> = (props) => {
   const dispatch = useAppDispatch();
   const { heroesStatus } = props;
-  const heroes = useAppSelector((state) => state.globalData.heroes);
-
   useEffect(() => {
     dispatch(setHeroesStatus(heroesStatus));
   }, [heroesStatus, dispatch]);
+
+  useEffect(() => {
+    dispatch(setSubHeaderMain(<ComposSubHeader />));
+    dispatch(setHeaderImg("/card2.jpg"));
+  }, [dispatch]);
 
   return (
     <section className="container m-auto ">
@@ -32,11 +39,7 @@ const ComposPage: NextPageWithLayout<Props> = (props) => {
 };
 
 ComposPage.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <Layout subHeader={<ComposSubHeader />} imgSrc="/card2.jpg">
-      {page}
-    </Layout>
-  );
+  return <Layout>{page}</Layout>;
 };
 
 export const getStaticProps: GetStaticProps<Props> = async () => {

@@ -13,6 +13,8 @@ import { GameVersion } from "./gameVersion";
 import { MatchDetail } from "./matches";
 import { Data, Lengue, Live } from "./lengues";
 import { Season } from "./players";
+import { ReactNode } from "react";
+import { Region } from "./region";
 
 export interface Root {
   globalData: GlobalData;
@@ -26,10 +28,16 @@ export interface Root {
 
 export interface GlobalData {
   abilitiesData: AbilityDetail[];
+  regions: Region[];
   items: Item[];
   heroes: Hero[];
   gameVersions: GameVersion[];
   talents: TreeBranchInfo[];
+  headerImg: string;
+  subHeaderMain: ReactNode;
+  isTransparentHeader: boolean;
+  showScrollTop: boolean;
+  showNavBarMobile: boolean;
   loading: boolean;
 }
 
@@ -45,6 +53,7 @@ export interface MatchDetailData {
   timeSeek: number;
   timesLabel: number[];
   currSeconds: number;
+  errMess: null | string;
 }
 
 export interface Lengues {
@@ -54,7 +63,7 @@ export interface Lengues {
 }
 
 export interface PlayersLeaderboardData {
-  season: Season[];
+  season: Season | null;
   loading: boolean;
 }
 

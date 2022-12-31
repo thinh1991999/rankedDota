@@ -59,7 +59,7 @@ const BotInfo = ({
                     id={uniqid()}
                   />
                 </div>
-                <span className="text-textSecondPrimary-dark text-xs mt-2">
+                <span className="text-textSecondPrimary-light dark:text-textSecondPrimary-dark text-xs mt-2">
                   {getTimeBySeconds(time)}
                 </span>
               </div>
@@ -113,7 +113,7 @@ const BotInfo = ({
                         id={uniqid()}
                       />
                     </div>
-                    <span className="text-textSecondPrimary-dark text-xs text-center mt-2">
+                    <span className="text-textSecondPrimary-light dark:text-textSecondPrimary-dark text-xs text-center mt-2">
                       {count}
                     </span>
                   </div>

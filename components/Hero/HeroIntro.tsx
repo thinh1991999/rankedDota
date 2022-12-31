@@ -11,6 +11,9 @@ import DetailAbility from "./DetailAbility";
 
 const HeroIntro = ({ hero }: { hero: Hero }) => {
   const { shortName, displayName, abilities, stats, roles, talents } = hero;
+  if (!stats) {
+    return <></>;
+  }
   const {
     agilityBase,
     agilityGain,
@@ -21,14 +24,14 @@ const HeroIntro = ({ hero }: { hero: Hero }) => {
     complexity,
   } = stats;
   return (
-    <section className="bg-neutral-light dark:bg-neutral-dark text-textMain-light dark:text-textMain-dark">
+    <section className=" text-textMain-light dark:text-textMain-dark">
       <div className="container m-auto">
         <div className="py-5 flex items-center">
           <div className="flex lg:w-5/12">
             <MyImage
               src={getImgStratsDota(`/heroes/${shortName}_vert.png`)}
-              width={100}
-              height={100}
+              width="100px"
+              height="100px"
               alt={displayName}
               borderRadius={5}
             />
@@ -39,8 +42,9 @@ const HeroIntro = ({ hero }: { hero: Hero }) => {
           <div className="flex justify-end lg:w-7/12">
             {abilities.map((abi) => {
               const { abilityId, ability } = abi;
-              const { drawMatchPage, name } = ability;
-              if (!drawMatchPage) return;
+              const { name, uri } = ability;
+              if (!uri) return;
+              console.log(abi);
               return (
                 <div key={abilityId} className="ml-2">
                   <ToolTip
@@ -49,8 +53,8 @@ const HeroIntro = ({ hero }: { hero: Hero }) => {
                         <MyImage
                           src={getImgStratsDota(`/abilities/${name}.png`)}
                           alt={name}
-                          width={80}
-                          height={80}
+                          width="80px"
+                          height="80px"
                           borderRadius={5}
                         />
                       </div>
@@ -63,14 +67,14 @@ const HeroIntro = ({ hero }: { hero: Hero }) => {
                 </div>
               );
             })}
-            <div className="bg-gray-50 ml-2 rounded-[5px]">
+            <div className=" ml-2 rounded-[5px]">
               <ToolTip
                 target={
                   <div className=" grayscale-[0.5] hover:grayscale-0">
                     <MyImage
                       src="/talent_tree.svg"
-                      height={80}
-                      width={80}
+                      height="80px"
+                      width="80px"
                       alt="talent_tree"
                     />
                   </div>
@@ -88,8 +92,8 @@ const HeroIntro = ({ hero }: { hero: Hero }) => {
               <div className="mr-1">
                 <MyImage
                   src="/meleeIcon.svg"
-                  height={20}
-                  width={20}
+                  height="20px"
+                  width="20px"
                   alt="melee"
                 />
               </div>
@@ -105,8 +109,8 @@ const HeroIntro = ({ hero }: { hero: Hero }) => {
                       ? "/compleModerate.svg"
                       : "/compleHigh.svg"
                   }
-                  height={20}
-                  width={20}
+                  height="20px"
+                  width="20px"
                   alt="melee"
                 />
               </div>
@@ -138,21 +142,21 @@ const HeroIntro = ({ hero }: { hero: Hero }) => {
           </div>
           <div className="flex items-center">
             <div className="flex items-center ml-5 ">
-              <MyImage src="/str.svg" alt="int" width={20} height={20} />
+              <MyImage src="/str.svg" alt="int" width="20px" height="20px" />
               <span className=" text-sm ml-1">{strengthBase}</span>
               <span className="text-gray-500 text-sm">
                 +{getFixIndexHero(strengthGain)}
               </span>
             </div>
             <div className="flex items-center ml-5 ">
-              <MyImage src="/agi.svg" alt="int" width={20} height={20} />
+              <MyImage src="/agi.svg" alt="int" width="20px" height="20px" />
               <span className=" text-sm ml-1">{agilityBase}</span>
               <span className="text-gray-500 text-sm">
                 +{getFixIndexHero(agilityGain)}
               </span>
             </div>
             <div className="flex items-center ml-5 ">
-              <MyImage src="/int.svg" alt="int" width={20} height={20} />
+              <MyImage src="/int.svg" alt="int" width="20px" height="20px" />
               <span className=" text-sm ml-1">{intelligenceBase}</span>
               <span className="text-gray-500 text-sm">
                 +{getFixIndexHero(intelligenceGain)}

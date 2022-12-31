@@ -3,7 +3,6 @@ import _ from "lodash";
 import {
   Event,
   Item,
-  ItemBootPurchase,
   ItemNeutral,
   PurchasePattern,
 } from "../../interfaces/item";
@@ -15,6 +14,8 @@ import {
 import MyImage from "../MyImage";
 import ToolTip from "../ToolTip";
 import { useAppSelector } from "../../store";
+import { HeroStats, ItemBootPurchase } from "../../interfaces/heroes";
+import { items } from "../../share/data";
 
 type ResultItemNeutral = {
   item: ItemNeutral;
@@ -23,8 +24,13 @@ type ResultItemNeutral = {
 
 type Tier = {
   title: string;
-  data: ResultItemNeutral[];
-  total: number;
+  data: {
+    items: {
+      itemNeutrals: ItemNeutral;
+      item: Item;
+    }[];
+    total: number;
+  };
 };
 
 type Timeline = {
@@ -83,13 +89,13 @@ const ToolTipItem = ({
 };
 
 const ItemList = ({
-  events,
+  itemList,
   totalMatchCount,
   title,
   timeline,
   currentNav,
 }: {
-  events: Event[];
+  itemList: ItemBootPurchase[];
   totalMatchCount: number;
   title: string;
   timeline?: string;
@@ -103,13 +109,13 @@ const ItemList = ({
         <span className="text-xs">{timeline}</span>
       </div>
       <div className="flex mt-2 -ml-1 -mr-1">
-        {events.map((event, idx) => {
+        {itemList.map((itemm, idx) => {
           if (idx >= 4) return;
-          const itemDetail = getDetailItem(items, event.itemId);
+          const itemDetail = getDetailItem(items, itemm.itemId);
           const img = getImgStratsDota(
             "/items/" + itemDetail?.shortName + ".png"
           );
-          const { winCount, matchCount, timeAverage } = event;
+          const { winCount, matchCount, timeAverage } = itemm;
           const winRate = ((winCount * 100) / matchCount).toFixed(0);
           const pickRate = ((matchCount * 100) / totalMatchCount).toFixed(0);
           const time = timeAverage ? getTimeBySeconds(timeAverage) : null;
@@ -120,8 +126,8 @@ const ItemList = ({
                   <div>
                     <MyImage
                       src={img}
-                      width={40}
-                      height={30}
+                      width="40px"
+                      height="30px"
                       borderRadius={5}
                       alt={itemDetail?.displayName || " "}
                     />
@@ -136,10 +142,10 @@ const ItemList = ({
                     pickRate={pickRate}
                     winRate={winRate}
                     time={time}
-                    cost={itemDetail?.stat.cost}
+                    cost={itemDetail?.stat?.cost}
                   />
                 }
-                id={title + event.itemId + idx}
+                id={title + itemm.itemId + idx}
               />
             </div>
           );
@@ -156,36 +162,37 @@ const NeutralList = ({
   tier: Tier;
   currentNav: number;
 }) => {
-  const { title, total, data } = tier;
+  const {
+    title,
+    data: { items, total },
+  } = tier;
   return (
     <>
       <h6 className="capitalize font-bold">{title}</h6>
       <div className="flex mt-2 -ml-1 -mr-1">
-        {data.map((itemNeutral, idx) => {
+        {items.map((itemNeutral, idx) => {
           if (idx >= 4) return;
           const {
-            item: { equippedMatchCount, equippedMatchWinCount },
-            detailItem,
+            item: { shortName, displayName },
+            itemNeutrals: { equippedMatchCount, equippedMatchWinCount },
           } = itemNeutral;
-          const img = getImgStratsDota(
-            "/items/" + detailItem?.shortName + ".png"
-          );
+          const img = getImgStratsDota("/items/" + shortName + ".png");
           const winRate = (
             (equippedMatchWinCount * 100) /
             equippedMatchCount
           ).toFixed(0);
           const pickRate = ((equippedMatchCount * 100) / total).toFixed(0);
           return (
-            <div key={detailItem.id} className="px-1">
+            <div key={idx} className="px-1">
               <ToolTip
                 target={
                   <div>
                     <MyImage
                       src={img}
-                      width={40}
-                      height={30}
+                      width="40px"
+                      height="30px"
                       borderRadius={5}
-                      alt={detailItem?.displayName || " "}
+                      alt={displayName || " "}
                     />
                     <span className="text-xs text-center block">
                       {currentNav === 0 ? winRate : pickRate}%
@@ -194,12 +201,12 @@ const NeutralList = ({
                 }
                 tooltip={
                   <ToolTipItem
-                    name={detailItem.displayName}
+                    name={displayName}
                     winRate={winRate}
                     pickRate={pickRate}
                   />
                 }
-                id={title + detailItem.id}
+                id={title + idx}
               />
             </div>
           );
@@ -209,180 +216,152 @@ const NeutralList = ({
   );
 };
 
-const HeroItems = ({
-  purchasePattern,
-  itemNeutral,
-  itemBootPurchase,
-}: {
-  purchasePattern: PurchasePattern;
-  itemNeutral: ItemNeutral[];
-  itemBootPurchase: ItemBootPurchase;
-}) => {
+const HeroItems = ({ stats }: { stats: HeroStats }) => {
   const items = useAppSelector((state) => state.globalData.items);
   const navs = useRef<string[]>(["Win rate", "Pick rate"]).current;
   const [currentNav, setCurrentNav] = useState<number>(0);
-  const [boots, setBoots] = useState<Event[]>([]);
-  const [timelines, setTimelines] = useState<Timeline[]>([]);
+  const [boots, setBoots] = useState<{
+    items: ItemBootPurchase[];
+    total: number;
+  }>();
+  const [timelines, setTimelines] = useState<
+    {
+      title: string;
+      data: {
+        items: ItemBootPurchase[];
+        total: number;
+      };
+      time: string;
+    }[]
+  >([]);
   const [tiers, setTiers] = useState<Tier[]>([]);
 
   useEffect(() => {
-    const getNewArr = (events: Event[], total: number): Event[] => {
-      const newEvents: Event[] = [];
-      _.forEach(events, (event) => {
-        const idx = _.findIndex(newEvents, (e) => e.itemId === event.itemId);
-        if (event.matchCount >= 100 && idx === -1) {
-          newEvents.push(event);
-        }
-      });
-      const eventsSort = _.orderBy(
-        newEvents,
-        (event) => {
-          const { winCount, matchCount } = event;
-          if (currentNav === 0) {
-            return winCount / matchCount;
-          } else {
-            return matchCount / total;
-          }
+    const getNewArr = (itemList: ItemBootPurchase[]) => {
+      const total = _.reduce(
+        itemList,
+        (prev, curr) => {
+          return prev + curr.matchCount;
         },
-        ["desc"]
+        0
       );
-      return eventsSort;
-    };
-    const { events, matchCount: countBoots } = itemBootPurchase;
-    const {
-      startingItems: { events: eventsStarting, matchCount: countStarting },
-      earlyGame: { events: eventsEarly, matchCount: countEarly },
-      midGame: { events: eventsMid, matchCount: countMid },
-      lateGame: { events: eventsLate, matchCount: countLate },
-    } = purchasePattern;
-    const resultTimelines: Timeline[] = [];
-    resultTimelines.push({
-      title: "Starting",
-      data: getNewArr(eventsStarting, countStarting),
-      time: "-1:40",
-      total: countStarting,
-    });
-    resultTimelines.push({
-      title: "Early",
-      data: getNewArr(eventsEarly, countEarly),
-      time: "00:00 - 15:00",
-      total: countEarly,
-    });
-    resultTimelines.push({
-      title: "Mid",
-      data: getNewArr(eventsMid, countMid),
-      time: "15:00 - 35:00",
-      total: countMid,
-    });
-    resultTimelines.push({
-      title: "Late",
-      data: getNewArr(eventsLate, countLate),
-      time: "35:00+",
-      total: countLate,
-    });
-    setBoots(getNewArr(events, countBoots));
-    setTimelines(resultTimelines);
-  }, [itemBootPurchase, purchasePattern, currentNav]);
-  useEffect(() => {
-    const getNewArr = (tier: Tier): Tier => {
-      const { data, title, total } = tier;
-      const eventsSort = _.orderBy(
-        data,
-        (result) => {
-          const {
-            item: { equippedMatchCount, equippedMatchWinCount },
-          } = result;
-          if (currentNav === 0) {
-            return equippedMatchWinCount / equippedMatchCount;
-          } else {
-            return equippedMatchCount / total;
-          }
+      const items = _.orderBy(
+        itemList,
+        (item) => {
+          const { matchCount, winCount } = item;
+          if (currentNav === 1) return matchCount / total;
+          return winCount / matchCount;
         },
         ["desc"]
       );
       return {
-        title,
-        data: eventsSort,
+        items,
         total,
       };
     };
-    const tier1: Tier = {
-      title: "Tier 1",
-      data: [],
-      total: 0,
-    };
-    const tier2: Tier = {
-      title: "Tier 2",
-      data: [],
-      total: 0,
-    };
-    const tier3: Tier = {
-      title: "Tier 3",
-      data: [],
-      total: 0,
-    };
-    const tier4: Tier = {
-      title: "Tier 4",
-      data: [],
-      total: 0,
-    };
-    const tier5: Tier = {
-      title: "Tier 5",
-      data: [],
-      total: 0,
-    };
-    _.forEach(itemNeutral, (item) => {
-      if (item.equippedMatchCount === 0) return;
-      const detailItem = getDetailItem(items, item.itemId);
-      if (detailItem) {
-        const {
-          stat: { neutralItemTier },
-        } = detailItem;
-        if (neutralItemTier === "TIER_1") {
-          tier1.data.push({
-            item,
-            detailItem,
-          });
-          tier1.total += item.equippedMatchCount;
-        }
-        if (neutralItemTier === "TIER_2") {
-          tier2.data.push({
-            item,
-            detailItem,
-          });
-          tier2.total += item.equippedMatchCount;
-        }
-        if (neutralItemTier === "TIER_3") {
-          tier3.data.push({
-            item,
-            detailItem,
-          });
-          tier3.total += item.equippedMatchCount;
-        }
-        if (neutralItemTier === "TIER_4") {
-          tier4.data.push({
-            item,
-            detailItem,
-          });
-          tier4.total += item.equippedMatchCount;
-        }
-        if (neutralItemTier === "TIER_5") {
-          tier5.data.push({
-            item,
-            detailItem,
-          });
-          tier5.total += item.equippedMatchCount;
+    const {
+      itemBootPurchase,
+      purchasePattern: { startingItems, earlyGame, midGame, lateGame },
+      itemNeutral,
+    } = stats;
+    setBoots(getNewArr(itemBootPurchase));
+    const resultTimelines = [];
+    resultTimelines.push({
+      title: "Starting",
+      data: getNewArr(startingItems),
+      time: "-1:40",
+    });
+    resultTimelines.push({
+      title: "Early",
+      data: getNewArr(earlyGame),
+      time: "00:00 - 15:00",
+    });
+    resultTimelines.push({
+      title: "Mid",
+      data: getNewArr(midGame),
+      time: "15:00 - 35:00",
+    });
+    resultTimelines.push({
+      title: "Late",
+      data: getNewArr(lateGame),
+      time: "35:00+",
+    });
+    const resultTiers: Tier[] = [
+      { title: "Tier 1", data: { items: [], total: 0 } },
+      { title: "Tier 2", data: { items: [], total: 0 } },
+      { title: "Tier 3", data: { items: [], total: 0 } },
+      { title: "Tier 4", data: { items: [], total: 0 } },
+      { title: "Tier 5", data: { items: [], total: 0 } },
+    ];
+    _.forEach(items, (item) => {
+      const { id, stat } = item;
+      if (stat) {
+        const { neutralItemTier } = stat;
+        const idx = _.findIndex(itemNeutral, (itemm) => itemm.itemId === id);
+        if (idx !== -1) {
+          switch (neutralItemTier) {
+            case "TIER_1":
+              resultTiers[0].data.items.push({
+                item,
+                itemNeutrals: itemNeutral[idx],
+              });
+              resultTiers[0].data.total += itemNeutral[idx].equippedMatchCount;
+              break;
+            case "TIER_2":
+              resultTiers[1].data.items.push({
+                item,
+                itemNeutrals: itemNeutral[idx],
+              });
+              resultTiers[1].data.total += itemNeutral[idx].equippedMatchCount;
+              break;
+            case "TIER_3":
+              resultTiers[2].data.items.push({
+                item,
+                itemNeutrals: itemNeutral[idx],
+              });
+              resultTiers[2].data.total += itemNeutral[idx].equippedMatchCount;
+              break;
+            case "TIER_4":
+              resultTiers[3].data.items.push({
+                item,
+                itemNeutrals: itemNeutral[idx],
+              });
+              resultTiers[3].data.total += itemNeutral[idx].equippedMatchCount;
+              break;
+            case "TIER_5":
+              resultTiers[4].data.items.push({
+                item,
+                itemNeutrals: itemNeutral[idx],
+              });
+              resultTiers[4].data.total += itemNeutral[idx].equippedMatchCount;
+              break;
+            default:
+              break;
+          }
         }
       }
     });
-    const resultTiers: Tier[] = [];
-    resultTiers.push(getNewArr(tier1));
-    resultTiers.push(getNewArr(tier2));
-    resultTiers.push(getNewArr(tier3));
-    resultTiers.push(getNewArr(tier4));
-    resultTiers.push(getNewArr(tier5));
+    _.forEach(resultTiers, (tier) => {
+      const {
+        data: { items, total },
+      } = tier;
+      tier.data.items = _.sortBy(
+        items,
+        (item) => {
+          const { equippedMatchCount, equippedMatchWinCount } =
+            item.itemNeutrals;
+          if (currentNav === 1) {
+            return equippedMatchCount / total;
+          }
+          return equippedMatchWinCount / equippedMatchCount;
+        },
+        ["desc"]
+      );
+    });
     setTiers(resultTiers);
-  }, [itemNeutral, items, currentNav]);
+    setTimelines(resultTimelines);
+  }, [stats, currentNav, items]);
+
   return (
     <section className="p-2 rounded-md bg-layer-dark">
       <div className="flex justify-between">
@@ -413,12 +392,14 @@ const HeroItems = ({
       </div>
       <div className="flex flex-wrap mt-2">
         <div className="w-full xl:w-[200px] py-4 ">
-          <ItemList
-            title="boosts"
-            events={boots}
-            totalMatchCount={itemBootPurchase.matchCount}
-            currentNav={currentNav}
-          />
+          {boots && (
+            <ItemList
+              title="boosts"
+              itemList={boots.items}
+              totalMatchCount={boots.total}
+              currentNav={currentNav}
+            />
+          )}
         </div>
         <div className="w-[1px] bg-gray-800 mx-5 xl:block hidden"></div>
         <div className="w-full xl:w-auto flex-1">
@@ -428,8 +409,8 @@ const HeroItems = ({
                 <div key={timeline.title} className="w-full xl:w-[200px] p-4">
                   <ItemList
                     title={timeline.title}
-                    events={timeline.data}
-                    totalMatchCount={timeline.total}
+                    itemList={timeline.data.items}
+                    totalMatchCount={timeline.data.total}
                     timeline={timeline.time}
                     currentNav={currentNav}
                   />

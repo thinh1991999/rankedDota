@@ -1,22 +1,23 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Season } from "../../interfaces/players";
+import _ from "lodash";
+import { PlayerSeason, Season } from "../../interfaces/players";
 import { PlayersLeaderboardData } from "../../interfaces/state";
-import { viLanguage } from "../../languages";
 import stratsApiService from "../../services/stratsApi.service";
-import { RootState } from "../store";
 
 const initialState: PlayersLeaderboardData = {
-  season: [],
+  season: null,
   loading: false,
 };
 
 export const fetchPlayersLeaderboard = createAsyncThunk(
   "playersLeaderboard",
   async (division: number) => {
-    const result = await stratsApiService.getPlayersLeaderboards(division);
+    const result = await stratsApiService.getPlayersLeaderboards({
+      divisionIdNb: division,
+    });
     const { season } = result.data.data.leaderboard;
-    if (!season) return [];
-    return (await season) as Season[];
+    if (!season) return null;
+    return (await season) as Season;
   }
 );
 
@@ -27,8 +28,14 @@ export const playersLeaderboardSlice = createSlice({
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
-    setSeason: (state, action: PayloadAction<Season[]>) => {
+    setSeason: (state, action: PayloadAction<Season>) => {
       state.season = action.payload;
+    },
+    loadMorePlayers: (state, action: PayloadAction<PlayerSeason[]>) => {
+      if (!state.season) return;
+      const clSeason = _.cloneDeepWith(state.season);
+      clSeason.players = [...clSeason.players, ...action.payload];
+      state.season = clSeason;
     },
   },
   extraReducers(builder) {
@@ -42,6 +49,7 @@ export const playersLeaderboardSlice = createSlice({
   },
 });
 
-export const { setLoading, setSeason } = playersLeaderboardSlice.actions;
+export const { setLoading, setSeason, loadMorePlayers } =
+  playersLeaderboardSlice.actions;
 
 export default playersLeaderboardSlice.reducer;

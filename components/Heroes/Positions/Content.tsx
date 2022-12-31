@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import _ from "lodash";
+
 import MyImage from "../../MyImage";
 import { useAppSelector } from "../../../store/hook";
 import { Hero, HeroesPos } from "../../../interfaces/heroes";
-import _ from "lodash";
 import { getDetaiHero, getImgOpenDota, nFormatter } from "../../../share";
 
 type Position = {
@@ -17,47 +19,50 @@ const PosRender = ({ pos, showAll }: { pos: Position[]; showAll: boolean }) => {
       {pos.map((pos, idx) => {
         if (!showAll && idx > 2) return;
         const { wr, hero, matches } = pos;
-        const { displayName, shortName } = hero;
+        const { displayName, shortName, id } = hero;
         const img = getImgOpenDota(
           `/apps/dota2/images/dota_react/heroes/${shortName}.png`
         );
         return (
-          <div
-            key={idx}
-            className="relative bg-layer-dark rounded-md my-2 border border-solid border-borderTender-dark cursor-pointer group"
-          >
-            <div className="absolute top-0 left-0 bottom-0 right-0 bg-black opacity-40 group-hover:opacity-0"></div>
-            <div className="relative p-2 overflow-hidden">
-              <div className="absolute top-0 left-0 bottom-0 right-0 blur-3xl grayscale-[0.3]">
-                <MyImage src={img} width="100%" height="100%" alt="" />
-              </div>
-              <div className="relative flex justify-between items-center text-textMain-dark">
-                <div className="w-[30px] h-[35px] bg-layerStrong-dark rounded-md flex items-center justify-center text-sm">
-                  <span>{idx + 1}</span>
+          <Link href={"/heroes/" + id} key={idx}>
+            <a>
+              <div className="relative bg-layer-light dark:bg-layer-dark rounded-md my-2 border border-solid border-borderSecondary-light dark:border-borderTender-dark cursor-pointer group ">
+                <div className="absolute top-0 left-0 bottom-0 right-0 bg-black opacity-40 dark:group-hover:opacity-0 group-hover:opacity-20 "></div>
+                <div className="relative p-2 overflow-hidden">
+                  <div className="absolute top-0 left-0 bottom-0 right-0 blur-3xl grayscale-[0.3]">
+                    <MyImage src={img} width="100%" height="100%" alt="" />
+                  </div>
+                  <div className="relative flex justify-between items-center ">
+                    <div className="w-[30px] h-[35px] bg-layerStrong-dark rounded-md flex items-center justify-center text-sm">
+                      <span>{idx + 1}</span>
+                    </div>
+                    <span className="one-line-max mx-3 text-sm font-bold">
+                      {displayName}
+                    </span>
+                    <MyImage
+                      src={img}
+                      width="60px"
+                      height="40px"
+                      alt=""
+                      borderRadius={6}
+                    />
+                  </div>
                 </div>
-                <span className="one-line-max mx-3 text-sm font-bold">
-                  {displayName}
-                </span>
-                <MyImage
-                  src={img}
-                  width="60px"
-                  height="40px"
-                  alt=""
-                  borderRadius={6}
-                />
+                <div className="relative p-2 flex justify-center items-center text-textSecondPrimary-dark text-sm">
+                  <span
+                    className={`${
+                      wr >= 50
+                        ? "text-blue-700 dark:text-blue-500"
+                        : "text-red-700 dark:text-red-500"
+                    } mr-5`}
+                  >
+                    {wr.toFixed(1)}%
+                  </span>
+                  <span>{nFormatter(matches, 1)}</span>
+                </div>
               </div>
-            </div>
-            <div className="relative p-2 flex justify-center items-center text-textSecondPrimary-dark text-sm">
-              <span
-                className={`${
-                  wr >= 50 ? "text-blue-500" : "text-red-500"
-                } mr-5`}
-              >
-                {wr.toFixed(1)}%
-              </span>
-              <span>{nFormatter(matches, 1)}</span>
-            </div>
-          </div>
+            </a>
+          </Link>
         );
       })}
     </>
@@ -123,7 +128,7 @@ const Content = () => {
         <div className="flex justify-center">
           <button
             onClick={() => setShowAll(true)}
-            className="text-textSecondPrimary-dark hover:text-textMain-dark px-2 py-1 rounded-md bg-layer-dark"
+            className="text-textSecondPrimary-light dark:text-textSecondPrimary-dark hover:opacity-80 px-2 py-1 rounded-md bg-layer-light dark:bg-layer-dark"
           >
             Show All Heroes
           </button>

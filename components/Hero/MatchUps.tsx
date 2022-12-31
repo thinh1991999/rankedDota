@@ -45,8 +45,8 @@ const MatchUp = ({
                   <div className="flex flex-col justify-center items-center">
                     <MyImage
                       src={heroIcon}
-                      width={30}
-                      height={30}
+                      width="30px"
+                      height="30px"
                       alt={shortName}
                     />
                     <div className="my-2 relative h-[2px] w-full rounded-sm bg-borderSecondary-dark">
@@ -111,8 +111,6 @@ const MatchUps = ({
   heroVsHeroMatchup: HeroVsHeroMatchup;
   hero: Hero;
 }) => {
-  const heroes = useAppSelector((state) => state.globalData.heroes);
-
   const navs = useRef<string[]>(["Against", "With"]).current;
   const [currentNav, setCurrentNav] = useState<number>(0);
   const [advantage, setAdvantage] = useState<MatchupDetail[]>([]);
@@ -147,7 +145,7 @@ const MatchUps = ({
     setTotalMatch(total);
   }, [heroVsHeroMatchup, currentNav]);
   return (
-    <section className="p-2 h-full flex flex-col bg-layer-dark rounded-md">
+    <div className="p-2 h-full flex flex-col bg-layer-dark rounded-md">
       <div className="flex justify-between">
         <h6 className="text-xl font-bold">Matchups</h6>
         <ul className="flex items-center ">
@@ -203,7 +201,7 @@ const MatchUps = ({
         <div className="h-[1px] flex-1 bg-borderSecondary-dark"></div>
         <span className="w-[100px] text-sm block text-end">Worst against</span>
       </div>
-    </section>
+    </div>
   );
 };
 

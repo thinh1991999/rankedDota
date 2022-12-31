@@ -1,5 +1,6 @@
 export interface HeaderNav {
   name: string;
+  icon?: string;
   fatherLink?: string;
   link: string;
   sub?: string;
@@ -10,6 +11,7 @@ export const headerNavs: HeaderNav[] = [
   {
     name: "Heros",
     link: "/heroes",
+    icon: "/hero.svg",
     childs: [
       {
         name: "Overview",
@@ -40,6 +42,7 @@ export const headerNavs: HeaderNav[] = [
   {
     name: "Players",
     link: "/players/ranks",
+    icon: "/HeaderNav/playersSub.svg",
     childs: [
       {
         name: "Rank",
@@ -72,6 +75,7 @@ export const headerNavs: HeaderNav[] = [
   {
     name: "Matches",
     link: "/matches/live",
+    icon: "/HeaderNav/matches.svg",
     childs: [
       {
         name: "Live",
@@ -86,10 +90,12 @@ export const headerNavs: HeaderNav[] = [
   {
     name: "Combos",
     link: "/combos",
+    icon: "/HeaderNav/combosSub.svg",
   },
   {
     name: "Teams",
     link: "/teams",
+    icon: "/HeaderNav/teamsSub.svg",
   },
 ];
 
@@ -140,7 +146,7 @@ export const playersNavs: HeaderNav[] = [
     childs: [
       {
         name: "World",
-        link: "/players/leaderboards/world?divisionId=0",
+        link: "/players/leaderboards/world?divisionIds=0",
       },
       {
         name: "Coaches",
@@ -199,5 +205,16 @@ export const mathDetailNav = [
   },
   {
     title: "Playback",
+  },
+];
+
+export const matchesNav = [
+  {
+    name: "Live",
+    link: "/matches/live",
+  },
+  {
+    name: "Graphs",
+    link: "/matches/graphs",
   },
 ];

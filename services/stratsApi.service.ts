@@ -116,127 +116,25 @@ class StratsApiService {
     });
   }
 
-  getHeroInfo(variables: object) {
-    const HeroInfo = `fragment HeroInfoConstantQueryFragment on ConstantQuery {
-      hero(id: $heroId) {
-        id
-        name
-        displayName
-        shortName
-        aliases
-        gameVersionId
-        abilities {
-          slot
-          gameVersionId
-          abilityId
-          ability {
-            id
-            name
-            uri
-            language {
-              displayName
-              lore
-              attributes
-              aghanimDescription
-              shardDescription
-              description
-              notes
-            }
-            stat {
-              abilityId
-              type
-              behavior
-              unitTargetType
-              unitTargetTeam
-              unitTargetFlags
-              unitDamageType
-              spellImmunity
-              modifierSupportValue
-              modifierSupportBonus
-              isOnCastbar
-              isOnLearnbar
-              fightRecapLevel
-              isGrantedByScepter
-              hasScepterUpgrade
-              maxLevel
-              levelsBetweenUpgrades
-              requiredLevel
-              hotKeyOverride
-              displayAdditionalHeroes
-              isUltimate
-              duration
-              charges
-              chargeRestoreTime
-              isGrantedByShard
-              dispellable
-              manaCost
-              cooldown
-            }
-            attributes {
-              name
-              value
-              linkedSpecialBonusAbilityId
-            }
-            drawMatchPage
-            isTalent
-          }
-          __typename
-        }
-        roles {
-          roleId
-          level
-        }
-        language {
-          displayName
-          lore
-          hype
-        }
-        talents {
-          abilityId
-          slot
-        }
-        stats {
-          enabled
-          heroUnlockOrder
-          team
-          cMEnabled
-          newPlayerEnabled
-          attackType
-          startingArmor
-          startingMagicArmor
-          startingDamageMin
-          startingDamageMax
-          attackRate
-          attackAnimationPoint
-          attackAcquisitionRange
-          attackRange
-          primaryAttribute
-          strengthBase
-          strengthGain
-          intelligenceBase
-          intelligenceGain
-          agilityBase
-          agilityGain
-          hpRegen
-          mpRegen
-          moveSpeed
-          moveTurnRate
-          hpBarOffset
-          visionDaytimeRange
-          visionNighttimeRange
-          complexity
-        }
-      }
-    }`;
+  getHeroInfo(id: number, brackets?: string[]) {
     return this.axios.post("", {
-      query: `
-      ${HeroInfo}
-        query GetHeroOverview($heroId: Short!) {
-        constants {
-          ...HeroInfoConstantQueryFragment
-        }
-      }`,
-      variables,
+      operationName: "GetHeroOverview",
+      variables: {
+        heroId: id,
+        topPlayersBracketIds: brackets ? brackets : ["IMMORTAL"],
+      },
+      query:
+        "query GetHeroOverview($heroId: Short!, $bracketIds: [RankBracket], $bracketBasicIds: [RankBracketBasicEnum], $topPlayersBracketIds: [RankBracket]) {\n  heroStats {\n    ...HeroOverviewGuidesHeroStatsQueryFragment\n    ...HeroOverviewItemsHeroStatsQueryFragment\n    ...HeroOverviewMatchupsHeroStatsQueryFragment\n    ...HeroOverviewGraphsHeroStatsQueryFragment\n    ...HeroOverviewAbilitiesHeroStatsQueryFragment\n    ...HeroOverviewTalentsHeroStatsQueryFragment\n    ...HeroOverviewPositionsHeroStatsQueryFragment\n    ...HeroOverviewRampagesHeroStatsQueryFragment\n    __typename\n  }\n  constants {\n    ...HeroOverviewAbilitiesConstantQueryFragment\n    ...HeroOverviewConstantsConstantQueryFragment\n    ...HeroOverviewItemsConstantQueryFragment\n    __typename\n  }\n  leaderboard {\n    ...HeroOverviewPlayersLeaderboardQueryFragment\n    __typename\n  }\n}\n\nfragment HeroOverviewGuidesHeroStatsQueryFragment on HeroStatsQuery {\n  guide(heroId: $heroId) {\n    heroId\n    guides(take: 3) {\n      ...GuidePreviewHeroGuide\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment GuidePreviewHeroGuide on HeroGuideType {\n  heroId\n  match {\n    id\n    durationSeconds\n    players {\n      matchId\n      steamAccountId\n      heroId\n      position\n      __typename\n    }\n    __typename\n  }\n  matchPlayer {\n    matchId\n    steamAccountId\n    heroId\n    position\n    steamAccount {\n      id\n      name\n      proSteamAccount {\n        name\n        __typename\n      }\n      __typename\n    }\n    assists\n    deaths\n    imp\n    isRadiant\n    item0Id\n    item1Id\n    item2Id\n    item3Id\n    item4Id\n    item5Id\n    neutral0Id\n    kills\n    additionalUnit {\n      item0Id\n      item1Id\n      item2Id\n      item3Id\n      item4Id\n      item5Id\n      neutral0Id\n      __typename\n    }\n    stats {\n      itemPurchases {\n        itemId\n        time\n        __typename\n      }\n      level\n      __typename\n    }\n    level\n    abilities {\n      abilityId\n      time\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewAbilitiesConstantQueryFragment on ConstantQuery {\n  hero(id: $heroId) {\n    id\n    abilities {\n      abilityId\n      ability {\n        id\n        name\n        stat {\n          maxLevel\n          behavior\n          unitTargetTeam\n          unitTargetType\n          hasScepterUpgrade\n          isGrantedByScepter\n          isGrantedByShard\n          isUltimate\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewAbilitiesHeroStatsQueryFragment on HeroStatsQuery {\n  abilityMaxLevel(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {\n    abilityId\n    level\n    winCount\n    matchCount\n    __typename\n  }\n  abilityMinLevel(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {\n    abilityId\n    level\n    winCount\n    matchCount\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewItemsHeroStatsQueryFragment on HeroStatsQuery {\n  ...HeroOverviewItemsStagesHeroStatsQueryFragment\n  ...HeroOverviewItemsNeutralsHeroStatsQueryFragment\n  ...HeroOverviewItemsBootsHeroStatsQueryFragment\n  __typename\n}\n\nfragment HeroOverviewItemsConstantQueryFragment on ConstantQuery {\n  ...HeroOverviewItemsNeutralsConstantQueryFragment\n  __typename\n}\n\nfragment HeroOverviewItemsStagesHeroStatsQueryFragment on HeroStatsQuery {\n  purchasePattern(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {\n    startingItems {\n      ...HeroOverviewItemsStagesHeroItemStartingPurchaseTypeFragment\n      __typename\n    }\n    earlyGame {\n      ...HeroOverviewItemsStagesHeroItemPurchaseTypeFragment\n      __typename\n    }\n    midGame {\n      ...HeroOverviewItemsStagesHeroItemPurchaseTypeFragment\n      __typename\n    }\n    lateGame {\n      ...HeroOverviewItemsStagesHeroItemPurchaseTypeFragment\n      __typename\n    }\n    __typename\n  }\n  purchasePatternStats: stats(\n    heroIds: [$heroId]\n    bracketBasicIds: $bracketBasicIds\n    minTime: 0\n    maxTime: 36\n    groupByTime: true\n  ) {\n    time\n    matchCount\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewItemsStagesHeroItemStartingPurchaseTypeFragment on HeroItemStartingPurchaseType {\n  itemId\n  winCount\n  matchCount\n  instance\n  wasGiven\n  __typename\n}\n\nfragment HeroOverviewItemsStagesHeroItemPurchaseTypeFragment on HeroItemPurchaseType {\n  itemId\n  winCount\n  matchCount\n  instance\n  __typename\n}\n\nfragment HeroOverviewItemsBootsHeroStatsQueryFragment on HeroStatsQuery {\n  itemBootPurchase(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {\n    itemId\n    matchCount\n    winCount\n    timeAverage\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewItemsNeutralsHeroStatsQueryFragment on HeroStatsQuery {\n  itemNeutral(\n    heroId: $heroId\n    bracketBasicIds: $bracketBasicIds\n    week: 1671984373\n  ) {\n    itemId\n    equippedMatchCount\n    equippedMatchWinCount\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewItemsNeutralsConstantQueryFragment on ConstantQuery {\n  items {\n    id\n    stat {\n      neutralItemTier\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewMatchupsHeroStatsQueryFragment on HeroStatsQuery {\n  heroVsHeroMatchup(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {\n    advantage {\n      ...HeroOverviewMatchupsHeroDryadTypeFragment\n      __typename\n    }\n    disadvantage {\n      ...HeroOverviewMatchupsHeroDryadTypeFragment\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewMatchupsHeroStatsHeroDryadTypeFragment on HeroStatsHeroDryadType {\n  heroId2\n  synergy\n  matchCount\n  winCount\n  __typename\n}\n\nfragment HeroOverviewMatchupsHeroDryadTypeFragment on HeroDryadType {\n  with {\n    ...HeroOverviewMatchupsHeroStatsHeroDryadTypeFragment\n    __typename\n  }\n  vs {\n    ...HeroOverviewMatchupsHeroStatsHeroDryadTypeFragment\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewGraphsHeroStatsQueryFragment on HeroStatsQuery {\n  winGameVersion(take: 7, groupBy: HERO_ID, bracketIds: $bracketIds) {\n    gameVersionId\n    heroId\n    winCount\n    matchCount\n    __typename\n  }\n  winDay(take: 32, groupBy: HERO_ID, bracketIds: $bracketIds) {\n    timestamp: day\n    heroId\n    winCount\n    matchCount\n    __typename\n  }\n  winHour(take: 25, groupBy: HERO_ID, bracketIds: $bracketIds) {\n    timestamp: hour\n    heroId\n    winCount\n    matchCount\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewPlayersLeaderboardQueryFragment on LeaderboardQuery {\n  hero(request: {heroIds: [$heroId], bracketIds: $topPlayersBracketIds, take: 5}) {\n    position\n    impAverage\n    steamAccount {\n      ...PlayerColSteamAccountTypeFragment\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment PlayerColSteamAccountTypeFragment on SteamAccountType {\n  avatar\n  ...PlayerNameColSteamAccountTypeFragment\n  __typename\n}\n\nfragment PlayerNameColSteamAccountTypeFragment on SteamAccountType {\n  id\n  name\n  proSteamAccount {\n    name\n    __typename\n  }\n  isAnonymous\n  smurfFlag\n  __typename\n}\n\nfragment HeroOverviewTalentsHeroStatsQueryFragment on HeroStatsQuery {\n  talent(heroId: $heroId) {\n    abilityId\n    matchCount\n    winCount\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewPositionsHeroStatsQueryFragment on HeroStatsQuery {\n  position: stats(\n    heroIds: [$heroId]\n    bracketBasicIds: $bracketBasicIds\n    groupByPosition: true\n    maxTime: 0\n  ) {\n    position\n    matchCount: remainingMatchCount\n    winCount\n    __typename\n  }\n  laneOutcomeWith_POSITION_1: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_1]\n    isWith: true\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeWith_POSITION_2: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_2]\n    isWith: true\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeWith_POSITION_3: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_3]\n    isWith: true\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeWith_POSITION_4: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_4]\n    isWith: true\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeWith_POSITION_5: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_5]\n    isWith: true\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeAgainst_POSITION_1: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_1]\n    isWith: false\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeAgainst_POSITION_2: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_2]\n    isWith: false\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeAgainst_POSITION_3: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_3]\n    isWith: false\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeAgainst_POSITION_4: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_4]\n    isWith: false\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeAgainst_POSITION_5: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_5]\n    isWith: false\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewPositionsHeroLaneOutcomeTypeFragment on HeroLaneOutcomeType {\n  heroId2\n  matchCount\n  winCount\n  lossCount\n  drawCount\n  stompWinCount\n  stompLossCount\n  __typename\n}\n\nfragment HeroOverviewRampagesHeroStatsQueryFragment on HeroStatsQuery {\n  rampages(request: {heroId: $heroId, bracketBasicIds: $bracketBasicIds, take: 5}) {\n    match {\n      id\n      rank\n      endDateTime\n      players {\n        steamAccountId\n        isRadiant\n        heroId\n        __typename\n      }\n      __typename\n    }\n    steamAccount {\n      avatar\n      ...PlayerNameColSteamAccountTypeFragment\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewConstantsConstantQueryFragment on ConstantQuery {\n  hero(id: $heroId) {\n    id\n    language {\n      hype\n      lore\n      __typename\n    }\n    aliases\n    __typename\n  }\n  __typename\n}\n",
+    });
+  }
+  getHeroHeader(id: number) {
+    return this.axios.post("", {
+      operationName: "GetHeroHeader",
+      variables: {
+        heroId: id,
+      },
+      query:
+        "query GetHeroHeader($heroId: Short!) {\n  constants {\n    ...HeroHeaderSummaryRowConstantQueryFragment\n    __typename\n  }\n  heroStats {\n    POSITION_1: winDay(\n      take: 1\n      positionIds: [POSITION_1]\n      bracketIds: [HERALD, GUARDIAN, CRUSADER, ARCHON, LEGEND, ANCIENT, DIVINE, IMMORTAL]\n    ) {\n      heroId\n      matchCount\n      winCount\n      __typename\n    }\n    POSITION_2: winDay(\n      take: 1\n      positionIds: [POSITION_2]\n      bracketIds: [HERALD, GUARDIAN, CRUSADER, ARCHON, LEGEND, ANCIENT, DIVINE, IMMORTAL]\n    ) {\n      heroId\n      matchCount\n      winCount\n      __typename\n    }\n    POSITION_3: winDay(\n      take: 1\n      positionIds: [POSITION_3]\n      bracketIds: [HERALD, GUARDIAN, CRUSADER, ARCHON, LEGEND, ANCIENT, DIVINE, IMMORTAL]\n    ) {\n      heroId\n      matchCount\n      winCount\n      __typename\n    }\n    POSITION_4: winDay(\n      take: 1\n      positionIds: [POSITION_4]\n      bracketIds: [HERALD, GUARDIAN, CRUSADER, ARCHON, LEGEND, ANCIENT, DIVINE, IMMORTAL]\n    ) {\n      heroId\n      matchCount\n      winCount\n      __typename\n    }\n    POSITION_5: winDay(\n      take: 1\n      positionIds: [POSITION_5]\n      bracketIds: [HERALD, GUARDIAN, CRUSADER, ARCHON, LEGEND, ANCIENT, DIVINE, IMMORTAL]\n    ) {\n      heroId\n      matchCount\n      winCount\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment HeroHeaderSummaryRowConstantQueryFragment on ConstantQuery {\n  hero(id: $heroId) {\n    id\n    stats {\n      attackType\n      complexity\n      primaryAttribute\n      strengthBase\n      strengthGain\n      agilityBase\n      agilityGain\n      intelligenceBase\n      intelligenceGain\n      __typename\n    }\n    roles {\n      roleId\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n",
     });
   }
 
@@ -642,7 +540,6 @@ class StratsApiService {
         value
         linkedSpecialBonusAbilityId
       }
-      drawMatchPage
       isTalent
       language {
         displayName
@@ -764,7 +661,6 @@ class StratsApiService {
             linkedSpecialBonusAbilityId
             requiresScepter
           }
-          drawMatchPage
           isTalent
         }
       }
@@ -818,6 +714,20 @@ class StratsApiService {
       name
       asOfDateTime
     }`;
+    const regions = ` regions{
+      id
+      name
+      clientName
+      displayName
+      leaderboardDivision
+      langKey
+      latitude
+      longitude
+      code
+      matchGroup
+      weekendTourneyDivision
+      __typename
+    }`;
     return this.axios.post("", {
       query: `
       {
@@ -826,6 +736,7 @@ class StratsApiService {
           ${items}
           ${heroes}
           ${gameVersions}
+          ${regions}
         }
       }
       `,
@@ -1291,874 +1202,14 @@ class StratsApiService {
     });
   }
 
-  getMatchDetail(variables: object) {
-    const HeroGuideMatch = ` fragment HeroGuideMatch on MatchType {
-      ...HeroGuideTimelineMatch
-      ...HeroGuidePickBan
-      __typename
-    }`;
-
-    const HeroGuideMatchPlayer = ` fragment HeroGuideMatchPlayer on MatchPlayerType {
-      ...HeroGuideTimelineMatchPlayer
-      ...HeroGuideAbilityBuildMatchPlayer
-      ...HeroGuidePostGameStatsMatchPlayer
-      ...HeroGuidePickBanPlayer
-      __typename
-    }`;
-
-    const HeroGuideMatchPlayerOther = `fragment HeroGuideMatchPlayerOther on MatchPlayerType {
-  ...HeroGuideTimelineMatchPlayerOther
-  ...HeroGuidePostGameStatsMatchPlayerOther
-  __typename
-}`;
-
-    const HeroGuideTimelineMatch = ` fragment HeroGuideTimelineMatch on MatchType {
-      durationSeconds
-      stats {
-        towerDeaths {
-          npcId
-          time
-          isRadiant
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }
-    `;
-    const HeroGuideTimelineMatchPlayerOther = ` fragment HeroGuideTimelineMatchPlayerOther on MatchPlayerType {
-      lane
-      role
-      heroId
-      stats {
-        networthPerMinute
-        level
-        wards {
-          positionX
-          positionY
-          time
-          type
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }`;
-
-    const HeroGuideTimelineMatchPlayer = ` fragment HeroGuideTimelineMatchPlayer on MatchPlayerType {
-      lane
-      role
-      stats {
-        itemPurchases {
-          time
-          itemId
-          __typename
-        }
-        inventoryReport {
-          backPack0 {
-            ...inventoryReportItem
-            __typename
-          }
-          backPack1 {
-            ...inventoryReportItem
-            __typename
-          }
-          backPack2 {
-            ...inventoryReportItem
-            __typename
-          }
-          item0 {
-            ...inventoryReportItem
-            __typename
-          }
-          item1 {
-            ...inventoryReportItem
-            __typename
-          }
-          item2 {
-            ...inventoryReportItem
-            __typename
-          }
-          item3 {
-            ...inventoryReportItem
-            __typename
-          }
-          item4 {
-            ...inventoryReportItem
-            __typename
-          }
-          item5 {
-            ...inventoryReportItem
-            __typename
-          }
-          neutral0 {
-            ...inventoryReportItem
-            __typename
-          }
-          __typename
-        }
-        spiritBearInventoryReport {
-          backPack0Id
-          backPack1Id
-          backPack2Id
-          item0Id
-          item1Id
-          item2Id
-          item3Id
-          item4Id
-          item5Id
-          neutral0Id
-          __typename
-        }
-        killEvents {
-          time
-          __typename
-        }
-        deathEvents {
-          time
-          __typename
-        }
-        assistEvents {
-          time
-          __typename
-        }
-        goldPerMinute
-        experiencePerMinute
-        lastHitsPerMinute
-        deniesPerMinute
-        level
-        matchPlayerBuffEvent {
-          abilityId
-          itemId
-          time
-          stackCount
-          __typename
-        }
-        __typename
-      }
-      additionalUnit {
-        item0Id
-        item1Id
-        item2Id
-        item3Id
-        item4Id
-        item5Id
-        neutral0Id
-        __typename
-      }
-      __typename
-    }`;
-
-    const inventoryReportItem = ` fragment inventoryReportItem on MatchPlayerInventoryObjectType {
-      itemId
-      charges
-      __typename
-    }`;
-
-    const HeroGuideAbilityBuildMatchPlayer = ` fragment HeroGuideAbilityBuildMatchPlayer on MatchPlayerType {
-      item0Id
-      item1Id
-      item2Id
-      item3Id
-      item4Id
-      item5Id
-      stats {
-        itemPurchases {
-          itemId
-          __typename
-        }
-        abilities {
-          abilityId
-          level
-          time
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }`;
-
-    const HeroGuidePostGameStatsMatchPlayerOther = `fragment HeroGuidePostGameStatsMatchPlayerOther on MatchPlayerType {
-      isRadiant
-      kills
-      __typename
-    }`;
-
-    const HeroGuidePostGameStatsMatchPlayer = `fragment HeroGuidePostGameStatsMatchPlayer on MatchPlayerType {
-      isRadiant
-      kills
-      deaths
-      assists
-      level
-      networth
-      imp
-      goldPerMinute
-      experiencePerMinute
-      numLastHits
-      numDenies
-      heroDamage
-      towerDamage
-      heroAverage {
-        time
-        kills
-        deaths
-        assists
-        networth
-        xp
-        cs
-        dn
-        heroDamage
-        towerDamage
-        __typename
-      }
-      __typename
-    }`;
-
-    const HeroGuidePickBan = `fragment HeroGuidePickBan on MatchType {
-      stats {
-        pickBans {
-          bannedHeroId
-          isPick
-          playerIndex
-          isRadiant
-          order
-          heroId
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }`;
-
-    const HeroGuidePickBanPlayer = ` fragment HeroGuidePickBanPlayer on MatchPlayerType {
-      playerSlot
-      __typename
-    }`;
-
-    const MatchLanesMatchTypeFragment = `fragment MatchLanesMatchTypeFragment on MatchType {
-      players {
-        stats {
-          tripsFountainPerMinute
-          farmDistributionReport {
-            other {
-              id
-              count
-              __typename
-            }
-            creepType {
-              id
-              count
-              __typename
-            }
-            neutralLocation {
-              count
-              __typename
-            }
-            ancientLocation {
-              count
-              __typename
-            }
-            __typename
-          }
-          assistEvents {
-            target
-            __typename
-          }
-          __typename
-        }
-        __typename
-      }
-      topLaneOutcome
-      bottomLaneOutcome
-      midLaneOutcome
-      stats {
-        towerStatus {
-          towers {
-            npcId
-            hp
-            __typename
-          }
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }`;
-
-    const MatchBuilds = `fragment MatchBuilds on MatchType {
-      didRadiantWin
-      statsDateTime
-      stats {
-        radiantKills
-        direKills
-        __typename
-      }
-      players {
-        role
-        lane
-        heroId
-        level
-        neutral0Id
-        steamAccount {
-          id
-          name
-          isAnonymous
-          smurfFlag
-          proSteamAccount {
-            name
-            __typename
-          }
-          __typename
-        }
-        stats {
-          abilities {
-            abilityId
-            time
-            level
-            __typename
-          }
-          itemPurchases {
-            time
-            itemId
-            __typename
-          }
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }`;
-
-    const MatchGraphs = `fragment MatchGraphs on MatchType {
-      durationSeconds
-      stats {
-        winRates
-        radiantNetworthLeads
-        __typename
-      }
-      players {
-        stats {
-          level
-          lastHitsPerMinute
-          networthPerMinute
-          actionsPerMinute
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }`;
-
-    const MatchLog = `fragment MatchLog on MatchType {
-      id
-      endDateTime
-      statsDateTime
-      stats {
-        towerDeaths {
-          attacker
-          npcId
-          time
-          isRadiant
-          __typename
-        }
-        chatEvents {
-          isRadiant
-          time
-          value
-          fromHeroId
-          type
-          __typename
-        }
-        __typename
-      }
-      players {
-        isRadiant
-        heroId
-        lane
-        role
-        steamAccount {
-          id
-          isAnonymous
-          name
-          smurfFlag
-          proSteamAccount {
-            name
-            __typename
-          }
-          __typename
-        }
-        stats {
-          runes {
-            time
-            rune
-            action
-            __typename
-          }
-          allTalks {
-            time
-            message
-            pausedTick
-            __typename
-          }
-          chatWheels {
-            time
-            chatWheelId
-            __typename
-          }
-          killEvents {
-            time
-            target
-            __typename
-          }
-          deathEvents {
-            time
-            attacker
-            target
-            __typename
-          }
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }`;
-
-    const MatchPerformance = ` fragment MatchPerformance on MatchType {
-      ...MatchPerformanceDistribution
-      ...MatchPerformanceSimulation
-      __typename
-    }`;
-
-    const MatchPerformanceDistribution = `fragment MatchPerformanceDistribution on MatchType {
-      players {
-        award
-        heroId
-        imp
-        stats {
-          impPerMinute2
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }`;
-
-    const MatchPerformanceSimulation = ` fragment MatchPerformanceSimulation on MatchType {
-      ...MatchPerformanceSimulationHeroSection
-      ...MatchPerformanceSimulationStatDataRowList
-      __typename
-    }`;
-
-    const MatchPerformanceSimulationHeroSection = ` fragment MatchPerformanceSimulationHeroSection on MatchType {
-      rank
-      players {
-        heroId
-        lane
-        role
-        steamAccount {
-          id
-          name
-          isAnonymous
-          smurfFlag
-          seasonRank
-          proSteamAccount {
-            name
-            __typename
-          }
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }`;
-
-    const MatchPerformanceSimulationStatDataRowList = ` fragment MatchPerformanceSimulationStatDataRowList on MatchType {
-      players {
-        heroId
-        __typename
-      }
-      __typename
-    }
-    `;
-
-    const MatchScoreboard = `fragment MatchScoreboard on MatchType {
-      didRadiantWin
-      stats {
-        pickBans {
-          heroId
-          order
-          isPick
-          letter
-          __typename
-        }
-        __typename
-      }
-      players {
-        role
-        stats {
-          campStack
-          heroDamageReceivedPerMinute
-          runes {
-            time
-            rune
-            action
-            __typename
-          }
-          killEvents {
-            time
-            target
-            __typename
-          }
-          assistEvents {
-            time
-            __typename
-          }
-          deathEvents {
-            time
-            timeDead
-            goldLost
-            __typename
-          }
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }`;
-
-    const MatchHeaderMatchTypeFragment = `fragment MatchHeaderMatchTypeFragment on MatchType {
-      id
-      players {
-        heroId
-        role
-        lane
-        __typename
-      }
-      didRadiantWin
-      radiantTeam {
-        ...MatchHeaderTeamTypeFragment
-        __typename
-      }
-      direTeam {
-        ...MatchHeaderTeamTypeFragment
-        __typename
-      }
-      statsDateTime
-      series {
-        matches {
-          id
-          __typename
-        }
-        __typename
-      }
-      analysisOutcome
-      durationSeconds
-      stats {
-        radiantKills
-        direKills
-        __typename
-      }
-      ...MatchHeaderSummaryRowMatchTypeFragment
-      __typename
-    }`;
-
-    const MatchHeaderTeamTypeFragment = `fragment MatchHeaderTeamTypeFragment on TeamType {
-      id
-      name
-      __typename
-    }`;
-
-    const MatchHeaderSummaryRowMatchTypeFragment = `fragment MatchHeaderSummaryRowMatchTypeFragment on MatchType {
-      id
-      lobbyType
-      gameMode
-      regionId
-      durationSeconds
-      endDateTime
-      rank
-      league {
-        id
-        displayName
-        __typename
-      }
-      __typename
-    }`;
-
-    const MatchLeagueSeriesSectionMatchTypeFragmen = `fragment MatchLeagueSeriesSectionMatchTypeFragment on MatchType {
-      id
-      league {
-        id
-        displayName
-        __typename
-      }
-      series {
-        type
-        matches {
-          id
-          radiantTeamId
-          direTeamId
-          didRadiantWin
-          __typename
-        }
-        __typename
-      }
-      __typename
-    }`;
-
-    const MatchOverviewMatchTypeFragment = `fragment MatchOverviewMatchTypeFragment on MatchType {
-      bottomLaneOutcome
-      durationSeconds
-      endDateTime
-      midLaneOutcome
-      statsDateTime
-      topLaneOutcome
-      gameMode
-      players {
-        assists
-        award
-        deaths
-        experiencePerMinute
-        goldPerMinute
-        heroDamage
-        heroHealing
-        heroId
-        imp
-        isRadiant
-        kills
-        lane
-        level
-        networth
-        numDenies
-        numLastHits
-        partyId
-        position
-        towerDamage
-        item0Id
-        item1Id
-        item2Id
-        item3Id
-        item4Id
-        item5Id
-        backpack0Id
-        backpack1Id
-        backpack2Id
-        neutral0Id
-        stats {
-          deniesPerMinute
-          experiencePerMinute
-          goldPerMinute
-          healPerMinute
-          heroDamagePerMinute
-          impPerMinute2
-          lastHitsPerMinute
-          level
-          networthPerMinute
-          towerDamagePerMinute
-          killEvents {
-            time
-            target
-            gold
-            xp
-            __typename
-          }
-          deathEvents {
-            time
-            attacker
-            __typename
-          }
-          assistEvents {
-            time
-            __typename
-          }
-          itemPurchases {
-            itemId
-            time
-            __typename
-          }
-          inventoryReport {
-            backPack0 {
-              ...inventoryReportItem
-              __typename
-            }
-            backPack1 {
-              ...inventoryReportItem
-              __typename
-            }
-            backPack2 {
-              ...inventoryReportItem
-              __typename
-            }
-            item0 {
-              ...inventoryReportItem
-              __typename
-            }
-            item1 {
-              ...inventoryReportItem
-              __typename
-            }
-            item2 {
-              ...inventoryReportItem
-              __typename
-            }
-            item3 {
-              ...inventoryReportItem
-              __typename
-            }
-            item4 {
-              ...inventoryReportItem
-              __typename
-            }
-            item5 {
-              ...inventoryReportItem
-              __typename
-            }
-            neutral0 {
-              ...inventoryReportItem
-              __typename
-            }
-            __typename
-          }
-          matchPlayerBuffEvent {
-            time
-            abilityId
-            itemId
-            stackCount
-            __typename
-          }
-          spiritBearInventoryReport {
-            item0Id
-            item1Id
-            item2Id
-            item3Id
-            item4Id
-            item5Id
-            neutral0Id
-            __typename
-          }
-          abilities {
-            abilityId
-            time
-            __typename
-          }
-          __typename
-        }
-        additionalUnit {
-          item0Id
-          item1Id
-          item2Id
-          item3Id
-          item4Id
-          item5Id
-          neutral0Id
-          __typename
-        }
-        steamAccount {
-          id
-          name
-          isAnonymous
-          smurfFlag
-          proSteamAccount {
-            name
-            __typename
-          }
-          seasonRank
-          seasonLeaderboardRank
-          __typename
-        }
-        dotaPlus {
-          level
-          __typename
-        }
-        __typename
-      }
-      stats {
-        towerDeaths {
-          time
-          npcId
-          attacker
-          __typename
-        }
-        radiantNetworthLeads
-        radiantExperienceLeads
-        pickBans {
-          heroId
-          bannedHeroId
-          wasBannedSuccessfully
-          isRadiant
-          order
-          __typename
-        }
-        __typename
-      }
-      radiantTeam {
-        ...team
-        __typename
-      }
-      direTeam {
-        ...team
-        __typename
-      }
-      __typename
-    }`;
-
-    const team = ` fragment team on TeamType {
-      id
-      name
-      __typename
-    }`;
+  getMatchDetail(id: number) {
     return this.axios.post("", {
-      query: `
-      ${HeroGuideMatch}
-      ${HeroGuideMatchPlayer}
-      ${HeroGuideMatchPlayerOther}
-      ${HeroGuideTimelineMatch}
-      ${HeroGuideTimelineMatchPlayerOther}
-      ${HeroGuideTimelineMatchPlayer}
-      ${inventoryReportItem}
-      ${HeroGuideAbilityBuildMatchPlayer}
-      ${HeroGuidePostGameStatsMatchPlayerOther}
-      ${HeroGuidePostGameStatsMatchPlayer}
-      ${HeroGuidePickBan}
-      ${HeroGuidePickBanPlayer}
-      ${MatchLanesMatchTypeFragment}
-      ${MatchBuilds}
-      ${MatchGraphs}
-      ${MatchLog}
-      ${MatchPerformance}
-      ${MatchPerformanceDistribution}
-      ${MatchPerformanceSimulation}
-      ${MatchPerformanceSimulationHeroSection}
-      ${MatchPerformanceSimulationStatDataRowList}
-      ${MatchScoreboard}
-      ${MatchHeaderMatchTypeFragment}
-      ${MatchHeaderTeamTypeFragment}
-      ${MatchHeaderSummaryRowMatchTypeFragment}
-      ${MatchLeagueSeriesSectionMatchTypeFragmen}
-      ${MatchOverviewMatchTypeFragment}
-      ${team}
-      query GetMatch($id: Long!) {
-        match(id: $id) {
-          id
-          durationSeconds
-          ...MatchBuilds
-          ...MatchGraphs
-          ...MatchLanesMatchTypeFragment
-          ...MatchLog
-          ...MatchPerformance
-          ...MatchScoreboard
-          ...HeroGuideMatch
-          players {
-            ...HeroGuideMatchPlayer
-            ...HeroGuideMatchPlayerOther
-            __typename
-          }
-          ...MatchHeaderMatchTypeFragment
-          ...MatchLeagueSeriesSectionMatchTypeFragment
-          ...MatchOverviewMatchTypeFragment
-          __typename
-        }
-      }`,
-      variables,
+      operationName: "GetMatch",
+      variables: {
+        id,
+      },
+      query:
+        "query GetMatch($id: Long!) {\n  match(id: $id) {\n    id\n    durationSeconds\n    ...MatchBuildsMatchTypeFragment\n    ...MatchGraphs\n    ...MatchLog\n    ...MatchPerformance\n    ...MatchScoreboard\n    ...HeroGuideMatch\n    players {\n      ...HeroGuideMatchPlayer\n      ...HeroGuideMatchPlayerOther\n      __typename\n    }\n    ...MatchHeaderMatchTypeFragment\n    ...MatchLeagueSeriesSectionMatchTypeFragment\n    ...MatchOverviewMatchTypeFragment\n    __typename\n  }\n}\n\nfragment HeroGuideMatch on MatchType {\n  ...HeroGuideTimelineMatch\n  ...HeroGuidePickBan\n  __typename\n}\n\nfragment HeroGuideMatchPlayer on MatchPlayerType {\n  ...HeroGuideTimelineMatchPlayer\n  ...HeroGuideAbilityBuildMatchPlayer\n  ...HeroGuidePostGameStatsMatchPlayer\n  ...HeroGuidePickBanPlayer\n  __typename\n}\n\nfragment HeroGuideMatchPlayerOther on MatchPlayerType {\n  ...HeroGuideTimelineMatchPlayerOther\n  ...HeroGuidePostGameStatsMatchPlayerOther\n  __typename\n}\n\nfragment HeroGuideTimelineMatch on MatchType {\n  durationSeconds\n  towerDeaths {\n    npcId\n    time\n    isRadiant\n    __typename\n  }\n  __typename\n}\n\nfragment HeroGuideTimelineMatchPlayerOther on MatchPlayerType {\n  lane\n  position\n  heroId\n  stats {\n    networthPerMinute\n    level\n    wards {\n      positionX\n      positionY\n      time\n      type\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment HeroGuideTimelineMatchPlayer on MatchPlayerType {\n  lane\n  position\n  stats {\n    itemPurchases {\n      time\n      itemId\n      __typename\n    }\n    inventoryReport {\n      backPack0 {\n        ...inventoryReportItem\n        __typename\n      }\n      backPack1 {\n        ...inventoryReportItem\n        __typename\n      }\n      backPack2 {\n        ...inventoryReportItem\n        __typename\n      }\n      item0 {\n        ...inventoryReportItem\n        __typename\n      }\n      item1 {\n        ...inventoryReportItem\n        __typename\n      }\n      item2 {\n        ...inventoryReportItem\n        __typename\n      }\n      item3 {\n        ...inventoryReportItem\n        __typename\n      }\n      item4 {\n        ...inventoryReportItem\n        __typename\n      }\n      item5 {\n        ...inventoryReportItem\n        __typename\n      }\n      neutral0 {\n        ...inventoryReportItem\n        __typename\n      }\n      __typename\n    }\n    spiritBearInventoryReport {\n      backPack0Id\n      backPack1Id\n      backPack2Id\n      item0Id\n      item1Id\n      item2Id\n      item3Id\n      item4Id\n      item5Id\n      neutral0Id\n      __typename\n    }\n    killEvents {\n      time\n      __typename\n    }\n    deathEvents {\n      time\n      __typename\n    }\n    assistEvents {\n      time\n      __typename\n    }\n    goldPerMinute\n    experiencePerMinute\n    lastHitsPerMinute\n    deniesPerMinute\n    level\n    matchPlayerBuffEvent {\n      abilityId\n      itemId\n      time\n      stackCount\n      __typename\n    }\n    __typename\n  }\n  additionalUnit {\n    item0Id\n    item1Id\n    item2Id\n    item3Id\n    item4Id\n    item5Id\n    neutral0Id\n    __typename\n  }\n  __typename\n}\n\nfragment inventoryReportItem on MatchPlayerInventoryObjectType {\n  itemId\n  charges\n  __typename\n}\n\nfragment HeroGuideAbilityBuildMatchPlayer on MatchPlayerType {\n  item0Id\n  item1Id\n  item2Id\n  item3Id\n  item4Id\n  item5Id\n  stats {\n    itemPurchases {\n      itemId\n      __typename\n    }\n    __typename\n  }\n  abilities {\n    abilityId\n    level\n    time\n    __typename\n  }\n  __typename\n}\n\nfragment HeroGuidePostGameStatsMatchPlayerOther on MatchPlayerType {\n  isRadiant\n  kills\n  __typename\n}\n\nfragment HeroGuidePostGameStatsMatchPlayer on MatchPlayerType {\n  isRadiant\n  kills\n  deaths\n  assists\n  level\n  networth\n  imp\n  goldPerMinute\n  experiencePerMinute\n  numLastHits\n  numDenies\n  heroDamage\n  towerDamage\n  heroAverage {\n    time\n    kills\n    deaths\n    assists\n    networth\n    xp\n    cs\n    dn\n    heroDamage\n    towerDamage\n    __typename\n  }\n  __typename\n}\n\nfragment HeroGuidePickBan on MatchType {\n  pickBans {\n    bannedHeroId\n    isPick\n    playerIndex\n    isRadiant\n    order\n    heroId\n    __typename\n  }\n  __typename\n}\n\nfragment HeroGuidePickBanPlayer on MatchPlayerType {\n  playerSlot\n  __typename\n}\n\nfragment MatchBuildsMatchTypeFragment on MatchType {\n  durationSeconds\n  endDateTime\n  gameMode\n  didRadiantWin\n  statsDateTime\n  radiantKills\n  direKills\n  players {\n    isRadiant\n    position\n    heroId\n    level\n    neutral0Id\n    steamAccount {\n      id\n      ...PlayerNameColSteamAccountTypeFragment\n      __typename\n    }\n    stats {\n      inventoryReport {\n        backPack0 {\n          ...inventoryReportItem\n          __typename\n        }\n        backPack1 {\n          ...inventoryReportItem\n          __typename\n        }\n        backPack2 {\n          ...inventoryReportItem\n          __typename\n        }\n        item0 {\n          ...inventoryReportItem\n          __typename\n        }\n        item1 {\n          ...inventoryReportItem\n          __typename\n        }\n        item2 {\n          ...inventoryReportItem\n          __typename\n        }\n        item3 {\n          ...inventoryReportItem\n          __typename\n        }\n        item4 {\n          ...inventoryReportItem\n          __typename\n        }\n        item5 {\n          ...inventoryReportItem\n          __typename\n        }\n        neutral0 {\n          ...inventoryReportItem\n          __typename\n        }\n        __typename\n      }\n      itemPurchases {\n        time\n        itemId\n        __typename\n      }\n      level\n      __typename\n    }\n    abilities {\n      abilityId\n      time\n      level\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment PlayerNameColSteamAccountTypeFragment on SteamAccountType {\n  id\n  name\n  proSteamAccount {\n    name\n    __typename\n  }\n  isAnonymous\n  smurfFlag\n  __typename\n}\n\nfragment MatchGraphs on MatchType {\n  durationSeconds\n  winRates\n  radiantNetworthLeads\n  players {\n    stats {\n      level\n      lastHitsPerMinute\n      networthPerMinute\n      actionsPerMinute\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment MatchLog on MatchType {\n  id\n  endDateTime\n  statsDateTime\n  towerDeaths {\n    attacker\n    npcId\n    time\n    isRadiant\n    __typename\n  }\n  chatEvents {\n    isRadiant\n    time\n    value\n    fromHeroId\n    type\n    __typename\n  }\n  players {\n    isRadiant\n    heroId\n    position\n    steamAccount {\n      id\n      isAnonymous\n      name\n      smurfFlag\n      proSteamAccount {\n        name\n        __typename\n      }\n      __typename\n    }\n    stats {\n      runes {\n        time\n        rune\n        action\n        __typename\n      }\n      allTalks {\n        time\n        message\n        pausedTick\n        __typename\n      }\n      chatWheels {\n        time\n        chatWheelId\n        __typename\n      }\n      killEvents {\n        time\n        target\n        __typename\n      }\n      deathEvents {\n        time\n        attacker\n        target\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment MatchPerformance on MatchType {\n  ...MatchPerformanceDistribution\n  ...MatchPerformanceSimulation\n  __typename\n}\n\nfragment MatchPerformanceDistribution on MatchType {\n  players {\n    award\n    heroId\n    imp\n    stats {\n      impPerMinute\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment MatchPerformanceSimulation on MatchType {\n  ...MatchPerformanceSimulationHeroSection\n  ...MatchPerformanceSimulationStatDataRowList\n  __typename\n}\n\nfragment MatchPerformanceSimulationHeroSection on MatchType {\n  rank\n  players {\n    heroId\n    position\n    steamAccount {\n      id\n      name\n      isAnonymous\n      smurfFlag\n      seasonRank\n      proSteamAccount {\n        name\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment MatchPerformanceSimulationStatDataRowList on MatchType {\n  players {\n    heroId\n    __typename\n  }\n  __typename\n}\n\nfragment MatchScoreboard on MatchType {\n  didRadiantWin\n  pickBans {\n    heroId\n    order\n    isPick\n    letter\n    __typename\n  }\n  players {\n    position\n    stats {\n      campStack\n      heroDamageReceivedPerMinute\n      runes {\n        time\n        rune\n        action\n        __typename\n      }\n      killEvents {\n        time\n        target\n        __typename\n      }\n      assistEvents {\n        time\n        __typename\n      }\n      deathEvents {\n        time\n        timeDead\n        goldLost\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment MatchHeaderMatchTypeFragment on MatchType {\n  id\n  players {\n    heroId\n    position\n    __typename\n  }\n  didRadiantWin\n  radiantTeam {\n    ...MatchHeaderTeamTypeFragment\n    __typename\n  }\n  direTeam {\n    ...MatchHeaderTeamTypeFragment\n    __typename\n  }\n  statsDateTime\n  series {\n    matches {\n      id\n      __typename\n    }\n    __typename\n  }\n  analysisOutcome\n  durationSeconds\n  radiantKills\n  direKills\n  ...MatchHeaderSummaryRowMatchTypeFragment\n  __typename\n}\n\nfragment MatchHeaderTeamTypeFragment on TeamType {\n  id\n  name\n  __typename\n}\n\nfragment MatchHeaderSummaryRowMatchTypeFragment on MatchType {\n  id\n  lobbyType\n  gameMode\n  regionId\n  durationSeconds\n  endDateTime\n  rank\n  league {\n    id\n    displayName\n    __typename\n  }\n  __typename\n}\n\nfragment MatchLeagueSeriesSectionMatchTypeFragment on MatchType {\n  id\n  league {\n    id\n    displayName\n    __typename\n  }\n  series {\n    type\n    matches {\n      id\n      radiantTeamId\n      direTeamId\n      didRadiantWin\n      __typename\n    }\n    node {\n      id\n      nodeType\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment MatchOverviewMatchTypeFragment on MatchType {\n  bottomLaneOutcome\n  durationSeconds\n  endDateTime\n  midLaneOutcome\n  statsDateTime\n  topLaneOutcome\n  gameMode\n  players {\n    assists\n    award\n    deaths\n    experiencePerMinute\n    goldPerMinute\n    heroDamage\n    heroHealing\n    heroId\n    imp\n    isRadiant\n    kills\n    lane\n    level\n    networth\n    numDenies\n    numLastHits\n    partyId\n    position\n    towerDamage\n    item0Id\n    item1Id\n    item2Id\n    item3Id\n    item4Id\n    item5Id\n    backpack0Id\n    backpack1Id\n    backpack2Id\n    neutral0Id\n    stats {\n      deniesPerMinute\n      experiencePerMinute\n      goldPerMinute\n      healPerMinute\n      heroDamagePerMinute\n      impPerMinute\n      lastHitsPerMinute\n      level\n      networthPerMinute\n      towerDamagePerMinute\n      killEvents {\n        time\n        target\n        gold\n        xp\n        __typename\n      }\n      deathEvents {\n        time\n        attacker\n        __typename\n      }\n      assistEvents {\n        time\n        __typename\n      }\n      itemPurchases {\n        itemId\n        time\n        __typename\n      }\n      inventoryReport {\n        backPack0 {\n          ...inventoryReportItem\n          __typename\n        }\n        backPack1 {\n          ...inventoryReportItem\n          __typename\n        }\n        backPack2 {\n          ...inventoryReportItem\n          __typename\n        }\n        item0 {\n          ...inventoryReportItem\n          __typename\n        }\n        item1 {\n          ...inventoryReportItem\n          __typename\n        }\n        item2 {\n          ...inventoryReportItem\n          __typename\n        }\n        item3 {\n          ...inventoryReportItem\n          __typename\n        }\n        item4 {\n          ...inventoryReportItem\n          __typename\n        }\n        item5 {\n          ...inventoryReportItem\n          __typename\n        }\n        neutral0 {\n          ...inventoryReportItem\n          __typename\n        }\n        __typename\n      }\n      matchPlayerBuffEvent {\n        time\n        abilityId\n        itemId\n        stackCount\n        __typename\n      }\n      spiritBearInventoryReport {\n        item0Id\n        item1Id\n        item2Id\n        item3Id\n        item4Id\n        item5Id\n        neutral0Id\n        __typename\n      }\n      __typename\n    }\n    abilities {\n      abilityId\n      time\n      __typename\n    }\n    additionalUnit {\n      item0Id\n      item1Id\n      item2Id\n      item3Id\n      item4Id\n      item5Id\n      neutral0Id\n      __typename\n    }\n    steamAccount {\n      id\n      name\n      isAnonymous\n      smurfFlag\n      proSteamAccount {\n        name\n        __typename\n      }\n      seasonRank\n      seasonLeaderboardRank\n      __typename\n    }\n    dotaPlus {\n      level\n      __typename\n    }\n    __typename\n  }\n  towerDeaths {\n    time\n    npcId\n    attacker\n    __typename\n  }\n  radiantNetworthLeads\n  radiantExperienceLeads\n  pickBans {\n    heroId\n    bannedHeroId\n    wasBannedSuccessfully\n    isRadiant\n    order\n    __typename\n  }\n  radiantTeam {\n    ...team\n    __typename\n  }\n  direTeam {\n    ...team\n    __typename\n  }\n  __typename\n}\n\nfragment team on TeamType {\n  id\n  name\n  __typename\n}\n",
     });
   }
 
@@ -2420,7 +1471,17 @@ class StratsApiService {
     });
   }
 
-  getPlayersLeaderboards(divisionIdNb: number) {
+  getPlayersLeaderboards({
+    divisionIdNb,
+    skip = 0,
+    take = 20,
+    skipUserFollowingData,
+  }: {
+    divisionIdNb: number;
+    skip?: number;
+    take?: number;
+    skipUserFollowingData?: boolean;
+  }) {
     let leaderBoardDivision = "AMERICAS";
     if (divisionIdNb === 1) {
       leaderBoardDivision = "SE_ASIA";
@@ -2436,13 +1497,13 @@ class StratsApiService {
       variables: {
         leaderboardRequestVariable: {
           leaderBoardDivision,
-          skip: 0,
-          take: 10000,
         },
+        skip,
+        take,
         skipUserFollowingData: false,
       },
       query:
-        "query GetPlayersLeaderboards($leaderboardRequestVariable: FilterSeasonLeaderboardRequestType, $skipUserFollowingData: Boolean!) {\n  leaderboard {\n    season(request: $leaderboardRequestVariable) {\n      steamAccountId\n      steamAccount {\n        ...LeaderboardSteamAccount\n        __typename\n      }\n      rank\n      rankShift\n      position\n      __typename\n    }\n    __typename\n  }\n  stratz @skip(if: $skipUserFollowingData) {\n    user {\n      following {\n        steamAccount {\n          ...FollowingSteamAccount\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment LeaderboardSteamAccount on SteamAccountType {\n  id\n  countryCode\n  isAnonymous\n  proSteamAccount {\n    countries\n    __typename\n  }\n  ...TeamTagPlayerNameColSteamAccountTypeFragment\n  __typename\n}\n\nfragment TeamTagPlayerNameColSteamAccountTypeFragment on SteamAccountType {\n  id\n  name\n  proSteamAccount {\n    name\n    team {\n      tag\n      id\n      name\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment FollowingSteamAccount on SteamAccountType {\n  seasonLeaderboardRank\n  seasonLeaderboardDivisionId\n  proSteamAccount {\n    position\n    __typename\n  }\n  ...LeaderboardSteamAccount\n  __typename\n}\n",
+        "query GetPlayersLeaderboards($leaderboardRequestVariable: FilterSeasonLeaderboardRequestType, $skipUserFollowingData: Boolean!, $skip: Long, $take: Long) {\n  leaderboard {\n    season(request: $leaderboardRequestVariable) {\n      playerCount\n      players(skip: $skip, take: $take) {\n        steamAccountId\n        steamAccount {\n          ...LeaderboardSteamAccount\n          __typename\n        }\n        rank\n        rankShift\n        position\n        __typename\n      }\n      countryData {\n        countryCode\n        playerCount\n        __typename\n      }\n      positionData {\n        position\n        playerCount\n        __typename\n      }\n      teamData {\n        id\n        name\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  stratz @skip(if: $skipUserFollowingData) {\n    user {\n      following {\n        steamAccount {\n          ...FollowingSteamAccount\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment LeaderboardSteamAccount on SteamAccountType {\n  id\n  countryCode\n  isAnonymous\n  proSteamAccount {\n    countries\n    __typename\n  }\n  ...TeamTagPlayerNameColSteamAccountTypeFragment\n  __typename\n}\n\nfragment TeamTagPlayerNameColSteamAccountTypeFragment on SteamAccountType {\n  id\n  name\n  proSteamAccount {\n    name\n    team {\n      tag\n      id\n      name\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment FollowingSteamAccount on SteamAccountType {\n  rankShift\n  seasonLeaderboardRank\n  seasonLeaderboardDivisionId\n  proSteamAccount {\n    position\n    __typename\n  }\n  ...LeaderboardSteamAccount\n  __typename\n}\n",
     });
   }
 }

@@ -17,9 +17,13 @@ import {
   setLoading,
   setSeason,
 } from "../../../store/Slices/playersLeaderboardSlice";
+import {
+  setHeaderImg,
+  setSubHeaderMain,
+} from "../../../store/Slices/globalDataSlice";
 
 type Props = {
-  season: Season[];
+  season: Season;
   statusCode: number;
 };
 
@@ -27,6 +31,12 @@ const WorldPage: NextPageWithLayout<Props> = (props) => {
   const [mounted, setMounted] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setSubHeaderMain(<PlayersSubHeader />));
+    dispatch(setHeaderImg("/playersBg.jpg"));
+  }, [dispatch]);
+
   useEffect(() => {
     if (mounted) return;
     dispatch(setLoading(true));
@@ -44,12 +54,12 @@ const WorldPage: NextPageWithLayout<Props> = (props) => {
         <SearchHandle />
       </div>
       <div className="flex flex-wrap -ml-2 -mr-2">
-        <div className="lg:w-1/2 p-2">
+        <div className="lg:w-1/2 w-full p-2">
           <div className="mt-2">
             <MapHandle />
           </div>
         </div>
-        <div className="lg:w-1/2 p-2">
+        <div className="lg:w-1/2 w-full p-2">
           <PlayerList />
         </div>
       </div>
@@ -58,20 +68,18 @@ const WorldPage: NextPageWithLayout<Props> = (props) => {
 };
 
 WorldPage.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <Layout subHeader={<PlayersSubHeader />} imgSrc="/playersBg.jpg">
-      {page}
-    </Layout>
-  );
+  return <Layout>{page}</Layout>;
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (
   context
 ) => {
-  const { divisionId } = context.query;
-  let finalDivisionId = 0;
+  const { divisionIds } = context.query;
+  let finalDivisionId = Number(divisionIds);
   try {
-    const res = await stratsApiService.getPlayersLeaderboards(finalDivisionId);
+    const res = await stratsApiService.getPlayersLeaderboards({
+      divisionIdNb: finalDivisionId,
+    });
     if (res.status >= 400) {
       return {
         props: {

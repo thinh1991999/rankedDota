@@ -16,7 +16,7 @@ import {
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 import { GameVersion, WinGameVersion } from "../../interfaces/gameVersion";
-import { Hero } from "../../interfaces/heroes";
+import { Hero, Win } from "../../interfaces/heroes";
 import { useAppSelector } from "../../store/hook";
 import { nFormatter } from "../../share";
 
@@ -149,7 +149,7 @@ const HeroCharWinrate = ({
   winGameVersions,
   hero,
 }: {
-  winGameVersions: WinGameVersion[];
+  winGameVersions: Win[];
   hero: Hero;
 }) => {
   const gameVersions = useAppSelector((state) => state.globalData.gameVersions);
@@ -253,7 +253,7 @@ const HeroCharWinrate = ({
   useEffect(() => {
     let versions: {
       gameVersion: GameVersion;
-      winGameVersion: WinGameVersion;
+      winGameVersion: Win;
     }[] = [];
     const data: {
       label: string;

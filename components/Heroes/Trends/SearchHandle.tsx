@@ -98,13 +98,13 @@ const SearchHandle = () => {
       undefined,
       { shallow: true }
     );
-    // dispatch(
-    //   fetchHeroesMetaTrends({
-    //     bracketIds: rank?.value,
-    //     positions: positionsChoose,
-    //     regionIds: region?.value,
-    //   })
-    // );
+    dispatch(
+      fetchHeroesMetaTrends({
+        bracketIds: rank?.value,
+        positions: positionsChoose,
+        regionIds: region?.value,
+      })
+    );
   };
 
   const handleChangeRegion = (selectedOption: SingleValue<ItemList>) => {
@@ -237,7 +237,7 @@ const SearchHandle = () => {
         }
         formatOptionLabel={FormatOptionLabel}
         options={ranks}
-        className="capitalize p-2 w-[200px] text-sm"
+        className="capitalize p-2 md:w-[200px] w-full text-sm"
       />
       <Select
         isMulti={true}
@@ -252,7 +252,7 @@ const SearchHandle = () => {
         styles={styles}
         hideSelectedOptions={false}
         closeMenuOnSelect={false}
-        className="capitalize p-2 w-[200px] text-sm"
+        className="capitalize p-2 md:w-[200px] w-full text-sm"
       />
 
       <Select
@@ -260,14 +260,14 @@ const SearchHandle = () => {
         onChange={handleChangeRegion}
         styles={styles}
         options={regions}
-        className="capitalize p-2 w-[150px] text-sm"
+        className="capitalize p-2 md:w-[150px] w-full text-sm"
       />
       <Select
         styles={styles}
         value={gameMode}
         onChange={handleChangeGameMode}
         options={gameModes}
-        className="capitalize p-2 w-[150px] text-sm"
+        className="capitalize p-2 md:w-[150px] w-full text-sm"
       />
     </div>
   );

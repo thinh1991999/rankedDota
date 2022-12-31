@@ -20,7 +20,6 @@ type AppPropsWithLayout = AppProps & {
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const dispatch = useAppDispatch();
-
   const loading = useAppSelector((state) => state.globalData.loading);
   const { isPageLoading } = usePageLoading();
   const [mounted, setMounted] = useState(false);
@@ -30,13 +29,13 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   }, [dispatch]);
 
   const getLayout = Component.getLayout ?? ((page) => page);
-  // if (loading)
-  //   return (
-  //     <section className="w-screen h-screen bg-background-dark flex justify-center items-center">
-  //       <ClockLoader color="#fff" size={40} />
-  //       <span className="ml-1 text-xl font-bold text-white">RankedDota</span>
-  //     </section>
-  //   );
+  if (loading)
+    return (
+      <div className="w-screen h-screen bg-background-dark flex justify-center items-center">
+        <ClockLoader color="#fff" size={40} />
+        <span className="ml-1 text-xl font-bold text-white">RankedDota</span>
+      </div>
+    );
   if (!mounted) {
     return <></>;
   }

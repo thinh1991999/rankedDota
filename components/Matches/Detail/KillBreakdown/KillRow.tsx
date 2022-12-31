@@ -11,7 +11,7 @@ import HeroIcon from "../../../HeroIcon";
 import MyImage from "../../../MyImage";
 import ToolTip from "../../../ToolTip";
 import uniqid from "uniqid";
-import { formatNetword, nFormatter } from "../../../../share/ultils";
+import { nFormatter } from "../../../../share/ultils";
 
 const KillRow = ({
   player,
@@ -33,7 +33,7 @@ const KillRow = ({
   }, [player, heroes]);
 
   return (
-    <div className="p-2 rounded-md bg-layerSecondary-dark">
+    <div className="p-2 rounded-md bg-layerSecondary-light dark:bg-layerSecondary-dark">
       <div className="flex items-center">
         <div className="flex items-center w-[200px]">
           <div className="w-[68px]">
@@ -48,7 +48,10 @@ const KillRow = ({
           <div className="ml-2">
             <h6 className="one-line-max">{player.steamAccount.name}</h6>
             <p className="text-sm">
-              3 <span className="text-textSecondPrimary-dark">kills</span>
+              3{" "}
+              <span className="text-textSecondPrimary-light dark:text-textSecondPrimary-dark">
+                kills
+              </span>
             </p>
           </div>
         </div>
@@ -63,13 +66,13 @@ const KillRow = ({
               if (target === id && time <= currTime) {
                 count++;
                 goldEarn = gold;
-                expEarn = xp;
+                expEarn = xp ? xp : 0;
               }
             });
             return (
               <div
                 key={id}
-                className="w-[60px] h-[25px] rounded-md bg-layerStrong-dark"
+                className="w-[60px] h-[25px] rounded-md bg-layerStrong-light dark:bg-layerStrong-dark"
               >
                 <ToolTip
                   target={
