@@ -4,11 +4,10 @@ import { NextPageWithLayout } from "../_app";
 import { ReactElement, useEffect } from "react";
 import { GetServerSideProps } from "next";
 import stratsApiService from "../../services/stratsApi.service";
-import { Data, Lengue, Live, Match } from "../../interfaces/lengues";
+import { Data, Lengue, Live } from "../../interfaces/lengues";
 import Error from "next/error";
-import { wrapper } from "../../store/store";
 import { setData, setLengue, setLive } from "../../store/Slices/lenguesSlice";
-import { useAppSelector, useAppDispatch } from "../../store/hook";
+import { useAppDispatch } from "../../store/hook";
 import { LenguesHeader, Overview } from "../../components/Lengues";
 import _ from "lodash";
 

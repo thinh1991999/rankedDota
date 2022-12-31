@@ -73,21 +73,19 @@ const RowInfo = ({ info }: { info: PlayerTimeline }) => {
           />
           {partyId !== null && (
             <>
-              <div
-                className={`${partyId} w-[20px] h-[15px] absolute top-0 left-1 `}
-              >
+              <div className={`w-[20px] h-[15px] absolute top-0 left-1 `}>
                 <div className="w-full h-full relative">
                   <div className="absolute top-0 left-0 bottom-0 right-0 bg-black opacity-80"></div>
                   <div className="absolute top-0 left-0 bottom-0 right-0 flex justify-center items-center">
-                    <span className={`${partyColor.text}`}>
+                    {/* ${partyColor.text} */}
+                    <span className={``}>
                       {romanize(partyId === 0 ? partyId + 1 : partyId)}
                     </span>
                   </div>
                 </div>
               </div>
-              <div
-                className={`${partyColor.bg} absolute top-0 left-0 bottom-0 w-1 `}
-              ></div>
+              {/* ${partyColor.bg} */}
+              <div className={` absolute top-0 left-0 bottom-0 w-1 `}></div>
             </>
           )}
         </div>

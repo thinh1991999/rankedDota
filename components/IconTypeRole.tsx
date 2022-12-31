@@ -33,10 +33,11 @@ const IconTypeRole = ({
     >
       <ToolTip
         target={
+          // ${filterClass}
           <div
             className={`${
               gray ? "grayscale" : "grayscale-0"
-            } ${filterClass} flex justify-center items-center `}
+            }  flex justify-center items-center `}
           >
             <MyImage
               src={icon}

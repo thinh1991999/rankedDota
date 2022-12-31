@@ -102,12 +102,12 @@ const HeroHighWR = ({ heroesStatus }: { heroesStatus: HeroesStatus }) => {
             <div key={pos} className="lg:w-1/5 md:w-1/3 sm:w-1/2 w-full p-2 ">
               <Link href={"/heroes/" + id}>
                 <a className="group relative block rounded-md overflow-hidden border border-borderSecondary-light dark:border-borderSecondary-dark">
-                  <div
+                  {/* <div
                     className={`bg-gradient-to-l ${bgFrom} ${bgTo} group-hover:opacity-50 opacity-30 absolute top-0 left-0 right-0 bottom-0 `}
                   ></div>
                   <div
                     className={`h-[16px] bg-gradient-to-l ${bgFrom} ${bgTo} opacity-10 absolute left-0 bottom-0 right-0`}
-                  ></div>
+                  ></div> */}
                   <div className={`flex items-center justify-between px-2 `}>
                     <div className="flex flex-col">
                       <span className="capitalize text-sm">{namePos}</span>

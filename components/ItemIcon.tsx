@@ -28,10 +28,11 @@ const ItemIcon = ({
   return (
     <ToolTip
       target={
+        // ${filterClass}
         <div
           className={`${
             gray ? "grayscale" : "grayscale-0"
-          } ${filterClass} flex justify-center items-center `}
+          }  flex justify-center items-center `}
         >
           <MyImage
             src={itemIcon}

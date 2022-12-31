@@ -91,12 +91,13 @@ const MatchupSort = ({
                     {partyId !== null && (
                       <>
                         <div
-                          className={`${partyId} w-[20px] h-[15px] absolute top-1 left `}
+                          className={` w-[20px] h-[15px] absolute top-1 left `}
                         >
                           <div className="w-full h-full relative">
                             <div className="absolute top-0 left-0 bottom-0 right-0 bg-black opacity-80"></div>
                             <div className="absolute top-0 left-0 bottom-0 right-0 flex justify-center items-center">
-                              <span className={`${partyColor.text}`}>
+                              {/* ${partyColor.text} */}
+                              <span className={``}>
                                 {romanize(
                                   partyId === 0 ? partyId + 1 : partyId
                                 )}
@@ -104,8 +105,9 @@ const MatchupSort = ({
                             </div>
                           </div>
                         </div>
+                        {/* ${partyColor.bg} */}
                         <div
-                          className={`${partyColor.bg} absolute top-0 left-0 right-0 h-1 `}
+                          className={` absolute top-0 left-0 right-0 h-1 `}
                         ></div>
                       </>
                     )}
@@ -238,12 +240,13 @@ const MatchupSort = ({
                     {partyId !== null && (
                       <>
                         <div
-                          className={`${partyId} w-[20px] h-[15px] absolute top-1 left `}
+                          className={` w-[20px] h-[15px] absolute top-1 left `}
                         >
                           <div className="w-full h-full relative">
                             <div className="absolute top-0 left-0 bottom-0 right-0 bg-black opacity-80"></div>
                             <div className="absolute top-0 left-0 bottom-0 right-0 flex justify-center items-center">
-                              <span className={`${partyColor.text}`}>
+                              {/* ${partyColor.text} */}
+                              <span className={``}>
                                 {romanize(
                                   partyId === 0 ? partyId + 1 : partyId
                                 )}
@@ -251,8 +254,9 @@ const MatchupSort = ({
                             </div>
                           </div>
                         </div>
+                        {/* ${partyColor.bg} */}
                         <div
-                          className={`${partyColor.bg} absolute top-0 left-0 right-0 h-1 `}
+                          className={` absolute top-0 left-0 right-0 h-1 `}
                         ></div>
                       </>
                     )}
