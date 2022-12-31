@@ -19,6 +19,7 @@ import lenguesSlice from "./Slices/lenguesSlice";
 import playersLeaderboardSlice from "./Slices/playersLeaderboardSlice";
 import heroesTrendsSlice from "./Slices/heroesTrendsSlice";
 import heroesPositionsSlice from "./Slices/heroesPositionsSlice";
+import { ThunkMiddleware } from "redux-thunk";
 
 export const makeStore = () => {
   const isServer = typeof window === "undefined";
@@ -68,19 +69,21 @@ export const makeStore = () => {
       combinedReducer
     );
 
-    const store: EnhancedStore<Root, Action> & {
-      __persistor?: any;
-    } = configureStore({
-      reducer: persistedReducer,
-      devTools: true,
-    });
-    // const store = configureStore({
+    // const store: EnhancedStore<Root, Action> & {
+    //   __persistor?: any;
+    // } = configureStore({
     //   reducer: persistedReducer,
     //   devTools: true,
     // });
-
+    const store: EnhancedStore<
+      Root,
+      AnyAction,
+      [ThunkMiddleware<Root, AnyAction, undefined>]
+    > = configureStore({
+      reducer: persistedReducer,
+      devTools: true,
+    });
     // store.__persistor = persistStore(store);
-
     return store;
   }
 };
@@ -95,11 +98,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   Action<string>
 >;
 export const wrapper = createWrapper(makeStore, {
-  debug: false,
-  // serializeState(state) {
-  //   JSON.stringify(state);
-  // },
-  // deserializeState(state) {
-  //   JSON.parse(state) as Root;
-  // },
+  debug: true,
 });

@@ -12,7 +12,8 @@ const PosHeader = ({
 }) => {
   return (
     <div className=" h-[80px] relative overflow-hidden  rounded-md border border-solid border-borderTender-dark">
-      <div className={`${position} absolute h-[300px] w-[300px]`}>
+      {/* ${position} */}
+      <div className={` absolute h-[300px] w-[300px]`}>
         <MyImage src="/minimap.png" width="100%" height="100%" alt="" />
       </div>
       <div className="absolute top-0 left-0 bottom-0 right-0 bg-gray-600 blur-xl"></div>

@@ -36,13 +36,14 @@ const HeroIcon = ({
         height: `${size}px`,
       }}
     >
+      {/* ${filterClass} */}
       {showTooltip ? (
         <ToolTip
           target={
             <div
               className={`${
                 gray ? "grayscale" : "grayscale-0"
-              } ${filterClass} flex justify-center items-center `}
+              }  flex justify-center items-center `}
             >
               <MyImage
                 src={heroIcon}
@@ -66,10 +67,11 @@ const HeroIcon = ({
           id={uniqid()}
         />
       ) : (
+        // ${filterClass}
         <div
           className={`${
             gray ? "grayscale" : "grayscale-0"
-          } ${filterClass} flex justify-center items-center `}
+          }  flex justify-center items-center `}
         >
           <MyImage
             src={heroIcon}

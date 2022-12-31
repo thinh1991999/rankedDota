@@ -86,7 +86,6 @@ const Map = ({ match, size = 200 }: { match: MatchLive; size?: number }) => {
                 width="10.04"
                 height="10.04"
                 viewBox="0 0 24 24"
-                className={`${npcId}`}
               >
                 <path
                   fillRule="evenodd"
