@@ -24,6 +24,7 @@ import MyImage from "../../MyImage";
 import ToolTip from "../../ToolTip";
 import uniqid from "uniqid";
 import { getRankName } from "../../../share/ultils";
+import { useTheme } from "next-themes";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -178,6 +179,7 @@ const externalTooltipHandler = (context: any) => {
 };
 
 const Chart = ({ stratz }: { stratz: Stratz | null }) => {
+  const { theme } = useTheme();
   const [chartData, setChartData] = useState<ChartData<"bar"> | null>(null);
   const [options, setOptions] = useState<ChartOptions<"bar"> | null>(null);
   const [customLabels, setCustomLabels] = useState<
@@ -313,7 +315,7 @@ const Chart = ({ stratz }: { stratz: Stratz | null }) => {
       scales: {
         x: {
           ticks: {
-            color: "white",
+            color: theme === "dark" ? "white" : "black",
             display: false,
           },
           grid: {
@@ -323,7 +325,7 @@ const Chart = ({ stratz }: { stratz: Stratz | null }) => {
         y: {
           max: 600000,
           ticks: {
-            color: "white",
+            color: theme === "dark" ? "white" : "black",
             stepSize: 150000,
             callback(tickValue, index, ticks) {
               if (typeof tickValue === "number")
@@ -339,20 +341,20 @@ const Chart = ({ stratz }: { stratz: Stratz | null }) => {
         },
       },
     });
-  }, [stratz]);
+  }, [stratz, theme]);
 
   return (
     <div>
-      <p className="py-5 text-sm text-textSecondPrimary-dark">
+      <p className="py-5 text-sm text-textSecondPrimary-light dark:text-textSecondPrimary-dark">
         Rank distribution is updated the first day of each month. The total
         account count is the total number of Dota 2 accounts ever created.
       </p>
-      <div className="bg-layer-dark rounded-md border border-solid border-borderTender-dark overflow-hidden ">
-        <div className="px-3 py-1 bg-layerStrong-dark">
-          <h5 className="text-textMain-dark">Rank Distribution by Medal</h5>
+      <div className="bg-layer-light dark:bg-layer-dark rounded-md border border-solid border-borderTender-light dark:border-borderTender-dark overflow-hidden ">
+        <div className="px-3 py-1 bg-layerStrong-light dark:bg-layerStrong-dark">
+          <h5>Rank Distribution by Medal</h5>
         </div>
         <div className="lg:overflow-hidden overflow-x-scroll py-3">
-          <div className="w-[1240px] h-[400px]">
+          <div className="w-[1240px] h-[400px] relative">
             {chartData && options && <Bar options={options} data={chartData} />}
           </div>
           <div className="pl-[48px] w-[1240px] flex items-center justify-between">

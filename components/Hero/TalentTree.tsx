@@ -51,8 +51,8 @@ const TalentTree = ({ talents }: { talents: Talent[] }) => {
           <MyImage
             src="/talent_tree.svg"
             alt="talent tree"
-            width={200}
-            height={200}
+            width="200px"
+            height="200px"
             borderRadius={6}
           />
         </div>

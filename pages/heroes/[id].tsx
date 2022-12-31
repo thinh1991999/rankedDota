@@ -3,28 +3,16 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import Error from "next/error";
 import { ReactElement } from "react";
 import { MoonLoader } from "react-spinners";
 import HeroIntro from "../../components/Hero/HeroIntro";
 import Layout from "../../components/Layout";
-import {
-  Hero,
-  HeroVsHeroMatchup,
-  LeaderBoard,
-  Position,
-  Rampage,
-  RoleStatus,
-} from "../../interfaces/heroes";
+import { Hero, HeroMain } from "../../interfaces/heroes";
 import stratsApiService from "../../services/stratsApi.service";
-import { usePageLoading } from "../../share";
+import { getDetaiHero, getImgStratsDota } from "../../share";
 import { NextPageWithLayout } from "../_app";
-import { GuideSymbol } from "../../interfaces/guide";
 import FeaturedGuides from "../../components/Hero/FeaturedGuides";
-import {
-  ItemBootPurchase,
-  ItemNeutral,
-  PurchasePattern,
-} from "../../interfaces/item";
 import HeroItems from "../../components/Hero/HeroItems";
 import HeroRampage from "../../components/Hero/HeroRampage";
 import HeroDetailAndLore from "../../components/Hero/HeroDetailAndLore";
@@ -35,123 +23,105 @@ import {
   OptionsRank,
   RolesStatus,
 } from "../../components";
-import { WinGameVersion } from "../../interfaces/gameVersion";
 import { LeaderBoards } from "../../components/Hero";
+import { useAppSelector, useAppDispatch } from "../../store/hook";
+import {
+  setHeaderImg,
+  setSubHeaderMain,
+} from "../../store/Slices/globalDataSlice";
 
 type Props = {
   heroOverView: {
-    hero: Hero;
-  };
-};
-
-type MainData = {
-  rampages: Rampage[];
-  guide: GuideSymbol[];
-  purchasePattern: PurchasePattern;
-  itemNeutral: ItemNeutral[];
-  itemBootPurchase: ItemBootPurchase;
-  heroVsHeroMatchup: HeroVsHeroMatchup;
-  positions: Position[];
-  rolesStatus: {
-    pos1: RoleStatus[];
-    pos2: RoleStatus[];
-    pos3: RoleStatus[];
-    pos4: RoleStatus[];
-    pos5: RoleStatus[];
-  };
-  winGameVersion: WinGameVersion[];
-  leaderboards: LeaderBoard[];
+    heroMain: HeroMain;
+  } | null;
+  statusCode: number;
 };
 
 const HeroesPage: NextPageWithLayout<Props> = (props) => {
-  const {
-    heroOverView: { hero },
-  } = props;
+  const dispatch = useAppDispatch();
   const router = useRouter();
-  const { isPageLoading } = usePageLoading();
-
+  const heroes = useAppSelector((state) => state.globalData.heroes);
   const [loading, setLoading] = useState<boolean>(false);
-  const [mainData, setMainData] = useState<MainData>();
+  const [hero, setHero] = useState<Hero | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const [queryData, setQueryData] = useState(router.query);
+  const [mainData, setMainData] = useState<HeroMain>();
 
   useEffect(() => {
-    let isApiSubcribed: boolean = true;
-    setLoading(true);
-    const bracketBasicIds = router.query?.rankBracketHeroTimeDetail;
-    const topPlayersBracketIds: string[] = [];
-    if (bracketBasicIds) {
-      const idxRegex = bracketBasicIds.indexOf("_");
-      const bracketLeft = bracketBasicIds.slice(0, idxRegex);
-      const bracketRight = bracketBasicIds.slice(
-        idxRegex + 1,
-        bracketBasicIds.length
+    if (mounted || !props.heroOverView) return;
+    setMounted(true);
+    const id = props.heroOverView.heroMain.constants.hero.id;
+    const heroo = getDetaiHero(heroes, id);
+    if (heroo) {
+      setHero(heroo);
+      setMainData(props.heroOverView.heroMain);
+      dispatch(setSubHeaderMain(<HeroIntro hero={heroo} />));
+      dispatch(
+        setHeaderImg(getImgStratsDota(`/heroes/${heroo.shortName}_vert.png`))
       );
-      topPlayersBracketIds.push(String(bracketLeft));
-      topPlayersBracketIds.push(String(bracketRight));
-    } else {
-      topPlayersBracketIds.push("IMMORTAL");
     }
-    const variables: object = {
-      heroId: Number(router.query?.id),
-      bracketIds: topPlayersBracketIds,
-      bracketBasicIds: bracketBasicIds,
-      topPlayersBracketIds,
-    };
-    const result = _(variables).omit(_.isUndefined).omit(_.isNull).value();
-    stratsApiService.getDetailHero(result).then((res) => {
-      if (isApiSubcribed) {
-        const {
-          heroStats: {
-            rampages,
-            guide,
-            purchasePattern,
-            itemNeutral,
-            itemBootPurchase,
-            heroVsHeroMatchup,
-            position,
-            laneOutcome_POSITION_1,
-            laneOutcome_POSITION_2,
-            laneOutcome_POSITION_3,
-            laneOutcome_POSITION_4,
-            laneOutcome_POSITION_5,
-            winGameVersion,
-          },
-          leaderboard: { hero },
-        } = res.data.data;
-        setMainData({
-          rampages,
-          guide,
-          purchasePattern,
-          itemNeutral,
-          itemBootPurchase,
-          heroVsHeroMatchup,
-          positions: position,
-          rolesStatus: {
-            pos1: laneOutcome_POSITION_1,
-            pos2: laneOutcome_POSITION_2,
-            pos3: laneOutcome_POSITION_3,
-            pos4: laneOutcome_POSITION_4,
-            pos5: laneOutcome_POSITION_5,
-          },
-          winGameVersion,
-          leaderboards: hero,
-        });
-        setLoading(false);
+  }, [heroes, dispatch, props, mounted]);
+
+  useEffect(() => {
+    let isApiSubcribed = true;
+    try {
+      if (!router.isReady) return;
+      const query = router.query;
+      if (JSON.stringify(query) !== JSON.stringify(queryData)) {
+        const { id, rankBracketHeroTimeDetail } = query;
+        const brackets = [];
+        if (typeof rankBracketHeroTimeDetail === "string") {
+          const idx = rankBracketHeroTimeDetail.indexOf("_");
+          brackets.push(rankBracketHeroTimeDetail.slice(0, idx));
+          brackets.push(
+            rankBracketHeroTimeDetail.slice(
+              idx + 1,
+              rankBracketHeroTimeDetail.length
+            )
+          );
+        } else {
+          brackets.push("IMMORTAL");
+        }
+        setLoading(true);
+        stratsApiService
+          .getHeroInfo(Number(id), brackets)
+          .then((res) => {
+            if (isApiSubcribed) {
+              const data = res.data.data as HeroMain;
+              setMainData(data);
+              setLoading(false);
+              setQueryData(query);
+            }
+          })
+          .catch((err) => {
+            isApiSubcribed = false;
+            setQueryData(query);
+          });
       }
-    });
+    } catch (error) {
+      isApiSubcribed = false;
+    }
     return () => {
       isApiSubcribed = false;
     };
-  }, [router]);
+  }, [router, queryData]);
+
+  if (props.statusCode !== 200) {
+    return <Error statusCode={props.statusCode} />;
+  }
+
+  if (!props.heroOverView) {
+    return <Error statusCode={500} />;
+  }
 
   return (
     <>
       <Head>
-        <title>{hero.displayName}</title>
+        <title>{hero?.displayName}</title>
         <meta name="description" content="Generated by create next app" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section>
-        <HeroIntro hero={hero} />
         <div className="container m-auto mt-5">
           <OptionsRank />
           {loading && (
@@ -159,51 +129,47 @@ const HeroesPage: NextPageWithLayout<Props> = (props) => {
               <MoonLoader color="#fff" size={40} />
             </div>
           )}
-          {!loading && mainData && (
+          {hero && mainData && !loading && (
             <>
               <div className="my-4 flex flex-wrap -ml-2 -mr-2">
                 <div className="w-full xl:w-1/3 p-2 h-[200px]">
                   <HeroCharWinrate
-                    winGameVersions={mainData.winGameVersion}
+                    winGameVersions={mainData.heroStats.winGameVersion}
                     hero={hero}
                   />
                 </div>
                 <div className="w-full xl:w-1/3 p-2 h-[200px]">
                   <ChartPickRate
-                    winGameVersions={mainData.winGameVersion}
+                    winGameVersions={mainData.heroStats.winGameVersion}
                     hero={hero}
                   />
                 </div>
                 <div className="w-full xl:w-1/3 p-2 h-[200px]">
                   <MatchUps
-                    heroVsHeroMatchup={mainData.heroVsHeroMatchup}
+                    heroVsHeroMatchup={mainData.heroStats.heroVsHeroMatchup}
                     hero={hero}
                   />
                 </div>
               </div>
               <div className="my-4">
-                <RolesStatus
-                  data={mainData.rolesStatus}
-                  positions={mainData.positions}
-                />
+                <RolesStatus stats={mainData.heroStats} />
               </div>
               <div className="my-4">
-                <HeroItems
-                  purchasePattern={mainData.purchasePattern}
-                  itemNeutral={mainData.itemNeutral}
-                  itemBootPurchase={mainData.itemBootPurchase}
-                />
+                <HeroItems stats={mainData.heroStats} />
               </div>
               <div className="my-4 flex flex-wrap -ml-2 -mr-2">
                 <div className="xl:w-4/6 xl:m-0 mb-4 w-full px-2">
-                  <FeaturedGuides hero={hero} guide={mainData.guide[0]} />
+                  <FeaturedGuides
+                    hero={hero}
+                    guide={mainData.heroStats.guide[0]}
+                  />
                 </div>
                 <div className="xl:w-2/6 w-full px-2 ">
-                  <LeaderBoards leaderBoards={mainData.leaderboards} />
+                  <LeaderBoards leaderboard={mainData.leaderboard} />
                 </div>
               </div>
               <div className="my-4">
-                <HeroRampage rampages={mainData.rampages} />
+                <HeroRampage rampages={mainData.heroStats.rampages} />
               </div>
               <div className="my-4">
                 <HeroDetailAndLore hero={hero} />
@@ -223,22 +189,59 @@ HeroesPage.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps: GetServerSideProps<Props> = async (
   context
 ) => {
-  const variables: object = {
-    heroId: Number(context.params?.id),
-  };
-  const res = await stratsApiService.getHeroInfo(variables);
-  const {
-    constants: { hero },
-  }: {
-    constants: { hero: Hero };
-  } = res.data.data;
-  return {
-    props: {
-      heroOverView: {
-        hero,
+  try {
+    const id = Number(context.params?.id);
+    const rankBracketHeroTimeDetail = context.query
+      .rankBracketHeroTimeDetail as string;
+    const brackets = [];
+    if (rankBracketHeroTimeDetail) {
+      const idx = rankBracketHeroTimeDetail.indexOf("_");
+      brackets.push(rankBracketHeroTimeDetail.slice(0, idx));
+      brackets.push(
+        rankBracketHeroTimeDetail.slice(
+          idx + 1,
+          rankBracketHeroTimeDetail.length
+        )
+      );
+    } else {
+      brackets.push("IMMORTAL");
+    }
+    const res = await stratsApiService.getHeroInfo(id, brackets);
+    if (res.status !== 200) {
+      return {
+        props: {
+          heroOverView: null,
+          statusCode: res.status,
+        },
+      };
+    }
+    // const res2 = await stratsApiService.getHeroHeader(id);
+    // if (res2.status !== 200) {
+    //   return {
+    //     props: {
+    //       heroOverView: null,
+    //       statusCode: res.status,
+    //     },
+    //   };
+    // }
+    const data = res.data.data;
+    // const data2 = res2.data.data;
+    return {
+      props: {
+        heroOverView: {
+          heroMain: data,
+        },
+        statusCode: 200,
       },
-    },
-  };
+    };
+  } catch (error) {
+    return {
+      props: {
+        heroOverView: null,
+        statusCode: 500,
+      },
+    };
+  }
 };
 
 export default HeroesPage;

@@ -15,8 +15,8 @@ const DetailAbility = ({ ability }: { ability: AbilityDetail }) => {
         <MyImage
           src={getImgStratsDota(`/abilities/${name}.png`)}
           alt={name}
-          width={40}
-          height={40}
+          width="40px"
+          height="40px"
           borderRadius={5}
         />
         <span className=" ml-3 uppercase font-medium tracking-wider">

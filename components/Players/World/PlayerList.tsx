@@ -6,18 +6,27 @@ import {
   AiOutlineUp,
 } from "react-icons/ai";
 import { ClipLoader } from "react-spinners";
-import { getTypeOfHero } from "../../../share";
+import InfiniteScroll from "react-infinite-scroll-component";
+import _ from "lodash";
+import uniqid from "uniqid";
+
+import { getFlagImgLink, getTypeOfHero } from "../../../share";
 import { useAppSelector } from "../../../store";
 import IconTypeRole from "../../IconTypeRole";
 import MyImage from "../../MyImage";
 import ToolTip from "../../ToolTip";
-import uniqid from "uniqid";
-import { Season } from "../../../interfaces/players";
+import { PlayerSeason, Season } from "../../../interfaces/players";
 import RankIcon from "../../RankIcon";
-import InfiniteScroll from "react-infinite-scroll-component";
-import _ from "lodash";
+import stratsApiService from "../../../services/stratsApi.service";
+import { useAppDispatch } from "../../../store/hook";
+import {
+  loadMorePlayers,
+  setSeason,
+} from "../../../store/Slices/playersLeaderboardSlice";
+import { useRouter } from "next/router";
+import { useGetStylesTheme } from "../../../share/customHooks";
 
-const Row = ({ s }: { s: Season }) => {
+const Row = ({ s }: { s: PlayerSeason }) => {
   const {
     position,
     rank,
@@ -48,11 +57,11 @@ const Row = ({ s }: { s: Season }) => {
     border = "hsl(240,1%,74%)";
   }
   const rankCheck = rankShift ? rankShift - rank : 0;
-  const flagImg = `https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/${flag}.svg`;
+  const flagImg = getFlagImgLink(flag);
   return (
-    <div className="flex items-center justify-between text-textMain-dark py-5 px-5 border-b border-solid border-borderTender-dark">
+    <div className="flex items-center justify-between  py-5 px-5 border-b border-solid border-borderTender-dark">
       <div className="flex items-center">
-        <div className="w-[100px] flex justify-start">
+        <div className="md:w-[100px] sm:w-[50px] w-[50px] flex justify-start">
           <div className="flex justify-center items-center relative text-[11px]">
             <svg width={9} height={24}>
               <g transform="matrix(1,0,0,1,-0.321777,0)">
@@ -163,7 +172,7 @@ const Row = ({ s }: { s: Season }) => {
             </div>
           </div>
         </div>
-        <div className="w-[100px]">
+        <div className="md:w-[100px] sm:w-[50px] w-[40px]">
           {rankShift && rankCheck !== 0 && (
             <div className="flex items-center">
               {rankCheck >= 0 ? (
@@ -177,7 +186,7 @@ const Row = ({ s }: { s: Season }) => {
             </div>
           )}
         </div>
-        <div className="flex items-center">
+        <div className="flex-1 overflow-hidden flex items-center md:text-base text-sm ">
           {position && (
             <div className="mr-3">
               <IconTypeRole role={position} width={15} height={15} />
@@ -193,16 +202,25 @@ const Row = ({ s }: { s: Season }) => {
                   alt=""
                 />
               </div>
-              <span className="text-textSecondPrimary-dark">{finalTeam}.</span>
+              <span className="text-textSecondPrimary-light dark:text-textSecondPrimary-dark">
+                {finalTeam}.
+              </span>
             </>
           )}
-          <span>{finalName}</span>
+          <p className="one-line-max">{finalName}</p>
         </div>
       </div>
       <div className="flex items-center">
-        <div className="mr-5">
+        <div className="md:mr-5 mr-1">
           {flagImg && (
-            <MyImage src={flagImg} width="25px" height="15px" alt="" />
+            <>
+              <div className="md:block hidden">
+                <MyImage src={flagImg} width="25px" height="15px" alt="" />
+              </div>
+              <div className="md:hidden">
+                <MyImage src={flagImg} width="20px" height="10px" alt="" />
+              </div>
+            </>
           )}
         </div>
         <ToolTip
@@ -222,36 +240,57 @@ const Row = ({ s }: { s: Season }) => {
 };
 
 const PlayerList = () => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { styles } = useGetStylesTheme();
   const season = useAppSelector((state) => state.playersLeaderboard.season);
   const loading = useAppSelector((state) => state.playersLeaderboard.loading);
 
-  const [immortals, setImmortals] = useState<Season[]>([]);
-  const [showImt, setShowImt] = useState<number>(10);
+  const [showImt, setShowImt] = useState<number>(20);
   const [loadMore, setLoadMore] = useState<boolean>(true);
   const handleNext = () => {
     setShowImt(showImt + 20);
   };
 
   useEffect(() => {
-    if (showImt + 100 >= season.length) {
-      setLoadMore(false);
-      return;
-    } else {
-      setLoadMore(true);
+    if (showImt === 20) return;
+    if (router.isReady) {
+      const id = Number(router.query.divisionIds);
+      stratsApiService
+        .getPlayersLeaderboards({
+          divisionIdNb: id,
+          skip: showImt - 20,
+          take: 20,
+        })
+        .then((res) => {
+          dispatch(loadMorePlayers(res.data.data.leaderboard.season.players));
+        })
+        .catch((err) => {
+          setLoadMore(false);
+        });
     }
-    setImmortals(
-      _.filter(season, (s) => {
-        return s.rank > 100 && s.rank - 100 <= showImt;
-      })
-    );
-  }, [season, showImt, loading]);
+  }, [showImt, dispatch, router]);
+
+  useEffect(() => {
+    if (loading) setShowImt(20);
+  }, [loading]);
+
   if (loading) {
     return (
       <div className="justify-center flex">
-        <ClipLoader color="#fff" size={40} />
+        <ClipLoader color={styles.loading} size={40} />
       </div>
     );
   }
+
+  if (!season) {
+    return (
+      <div className="justify-center flex">
+        <span>Error</span>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="mb-5">
@@ -259,9 +298,11 @@ const PlayerList = () => {
           <div className="w-[30px]">
             <RankIcon rank={80} top={true} size={30} />
           </div>
-          <h6 className="text-lg text-blue-200 font-bold my-5 ml-2">Top 10</h6>
+          <h6 className="text-lg text-blue-500 dark:text-blue-200 font-bold my-5 ml-2">
+            Top 10
+          </h6>
         </div>
-        {season.map((s, idx) => {
+        {season.players.map((s, idx) => {
           if (s.rank <= 10) return <Row key={idx} s={s} />;
         })}
       </div>
@@ -270,11 +311,11 @@ const PlayerList = () => {
           <div className="w-[30px]">
             <RankIcon rank={80} top={true} size={30} />
           </div>
-          <h6 className="text-lg text-yellow-500 font-bold my-5 ml-2">
+          <h6 className="text-lg text-yellow-700 dark:text-yellow-500 font-bold my-5 ml-2">
             Top 100
           </h6>
         </div>
-        {season.map((s, idx) => {
+        {season.players.map((s, idx) => {
           if (s.rank > 10 && s.rank <= 100) return <Row key={idx} s={s} />;
         })}
       </div>
@@ -283,22 +324,22 @@ const PlayerList = () => {
           <div className="w-[30px]">
             <RankIcon rank={80} top={true} size={30} />
           </div>
-          <h6 className="text-lg text-textSecondPrimary-dark font-bold my-5 ml-2">
+          <h6 className="text-lg text-textSecondPrimary-light dark:text-textSecondPrimary-dark font-bold my-5 ml-2">
             Ranked Immortals
           </h6>
         </div>
         <InfiniteScroll
-          dataLength={immortals.length}
+          dataLength={season.players.length}
           next={handleNext}
           hasMore={loadMore}
           loader={<h4>Loading...</h4>}
           scrollableTarget="main"
         >
-          {immortals.map((s, idx) => {
+          {season.players.map((s, idx) => {
             if (s.rank > 100) return <Row key={idx} s={s} />;
           })}
         </InfiniteScroll>
-        {/* {season.map((s, idx) => {
+        {/* {season.players.map((s, idx) => {
           if (s.rank > 100) return <Row key={idx} s={s} />;
         })} */}
       </div>

@@ -1,10 +1,16 @@
 import { useTheme } from "next-themes";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import react, { useEffect, useState, useMemo } from "react";
 import { StylesConfig } from "react-select";
 import { useAppSelector } from "../store";
+import { useAppDispatch } from "../store/hook";
+import {
+  setHeaderImg,
+  setSubHeaderMain,
+} from "../store/Slices/globalDataSlice";
 
 export const usePageLoading = () => {
+  const dispatch = useAppDispatch();
   const [isPageLoading, setIsPageLoading] = useState(false);
 
   useEffect(() => {
@@ -12,10 +18,13 @@ export const usePageLoading = () => {
       if (shallow) return;
       setIsPageLoading(true);
     };
-    const routeEventEnd = () => {
+    const routeEventEnd = (url: any) => {
+      if (url === "/") {
+        dispatch(setSubHeaderMain(null));
+        dispatch(setHeaderImg(""));
+      }
       setIsPageLoading(false);
     };
-
     Router.events.on("routeChangeStart", routeEventStart);
     Router.events.on("routeChangeComplete", routeEventEnd);
     Router.events.on("routeChangeError", routeEventEnd);
@@ -27,6 +36,35 @@ export const usePageLoading = () => {
   }, []);
 
   return { isPageLoading };
+};
+
+export const useCheckChangeRouter = () => {
+  const router = useRouter();
+
+  const [currentRouter, setCurrentRouter] = useState<string>("");
+  const [isChange, setIsChange] = useState(false);
+  useEffect(() => {
+    const routeEventStart = (url: any, { shallow }: { shallow: boolean }) => {
+      console.log("url start", url);
+    };
+    const routeEventEnd = (url: any) => {};
+
+    Router.events.on("routeChangeStart", routeEventStart);
+    Router.events.on("routeChangeComplete", routeEventEnd);
+    Router.events.on("routeChangeError", routeEventEnd);
+    return () => {
+      Router.events.off("routeChangeStart", routeEventStart);
+      Router.events.off("routeChangeComplete", routeEventEnd);
+      Router.events.off("routeChangeError", routeEventEnd);
+    };
+  }, []);
+
+  useEffect(() => {
+    const path = router.basePath;
+    // console.log(path);
+  }, [router]);
+
+  return { isChange };
 };
 
 // MatchDetail
@@ -86,6 +124,72 @@ export const useGetStylesReactSelect = () => {
           ...provided,
           color: "white",
         }),
+      });
+    } else {
+      setStyles({
+        option: (provided, state) => ({
+          ...provided,
+          color: "black",
+          backgroundColor: state.isSelected ? "rgba(239, 240, 240, 0.88)" : "",
+          padding: "8px 8px",
+          borderRadius: "5px",
+          cursor: "pointer",
+          ":hover": {
+            backgroundColor: "rgba(239, 240, 240, 0.88)",
+          },
+        }),
+        menu: (provided, state) => ({
+          ...provided,
+          backgroundColor: "white",
+          padding: "8px 10px",
+          minWidth: "180px",
+          border: "1px solid rgba(99, 100, 100, 0.5)",
+        }),
+        control: () => ({
+          // none of react-select's styles are passed to <Control />
+          backgroundColor: "rgba(255, 255, 255, 0.12)",
+          display: "flex",
+          border: "1px solid rgba(99, 100, 100, 0.5)",
+          borderRadius: "5px",
+          color: "black",
+        }),
+        singleValue: (provided, state) => ({
+          ...provided,
+          color: "black",
+        }),
+      });
+    }
+  }, [theme]);
+  return { styles };
+};
+
+export const useGetStylesTheme = () => {
+  const { theme } = useTheme();
+  const [styles, setStyles] = useState<{
+    grid: string;
+    border: string;
+    tick: string;
+    loading: string;
+  }>({
+    grid: "white",
+    border: "white",
+    tick: "white",
+    loading: "white",
+  });
+  useEffect(() => {
+    if (theme === "dark") {
+      setStyles({
+        grid: "white",
+        border: "white",
+        tick: "white",
+        loading: "white",
+      });
+    } else {
+      setStyles({
+        grid: "black",
+        border: "black",
+        tick: "black",
+        loading: "black",
       });
     }
   }, [theme]);

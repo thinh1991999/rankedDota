@@ -110,14 +110,14 @@ const SearchHandle = () => {
         }
         formatOptionLabel={FormatOptionLabel}
         options={ranks}
-        className="capitalize p-2 w-[200px] text-sm"
+        className="capitalize p-2 md:w-[200px] w-full text-sm"
       />
       <Select
         styles={styles}
         value={gameMode}
         onChange={handleChangeGameMode}
         options={gameModes}
-        className="capitalize p-2 w-[150px] text-sm"
+        className="capitalize p-2 md:w-[150px] w-full text-sm"
       />
     </div>
   );

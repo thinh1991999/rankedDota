@@ -1,8 +1,7 @@
 import { BsColumnsGap } from "react-icons/bs";
 import { MdOutlineTrendingUp } from "react-icons/md";
 import { Hero } from "../interfaces/heroes";
-import { Item } from "../../interfaces/item";
-
+import { Item } from "../interfaces/item";
 
 export const homeCards: any = [
   {
@@ -13,6 +12,7 @@ export const homeCards: any = [
   {
     name: "Public Matches",
     img: "/card2.jpg",
+    link: "/matches/live",
   },
   {
     name: "Pro Matches",
@@ -21,6 +21,7 @@ export const homeCards: any = [
   {
     name: "Pro Teams",
     img: "/card4.jpg",
+    link: "/teams",
   },
 ];
 

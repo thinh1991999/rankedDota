@@ -10,6 +10,7 @@ import MyImage from "../MyImage";
 import HeroIcon from "../HeroIcon";
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 import moment from "moment";
+import Link from "next/link";
 
 const SearchMatches = () => {
   const dispatch = useAppDispatch();
@@ -90,9 +91,11 @@ const SearchMatches = () => {
                       </div>
                       <div className="flex flex-col justify-center text-sm">
                         <span>{match_id}</span>
-                        <button className="font-bold hover:opacity-50">
-                          View Detail
-                        </button>
+                        <Link href={"/matches/" + match_id}>
+                          <a className="font-bold hover:opacity-50">
+                            View Detail
+                          </a>
+                        </Link>
                       </div>
                     </div>
                     <div className="mt-5 flex items-center justify-between">

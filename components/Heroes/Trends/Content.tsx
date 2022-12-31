@@ -69,13 +69,13 @@ const Content = () => {
             key={id}
             className={`${
               !checkShow ? "block" : "hidden"
-            } border-b border-solid border-borderTenderStrong-dark bg-layer-dark text-textSecondPrimary-dark text-sm`}
+            } border-b border-solid border-borderTenderStrong-light dark:border-borderTenderStrong-dark bg-layer-light dark:bg-layer-dark text-textSecondPrimary-light dark:text-textSecondPrimary-dark text-sm`}
           >
             <div
               className={`${
                 checkActiveHero
-                  ? "bg-layerStrong-dark"
-                  : "hover:bg-layerStrong-dark"
+                  ? "dark:bg-layerStrong-dark bg-layerStrong-light"
+                  : "hover:bg-layerStrong-light dark:hover:bg-layerStrong-dark"
               } flex items-center py-2  `}
             >
               <div className="w-[30px] flex justify-center">
@@ -148,7 +148,7 @@ const Content = () => {
               </div>
               <div className="flex-1 flex items-center justify-center">
                 <button
-                  className="px-3 py-2 rounded-md hover:bg-layer-dark text-lg text-textMain-dark"
+                  className="px-3 py-2 rounded-md dark:hover:bg-button-dark hover:bg-button-light text-lg "
                   onClick={() => handleActiveHero(id)}
                 >
                   {checkActiveHero ? <AiOutlineMinus /> : <AiOutlinePlus />}

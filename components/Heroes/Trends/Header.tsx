@@ -28,14 +28,14 @@ const Header = () => {
   };
 
   return (
-    <div className="flex items-center py-3 bg-layerStrong-dark rounded-md text-textSecondPrimary-dark ">
+    <div className="flex items-center py-3 bg-layerStrong-light dark:bg-layerStrong-dark rounded-md text-textSecondPrimary-light dark:text-textSecondPrimary-dark ">
       <div className="w-[30px] flex justify-center"></div>
       <div className="w-[85px] flex justify-center">
         <span>Hero</span>
       </div>
       <div className="w-[85px] flex justify-center">
         <button
-          className="flex items-center hover:text-textMain-dark"
+          className="flex items-center hover:opacity-80"
           onClick={() => handleSort("START_WR")}
         >
           <span>Start</span>
@@ -47,7 +47,7 @@ const Header = () => {
       </div>
       <div className="w-[85px] flex justify-center">
         <button
-          className="flex items-center hover:text-textMain-dark"
+          className="flex items-center hover:opacity-80"
           onClick={() => handleSort("CURRENT_WR")}
         >
           <span>Current</span>
@@ -56,7 +56,7 @@ const Header = () => {
       </div>
       <div className="w-[85px] flex justify-center">
         <button
-          className="flex items-center hover:text-textMain-dark"
+          className="flex items-center hover:opacity-80"
           onClick={() => handleSort("DIFFER_WR")}
         >
           <span>+/-</span>
@@ -65,7 +65,7 @@ const Header = () => {
       </div>
       <div className="w-[85px] flex justify-center">
         <button
-          className="flex items-center hover:text-textMain-dark"
+          className="flex items-center hover:opacity-80"
           onClick={() => handleSort("START_PR")}
         >
           <span>Start</span>
@@ -77,7 +77,7 @@ const Header = () => {
       </div>
       <div className="w-[85px] flex justify-center">
         <button
-          className="flex items-center hover:text-textMain-dark"
+          className="flex items-center hover:opacity-80"
           onClick={() => handleSort("CURRENT_PR")}
         >
           <span>Current</span>
@@ -86,7 +86,7 @@ const Header = () => {
       </div>
       <div className="w-[85px] flex justify-center">
         <button
-          className="flex items-center hover:text-textMain-dark"
+          className="flex items-center hover:opacity-80"
           onClick={() => handleSort("DIFFER_PR")}
         >
           <span>+/-</span>
@@ -98,7 +98,7 @@ const Header = () => {
       </div>
       <div className="w-[80px]">
         <button
-          className="flex items-center hover:text-textMain-dark"
+          className="flex items-center hover:opacity-80"
           onClick={() => handleSort("MATCHES")}
         >
           <span>Matches</span>

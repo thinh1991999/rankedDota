@@ -4,7 +4,6 @@ import {
   BackPack0,
   PlayerMatchDetail,
   PlayerTimeline,
-  TeamTotalInfo,
 } from "../../../../interfaces/matches";
 import {
   getDetaiHero,
@@ -17,7 +16,7 @@ import { useAppSelector } from "../../../../store";
 import IconTypeRole from "../../../IconTypeRole";
 import ItemIcon from "../../../ItemIcon";
 import MyImage from "../../../MyImage";
-import Footer from "./Footer";
+// import Footer from "./Footer";
 import Header from "./Header";
 
 const RowInfo = ({ info }: { info: PlayerTimeline }) => {
@@ -61,7 +60,7 @@ const RowInfo = ({ info }: { info: PlayerTimeline }) => {
       className={`py-3 flex justify-between items-center  border-solid border-borderTender-dark`}
     >
       <div className="mx-2 w-[16px] flex justify-center">
-        <IconTypeRole role={role} lane={lane} />
+        <IconTypeRole role={role} lane={lane} height={18} width={18} />
       </div>
       <div className="w-[70px] mx-2 relative rounded-md overflow-hidden">
         <div className="relative">
@@ -193,13 +192,15 @@ const RowInfo = ({ info }: { info: PlayerTimeline }) => {
             if (!item)
               return (
                 <div key={idx} className="p-1 w-[30px] ">
-                  <div className="h-[20px] w-full bg-gray-500"></div>
+                  <div className="h-[20px] w-full bg-layerStrong-dark rounded-sm"></div>
                 </div>
               );
             const { itemId } = item;
             return (
               <div key={idx} className="p-1 w-[30px] ">
-                <ItemIcon width="100%" height="20px" id={itemId} />
+                <div className="rounded-sm overflow-hidden">
+                  <ItemIcon width="100%" height="20px" id={itemId} />
+                </div>
               </div>
             );
           })}
@@ -208,7 +209,7 @@ const RowInfo = ({ info }: { info: PlayerTimeline }) => {
           {neutral0 ? (
             <ItemIcon id={neutral0.itemId} width="18px" height="18px" />
           ) : (
-            <div className="h-full w-full bg-gray-500 rounded-full"></div>
+            <div className="h-full w-full bg-layerStrong-dark rounded-full"></div>
           )}
         </div>
       </div>

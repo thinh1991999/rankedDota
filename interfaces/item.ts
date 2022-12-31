@@ -3,12 +3,12 @@ export interface Item {
   name: string;
   displayName: string;
   shortName: string;
-  isSupportFullItem: null;
+  isSupportFullItem: null | boolean;
   language: Language;
-  stat: Stat;
-  attributes: Attribute[];
-  components: null;
-  image: string;
+  stat: Stat | null;
+  attributes: Attribute[] | null;
+  components: null | any;
+  image: string | null;
 }
 
 export interface Attribute {
@@ -28,9 +28,9 @@ export interface Stat {
   fightRecapLevel: number;
   sharedCooldown: string;
   cost: number;
-  shopTags: string;
-  aliases: string;
-  quality: string;
+  shopTags: string | null;
+  aliases: string | null;
+  quality: string | null;
   isSellable: boolean;
   isDroppable: boolean;
   isPurchasable: boolean;
@@ -41,7 +41,7 @@ export interface Stat {
   isRequiresCharges: boolean;
   isDisplayCharges: boolean;
   isSupport: boolean;
-  isAlertable: null;
+  isAlertable: null | boolean;
   isTempestDoubleClonable: boolean;
   stockMax: number;
   initialCharges: number;
@@ -50,11 +50,11 @@ export interface Stat {
   initialStockTime: number;
   isRecipe: boolean;
   needsComponents: boolean;
-  upgradeItem: null;
-  upgradeRecipe: null;
-  itemResult: null;
-  neutralItemDropTime: null;
-  neutralItemTier: null;
+  upgradeItem: null | number;
+  upgradeRecipe: null | number;
+  itemResult: null | number;
+  neutralItemDropTime: null | number;
+  neutralItemTier: string | null;
 }
 
 export interface ItemNeutral {

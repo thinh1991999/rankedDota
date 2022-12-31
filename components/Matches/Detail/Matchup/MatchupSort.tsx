@@ -3,11 +3,7 @@ import { getDetaiHero, getImgStratsDota } from "../../../../share";
 import { useAppSelector } from "../../../../store/hook";
 import IconTypeRole from "../../../IconTypeRole";
 import MyImage from "../../../MyImage";
-import {
-  formatNetword,
-  getPartyColor,
-  romanize,
-} from "../../../../share/ultils";
+import { getPartyColor, romanize } from "../../../../share/ultils";
 import RankIcon from "../../../RankIcon";
 import SortDetail from "./SortDetail";
 import {
@@ -15,6 +11,7 @@ import {
   PlayerTimeline,
 } from "../../../../interfaces/matches";
 import { AiOutlineClose } from "react-icons/ai";
+import { formatNumber } from "../../../../share/ultils";
 
 const MatchupSort = ({
   currentInfo,
@@ -147,7 +144,7 @@ const MatchupSort = ({
                           )}
                         </div>
                       </div>
-                      <div className="my-3">
+                      <div className="my-3 flex justify-center items-center">
                         <IconTypeRole
                           height={18}
                           width={18}
@@ -170,7 +167,7 @@ const MatchupSort = ({
                           alt="gold"
                         />
                         <span className="ml-1">
-                          {formatNetword(networth ? networth : 0)}
+                          {formatNumber(networth ? networth : 0)}
                         </span>
                       </div>
                     </div>
@@ -294,7 +291,7 @@ const MatchupSort = ({
                           )}
                         </div>
                       </div>
-                      <div className="my-3">
+                      <div className="my-3 flex justify-center items-center">
                         <IconTypeRole
                           height={18}
                           width={18}
@@ -317,7 +314,7 @@ const MatchupSort = ({
                           alt="gold"
                         />
                         <span className="ml-1">
-                          {formatNetword(networth ? networth : 0)}
+                          {formatNumber(networth ? networth : 0)}
                         </span>
                       </div>
                     </div>

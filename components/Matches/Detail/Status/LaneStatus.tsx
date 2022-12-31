@@ -17,7 +17,7 @@ type LaneType = {
 const Lane = ({ info, lane }: { info: LaneType; lane: string }) => {
   const heroes = useAppSelector((state) => state.globalData.heroes);
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center rounded-md bg-layer-dark">
+    <div className="w-full h-full flex flex-col items-center justify-center rounded-md bg-layer-light dark:bg-layer-dark">
       <div className="flex items-center justify-center">
         {info?.rads.map((player, idx) => {
           const {
@@ -52,7 +52,9 @@ const Lane = ({ info, lane }: { info: LaneType; lane: string }) => {
             </div>
           );
         })}
-        <span className="mx-1 text-textSecondPrimary-dark text-xs">vs</span>
+        <span className="mx-1 text-textSecondPrimary-light dark:text-textSecondPrimary-dark text-xs">
+          vs
+        </span>
         {info?.dires.map((player, idx) => {
           const {
             heroId,
@@ -90,7 +92,7 @@ const Lane = ({ info, lane }: { info: LaneType; lane: string }) => {
       <div
         className={`${
           info?.status === "TIE"
-            ? "text-textSecondPrimary-dark"
+            ? "text-textSecondPrimary-light dark:text-textSecondPrimary-dark"
             : info?.status === "RADIANT_VICTORY"
             ? "text-green-500"
             : "text-red-500"

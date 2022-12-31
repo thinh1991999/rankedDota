@@ -2,17 +2,23 @@ import React from "react";
 import { heroesNavs } from "../../share";
 import MyImage from "../MyImage";
 import SubNav from "../SubNav";
+import { matchesNav } from "../../share/navData";
 
-const SubHeader = ({ title = "Heroes" }: { title?: string }) => {
+const SubHeader = () => {
   return (
     <>
-      <SubNav navs={heroesNavs} />
+      <SubNav navs={matchesNav} />
       <div className="border-b  border-borderTender-dark">
         <div className="container flex items-center justify-start py-5 ">
           <div className="p-5 bg-layer-dark rounded-md">
-            <MyImage src="/hero.svg" height="50px" width="50px" alt="hero" />
+            <MyImage
+              src="/HeaderNav/matches.svg"
+              height="50px"
+              width="50px"
+              alt="hero"
+            />
           </div>
-          <h5 className="text-2xl font-bold ml-2">{title}</h5>
+          <h5 className="text-2xl font-bold ml-2">Matches</h5>
         </div>
       </div>
     </>

@@ -15,7 +15,7 @@ module.exports = {
         lightactive: "#eeeeee",
         button: {
           dark: "#282727a1",
-          light: "rgba(90, 90, 90, 1)",
+          light: "rgba(90, 90, 90, 0.3)",
         },
         neutral: {
           dark: "hsl(217 33% 17% / 1)",
@@ -28,7 +28,7 @@ module.exports = {
         },
         textSecondPrimary: {
           dark: "rgba(255, 255, 255, 0.6)",
-          light: "#eee",
+          light: "rgba(50, 45, 47, 1)",
         },
         textMain: {
           dark: "white",
@@ -36,15 +36,23 @@ module.exports = {
         },
         background: {
           dark: "#000000",
+          light: "rgba(242, 243, 243, 0.88)",
+        },
+        bgSelect: {
+          dark: "rgba(55, 53, 54, 1)",
           light: "white",
         },
         component: {
           dark: "#0c1322",
           light: "#F5F5F5",
         },
+        btn: {
+          dark: "rgba(255, 255, 255, 0.08)",
+          light: "rgba(208, 208, 208, 0.4)",
+        },
         layer: {
           dark: "rgba(255, 255, 255, 0.08)",
-          light: "rgba(208, 208, 208, 0.15)",
+          light: "rgba(208, 208, 208, 0.4)",
         },
         layerStrong: {
           dark: "rgba(255, 255, 255, 0.12)",
@@ -52,7 +60,7 @@ module.exports = {
         },
         layerSecondary: {
           dark: "rgba(255, 255, 255, 0.04)",
-          light: "rgba(255, 255, 255, 0.04)",
+          light: "rgba(255, 255, 255, 0.4)",
         },
         borderSecondary: {
           dark: "rgba(99, 100, 100, 1)",
@@ -68,7 +76,7 @@ module.exports = {
         },
         navBg: {
           dark: "rgba(27, 26, 27, 0.8)",
-          light: "rgba(0, 0, 0, 0.12)",
+          light: "rgba(255, 255, 255, 0.9)",
         },
       },
       width: {
@@ -77,6 +85,8 @@ module.exports = {
       boxShadow: {
         btnDark: "0 35px 60px -15px rgba(0, 0, 0, 0.3)",
         btnLight: "0 35px 60px -15px rgba(0, 0, 0, 0.3)",
+        cardDark: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
+        cardLight: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;",
       },
       border: ["hover"],
       keyframes: {
@@ -84,6 +94,13 @@ module.exports = {
           "0%": { transform: "translateY(0)" },
           "100%": { transform: "translateY(-10px)" },
         },
+        navBarMobile: {
+          "0%": {},
+          "100%": { transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        showHeaderMobile: "navBarMobile 0.3s linear forwards",
       },
       container: {
         // you can configure the container to be centered

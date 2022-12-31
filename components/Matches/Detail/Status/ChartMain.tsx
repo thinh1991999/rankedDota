@@ -374,10 +374,8 @@ const ChartMain = () => {
 
   useEffect(() => {
     if (!matchDetail) return;
-    const {
-      durationSeconds,
-      stats: { radiantNetworthLeads, radiantExperienceLeads },
-    } = matchDetail;
+    const { durationSeconds, radiantExperienceLeads, radiantNetworthLeads } =
+      matchDetail;
     const arr: number[] = [];
     const timeUtc = moment.duration(durationSeconds * 1000).asMinutes();
     _.range(timeUtc).forEach((item) => {

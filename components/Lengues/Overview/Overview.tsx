@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppSelector } from "../../../store/hook";
-import { getImgStratsDota, formatNetword } from "../../../share/ultils";
+import { getImgStratsDota, formatNumber } from "../../../share/ultils";
 import MyImage from "../../MyImage";
 import moment from "moment";
 
@@ -36,7 +36,7 @@ const Overview = () => {
                   <span>20 teams</span>
                   <div className="h-[16px] border-l border-solid border-borderTender-dark mx-2"></div>
                   <span className="text-yellow-500">
-                    $ {formatNetword(prizePool)}
+                    $ {formatNumber(prizePool)}
                   </span>
                 </div>
               </div>

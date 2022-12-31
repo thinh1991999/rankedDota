@@ -20,7 +20,7 @@ export const rootSlice = createSlice({
 
 export const { handleOffBgHeader, handleOnBgHeader } = rootSlice.actions;
 
-export const translateHeader = (state: RootState) =>
-  state.translateHeader.value;
+// export const translateHeader = (state: RootState) =>
+//   state.translateHeader.value;
 
 export default rootSlice.reducer;

@@ -30,8 +30,8 @@ const HeroRampage = ({ rampages }: { rampages: Rampage[] }) => {
                     <div className="flex-1 flex items-center">
                       <MyImage
                         src={avatar}
-                        width={50}
-                        height={50}
+                        width="50px"
+                        height="50px"
                         alt={name}
                         borderRadius={5}
                       />

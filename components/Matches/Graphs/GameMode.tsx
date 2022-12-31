@@ -1,6 +1,6 @@
 import _ from "lodash";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Chart as ChartJS,
   LinearScale,
@@ -19,6 +19,7 @@ import {
 import { Chart } from "react-chartjs-2";
 import { MatchGraph } from "../../../interfaces/matches";
 import { nFormatter } from "../../../share";
+import { useGetStylesTheme } from "../../../share/customHooks";
 
 ChartJS.register(
   LinearScale,
@@ -144,72 +145,76 @@ const GameMode = ({
     TURBO: MatchGraph[];
   };
 }) => {
+  const { styles } = useGetStylesTheme();
   const [data, setData] = useState<ChartData | null>(null);
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
 
-  const options: ChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: false,
+  const options: ChartOptions = useMemo(() => {
+    return {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false,
+        },
+        title: {
+          display: false,
+        },
+        tooltip: {
+          mode: "index",
+          intersect: false,
+          displayColors: false,
+          enabled: false,
+          external: externalTooltipHandler,
+        },
       },
-      title: {
-        display: false,
-      },
-      tooltip: {
+      hover: {
         mode: "index",
         intersect: false,
-        displayColors: false,
-        enabled: false,
-        external: externalTooltipHandler,
       },
-    },
-    hover: {
-      mode: "index",
-      intersect: false,
-    },
-    maintainAspectRatio: false,
-    scales: {
-      x: {
-        ticks: {
-          callback: function (val: string, index: number, values: any) {
-            if (data?.labels) {
-              const value = data.labels[index];
-              if (typeof value === "number") {
-                const time = moment.unix(value);
-                const year = time.year();
-                const month = time.month() + 1;
-                const date = time.date();
-                if (month === 1 && date === 1) {
-                  return year;
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          ticks: {
+            callback: function (val: string, index: number, values: any) {
+              if (data?.labels) {
+                const value = data.labels[index];
+                if (typeof value === "number") {
+                  const time = moment.unix(value);
+                  const year = time.year();
+                  const month = time.month() + 1;
+                  const date = time.date();
+                  if (month === 1 && date === 1) {
+                    return year;
+                  }
                 }
               }
-            }
+            },
+            color: styles.tick,
+            padding: 10,
           },
-          color: "white",
-          padding: 10,
-        },
-        grid: {
-          color: "rgba(107, 107, 107, 0.5)",
-          tickLength: 8,
-        },
-      } as any,
-      y: {
-        ticks: {
-          callback: function (val: any, index: number, values: any) {
-            if (index % 2 === 0) return nFormatter(val, 0);
+          grid: {
+            color: "rgba(107, 107, 107, 0.5)",
+            tickLength: 8,
+            display: false,
           },
-          color: "white",
-          padding: 10,
-        },
-        weight: 10,
-        grid: {
-          color: "rgba(107, 107, 107, 0.5)",
-          tickLength: 0,
+        } as any,
+        y: {
+          ticks: {
+            callback: function (val: any, index: number, values: any) {
+              if (index % 2 === 0) return nFormatter(val, 0);
+            },
+            color: styles.tick,
+            padding: 10,
+          },
+          weight: 10,
+          grid: {
+            color: "rgba(107, 107, 107, 0.5)",
+            tickLength: 0,
+          },
         },
       },
-    },
-  };
+    };
+  }, [styles, data]);
 
   const htmlLegendPlugin = {
     id: "htmlLegend",
@@ -239,13 +244,14 @@ const GameMode = ({
       const items = chart.options.plugins.legend.labels.generateLabels(chart);
       const ul = document.createElement("ul");
       ul.style.display = "flex";
+      ul.style.flexWrap = "wrap";
       ul.style.justifyContent = "end";
       items.forEach((item: any, idx: number) => {
         const li = document.createElement("li");
         li.style.display = "flex";
         li.style.alignItems = "center";
         li.style.fontSize = "0.9rem";
-        li.style.marginLeft = "20px";
+        li.style.padding = "10px";
         li.style.cursor = "pointer";
         li.addEventListener("mouseenter", () => {
           const newData = this.getNewDatasets(data, false, idx);
@@ -306,23 +312,26 @@ const GameMode = ({
     const dataTurbo: number[] = [];
     _.forEach(ALL_PICK, (match) => {
       const { month } = match;
-      months.push(month);
+      if (!months.includes(month)) months.push(month);
     });
     const newMonths = _.orderBy(months, (month) => month, "asc");
+
     _.forEach(newMonths, (month) => {
       // labels.push(moment.unix(month).format("MMMM D, YYYY h:mm A"));
       labels.push(month);
       const getCheckMatch = (arrMatch: MatchGraph[]) => {
-        return _.filter(arrMatch, (match) => match.month === month)[0];
+        let total = 0;
+        _.forEach(arrMatch, (match) => {
+          if (match.month === month) {
+            total += match.matchCount;
+          }
+        });
+        return total;
       };
-      dataAllPick.push(Math.round(getCheckMatch(ALL_PICK).matchCount / 10));
-      dataCaptainsMode.push(
-        Math.round(getCheckMatch(CAPTAINS_MODE).matchCount / 10)
-      );
-      dataAllPickRanked.push(
-        Math.round(getCheckMatch(ALL_PICK_RANKED).matchCount / 10)
-      );
-      dataTurbo.push(Math.round(getCheckMatch(TURBO).matchCount / 10));
+      dataAllPick.push(Math.round(getCheckMatch(ALL_PICK) / 10));
+      dataCaptainsMode.push(Math.round(getCheckMatch(CAPTAINS_MODE) / 10));
+      dataAllPickRanked.push(Math.round(getCheckMatch(ALL_PICK_RANKED) / 10));
+      dataTurbo.push(Math.round(getCheckMatch(TURBO) / 10));
     });
     setData({
       labels,
@@ -331,6 +340,7 @@ const GameMode = ({
           label: "All Pick",
           data: dataAllPick,
           borderColor: "rgba(255, 41, 41, 1)",
+          borderWidth: 2,
           fill: true,
           backgroundColor: "rgba(255, 41, 41, 0.4)",
           pointRadius: 0,
@@ -364,7 +374,7 @@ const GameMode = ({
   }, [gameMode]);
 
   return (
-    <section className="p-2 rounded-md bg-layer-dark">
+    <section className="p-2 rounded-md bg-layer-light dark:bg-layer-dark">
       <h5>Matches by Game Mode</h5>
       <div className="h-[300px] relative">
         {data && (

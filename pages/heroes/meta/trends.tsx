@@ -18,6 +18,10 @@ import {
   TrendsSearchHandle,
 } from "../../../components/Heroes";
 import _ from "lodash";
+import {
+  setHeaderImg,
+  setSubHeaderMain,
+} from "../../../store/Slices/globalDataSlice";
 
 type Props = {
   heroesTrends: HeroesMetaTrends;
@@ -35,6 +39,8 @@ const TrendsPage: NextPageWithLayout<Props> = (props) => {
       props.error
         ? dispatch(setErrMess(props.error))
         : dispatch(setHeroesTrends(props.heroesTrends));
+      dispatch(setSubHeaderMain(<HeroesSubHeader title="Trends" />));
+      dispatch(setHeaderImg("/card1.jpg"));
       dispatch(setLoading(false));
     }
     setMounted(true);
@@ -56,7 +62,7 @@ const TrendsPage: NextPageWithLayout<Props> = (props) => {
 };
 
 TrendsPage.getLayout = function getLayout(page: ReactElement) {
-  return <Layout subHeader={<HeroesSubHeader />}>{page}</Layout>;
+  return <Layout>{page}</Layout>;
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (

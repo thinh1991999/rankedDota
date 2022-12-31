@@ -14,7 +14,6 @@ const Abilities = ({
   abiFull: (AbilityDetail & { time: number })[];
 }) => {
   const currentTime = useGetTimeCurrentMatchDetail();
-
   return (
     <div className="flex  overflow-hidden">
       {abiFull.map((abi, idx) => {

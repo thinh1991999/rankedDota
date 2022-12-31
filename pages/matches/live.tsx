@@ -1,45 +1,101 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
+import Error from "next/error";
 
 import Layout from "../../components/Layout";
 import { NextPageWithLayout } from "../_app";
 import stratsApiService from "../../services/stratsApi.service";
 import { MatchLive } from "../../interfaces/matches";
-import { Matches } from "../../components/Matches";
+import { Matches, MatchesSubHeader } from "../../components/Matches";
+import ErrorMess from "../../components/ErrorMess";
+import { useAppDispatch } from "../../store";
+import {
+  setHeaderImg,
+  setSubHeaderMain,
+} from "../../store/Slices/globalDataSlice";
 
 type Props = {
-  matches: MatchLive[];
+  matches: MatchLive[] | null;
+  statusCode: number;
+  errMess: string | null;
 };
 
-const livePage: NextPageWithLayout<Props> = (props) => {
-  const { matches } = props;
+const LivePage: NextPageWithLayout<Props> = (props) => {
+  const dispatch = useAppDispatch();
+  const { matches, errMess } = props;
+
+  useEffect(() => {
+    dispatch(setSubHeaderMain(<MatchesSubHeader />));
+    dispatch(setHeaderImg("/card2.jpg"));
+  }, [dispatch]);
+
+  if (props.statusCode !== 200) {
+    return <Error statusCode={props.statusCode} />;
+  }
   return (
     <>
       <Head>
         <title>{`Matches > Live`} </title>
       </Head>
       <section className="container m-auto">
-        <Matches matches={matches} />
+        {errMess ? (
+          <ErrorMess errMess={errMess} />
+        ) : matches ? (
+          <Matches matches={matches} />
+        ) : (
+          <></>
+        )}
       </section>
     </>
   );
 };
 
-livePage.getLayout = function getLayout(page: ReactElement) {
+LivePage.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const res = await stratsApiService.getMatchesLive();
-  const {
-    live: { matches },
-  } = res.data.data;
-  return {
-    props: {
-      matches,
-    },
-  };
+  try {
+    const res = await stratsApiService.getMatchesLive();
+    if (res.status >= 400) {
+      return {
+        props: {
+          errMess: null,
+          matches: null,
+          statusCode: res.status,
+        },
+      };
+    }
+    const { data, errors } = res.data;
+    if (errors) {
+      return {
+        props: {
+          matches: null,
+          errMess: errors[0].message as string,
+          statusCode: 200,
+        },
+      };
+    }
+    const {
+      live: { matches },
+    } = data;
+    return {
+      props: {
+        matches,
+        errMess: null,
+        statusCode: 200,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        errMess: null,
+        matches: null,
+        statusCode: 500,
+      },
+    };
+  }
 };
 
-export default livePage;
+export default LivePage;

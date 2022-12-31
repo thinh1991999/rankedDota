@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -18,6 +18,8 @@ import _ from "lodash";
 import { getRandomRgba } from "../../../share/ultils";
 import moment from "moment";
 import { drawLinePluginChart } from "../../../share";
+import { useTheme } from "next-themes";
+import { useGetStylesTheme } from "../../../share/customHooks";
 
 ChartJS.register(
   CategoryScale,
@@ -127,61 +129,64 @@ const externalTooltipHandler = (context: any) => {
 };
 
 const Chart = ({ matches }: { matches: Matches | null }) => {
+  const { styles } = useGetStylesTheme();
   const [chartData, setChartData] = useState<ChartData<"line"> | null>(null);
-  const options: ChartOptions<"line"> = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: false,
-      },
-      title: {
-        display: false,
-      },
-      tooltip: {
-        mode: "index",
-        intersect: false,
-        displayColors: false,
-        enabled: false,
-        external: externalTooltipHandler,
-      },
-    },
-    hover: {
-      mode: "index",
-      intersect: false,
-    },
-    maintainAspectRatio: false,
-    scales: {
-      x: {
-        ticks: {
-          color: "white",
-          padding: 10,
-          autoSkip: false,
-          callback(tickValue, index, ticks) {
-            const time = this.getLabelForValue(index);
-            const momentTime = moment.unix(Number(time));
-            if (momentTime.minutes() >= 50 && momentTime.hours() === 7)
-              return momentTime.format("HH:mm");
-          },
-        },
-        grid: {
-          color: "rgba(107, 107, 107, 0.5)",
-          tickLength: 8,
+  const options: ChartOptions<"line"> = useMemo(() => {
+    return {
+      responsive: true,
+      plugins: {
+        legend: {
           display: false,
         },
-      },
-      y: {
-        ticks: {
-          color: "white",
-          padding: 10,
+        title: {
+          display: false,
         },
-        weight: 10,
-        grid: {
-          color: "rgba(107, 107, 107, 0.5)",
-          tickLength: 0,
+        tooltip: {
+          mode: "index",
+          intersect: false,
+          displayColors: false,
+          enabled: false,
+          external: externalTooltipHandler,
         },
       },
-    },
-  };
+      hover: {
+        mode: "index",
+        intersect: false,
+      },
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          ticks: {
+            color: styles?.tick,
+            padding: 10,
+            autoSkip: false,
+            callback(tickValue, index, ticks) {
+              const time = this.getLabelForValue(index);
+              const momentTime = moment.unix(Number(time));
+              if (momentTime.minutes() >= 50 && momentTime.hours() === 7)
+                return momentTime.format("HH:mm");
+            },
+          },
+          grid: {
+            color: "rgba(107, 107, 107, 0.5)",
+            tickLength: 8,
+            display: false,
+          },
+        },
+        y: {
+          ticks: {
+            color: styles?.tick,
+            padding: 10,
+          },
+          weight: 10,
+          grid: {
+            color: "rgba(107, 107, 107, 0.5)",
+            tickLength: 0,
+          },
+        },
+      },
+    };
+  }, [styles]);
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
 
   const htmlLegendPlugin = {
@@ -501,20 +506,22 @@ const Chart = ({ matches }: { matches: Matches | null }) => {
   }, [matches]);
 
   return (
-    <section className="text-textMain-dark">
+    <section>
       <h5>Players In Queue</h5>
       <p>Amount of players searching for a game in each region.</p>
-      <div className="h-[600px] relative">
-        {chartData && (
-          <Line
-            options={options}
-            data={chartData}
-            plugins={[htmlLegendPlugin, drawLinePluginChart]}
-            redraw={true}
-          />
-        )}
+      <div className="lg:overflow-visible overflow-x-scroll">
+        <div className="h-[600px] relative w-[1208px]">
+          {chartData && (
+            <Line
+              options={options}
+              data={chartData}
+              plugins={[htmlLegendPlugin, drawLinePluginChart]}
+              redraw={true}
+            />
+          )}
+        </div>
       </div>
-      <div id="player-queue" className="mt-5 "></div>
+      <div id="player-queue" className="mt-5 w-full"></div>
     </section>
   );
 };

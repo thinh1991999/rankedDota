@@ -9,7 +9,6 @@ const MapHandle = () => {
   const season = useAppSelector((state) => state.playersLeaderboard.season);
   const loading = useAppSelector((state) => state.playersLeaderboard.loading);
   const divitionId = router.query.divisionIds;
-
   const position = useMemo(() => {
     let leaderBoardDivision = "AMERICAS";
     if (divitionId === "1") {
@@ -23,9 +22,8 @@ const MapHandle = () => {
     }
     return leaderBoardDivision;
   }, [divitionId]);
-
   return (
-    <div className="p-2 rounded-md bg-layer-dark text-textSecondPrimary-dark">
+    <div className="p-2 rounded-md bg-layer-light dark:bg-layer-dark text-textSecondPrimary-light dark:text-textSecondPrimary-dark">
       <h6 className="capitalize">
         World Leaderboard - {position.toLocaleLowerCase()}
       </h6>
@@ -384,8 +382,14 @@ const MapHandle = () => {
       </p>
       <p className="text-sm mt-3">
         Showing results for{" "}
-        <span className="text-textMain-dark font-bold">
-          {loading ? <BeatLoader color="#fff" size={5} /> : season.length}{" "}
+        <span className=" font-bold">
+          {loading ? (
+            <BeatLoader color="#fff" size={5} />
+          ) : season ? (
+            season.playerCount
+          ) : (
+            0
+          )}{" "}
           players
         </span>
       </p>

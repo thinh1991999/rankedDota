@@ -20,7 +20,7 @@ const OptionsRank = () => {
       const result = _.filter(heroRankOptions, (option) =>
         option.query.includes(rankBracketHeroTimeDetail)
       );
-      return result[0].title;
+      return result[0]?.title || "Error";
     } else {
       return "All rank tiers";
     }
@@ -55,7 +55,7 @@ const OptionsRank = () => {
         </div>
       </div>
       {show && (
-        <ul className="absolute min-w-[250px] z-10 top-[calc(100%_+_10px)] left-0 whitespace-nowrap p-2 rounded-md border border-borderSecondary-dark bg-layer-dark">
+        <ul className="absolute min-w-[250px] z-50 top-[calc(100%_+_10px)] left-0 whitespace-nowrap p-2 rounded-md border border-borderSecondary-dark bg-stone-700">
           {heroRankOptions.map((option) => {
             const { title, query } = option;
             return (

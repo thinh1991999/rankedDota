@@ -9,11 +9,7 @@ const PlayersPage: NextPageWithLayout = () => {
 };
 
 PlayersPage.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <Layout subHeader={<PlayersSubHeader />} imgSrc="/playersBg.jpg">
-      {page}
-    </Layout>
-  );
+  return <Layout>{page}</Layout>;
 };
 
 export default PlayersPage;

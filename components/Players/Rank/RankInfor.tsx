@@ -31,33 +31,29 @@ const RankInfor = ({ stratz }: { stratz: Stratz | null }) => {
     setTotalR(countTotalR);
   }, [stratz]);
   return (
-    <div className="flex justify-between items-center -ml-2 -mr-2">
-      <div className="w-1/3 p-2 ">
-        <div className="border border-solid border-borderTender-dark bg-layer-dark rounded-md flex items-center justify-center text-textSecondPrimary-dark py-5">
+    <div className="flex flex-wrap -ml-2 -mr-2">
+      <div className="lg:w-1/3 md:w-1/2 w-full p-2 ">
+        <div className="border border-solid border-borderTender-light dark:border-borderTender-dark bg-layer-light dark:bg-layer-dark rounded-md flex items-center justify-center text-textSecondPrimary-light dark:text-textSecondPrimary-dark py-5">
           <FaUser className="text-4xl" />
           <div className="ml-5 flex flex-col">
             <span className="font-thin text-sm">Total Accounts</span>
-            <span className="text-textMain-dark font-bold">
-              {formatNumber(totalAcc)}
-            </span>
+            <span className=" font-bold">{formatNumber(totalAcc)}</span>
           </div>
         </div>
       </div>
-      <div className="w-1/3 p-2 ">
-        <div className="border border-solid border-borderTender-dark bg-layer-dark rounded-md flex items-center justify-center text-textSecondPrimary-dark py-5">
+      <div className="lg:w-1/3 md:w-1/2 w-full p-2 ">
+        <div className="border border-solid border-borderTender-light dark:border-borderTender-dark bg-layer-light dark:bg-layer-dark rounded-md flex items-center justify-center text-textSecondPrimary-light dark:text-textSecondPrimary-dark py-5">
           <div className="w-[40px] h-[40px]">
             <RankIcon rank={null} size={40} />
           </div>
           <div className="ml-5 flex flex-col">
             <span className="font-thin text-sm">Uncalibrated</span>
-            <span className="text-textMain-dark font-bold">
-              {formatNumber(totalUR)}
-            </span>
+            <span className=" font-bold">{formatNumber(totalUR)}</span>
           </div>
         </div>
       </div>
-      <div className="w-1/3 p-2 ">
-        <div className="border border-solid border-borderTender-dark bg-layer-dark rounded-md flex items-center justify-center text-textSecondPrimary-dark py-5">
+      <div className="lg:w-1/3 md:w-1/2 w-full p-2 ">
+        <div className="border border-solid border-borderTender-light dark:border-borderTender-dark bg-layer-light dark:bg-layer-dark rounded-md flex items-center justify-center text-textSecondPrimary-light dark:text-textSecondPrimary-dark py-5">
           <div className="flex items-center">
             <div className="w-[40px] h-[40px]">
               <RankIcon rank={10} size={40} />
@@ -69,9 +65,7 @@ const RankInfor = ({ stratz }: { stratz: Stratz | null }) => {
           </div>
           <div className="ml-5 flex flex-col">
             <span className="font-thin text-sm">Calibrated</span>
-            <span className="text-textMain-dark font-bold">
-              {formatNumber(totalR)}
-            </span>
+            <span className=" font-bold">{formatNumber(totalR)}</span>
           </div>
         </div>
       </div>

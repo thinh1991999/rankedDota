@@ -26,9 +26,9 @@ const Heroes = () => {
     _.forEach(heroes, (hero: Hero) => {
       const { id } = hero;
       const { stats } = hero;
-      if (stats.primaryAttribute === "str") {
+      if (stats?.primaryAttribute === "str") {
         heroAll.str.push(hero);
-      } else if (stats.primaryAttribute === "agi") {
+      } else if (stats?.primaryAttribute === "agi") {
         heroAll.agi.push(hero);
       } else {
         heroAll.int.push(hero);

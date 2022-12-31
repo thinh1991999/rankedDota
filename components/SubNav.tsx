@@ -30,7 +30,7 @@ const SubNav = ({ navs }: { navs: HeaderNav[] }) => {
               trigger={["hover"]}
               overlay={
                 childs && !checkActiveMain ? (
-                  <ul className="bg-navBg-dark p-2 rounded-md w-[230px] border border-solid border-borderTender-dark">
+                  <ul className="bg-navBg-light dark:bg-navBg-dark p-2 rounded-md w-[230px] border border-solid border-borderTender-dark">
                     {childs?.map((child, idx) => {
                       const { name, childs, link } = child;
                       if (childs) {
@@ -103,9 +103,9 @@ const SubNav = ({ navs }: { navs: HeaderNav[] }) => {
                     <a
                       className={`${
                         checkActiveMain && !childs
-                          ? "bg-layer-dark text-textMain-dark"
+                          ? "dark:bg-button-dark-dark bg-button-light dark:text-textMain-dark text-textMain-light"
                           : ""
-                      } flex items-center px-3 py-2 rounded-md hover:bg-layer-dark hover:text-textMain-dark text-textSecondPrimary-dark`}
+                      } flex items-center px-3 py-2 rounded-md dark:hover:bg-button-dark hover:bg-button-light hover:text-textPrimary-light dark:hover:text-textMain-dark dark:text-textSecondPrimary-dark text-textSecondPrimary-light`}
                     >
                       {name}{" "}
                       {childs ? (
@@ -122,7 +122,7 @@ const SubNav = ({ navs }: { navs: HeaderNav[] }) => {
                 </button>
                 {childs && checkActiveMain && (
                   <>
-                    <div className="absolute top-0 left-0 right-0 bottom-0 bg-black opacity-25 "></div>
+                    <div className="absolute top-0 left-0 right-0 bottom-0 bg-black dark:opacity-25 opacity-10 "></div>
                     <ul className="flex items-center relative">
                       {childs?.map((child, idx) => {
                         const { name, childs, link } = child;
@@ -133,13 +133,13 @@ const SubNav = ({ navs }: { navs: HeaderNav[] }) => {
                               placement="topLeft"
                               trigger={["hover"]}
                               overlay={
-                                <ul className="absolute left-full bg-navBg-dark border border-solid border-borderTender-dark p-2 rounded-md w-[230px]">
+                                <ul className="absolute left-full bg-navBg-light dark:bg-navBg-dark border border-solid border-borderTender-dark p-2 rounded-md w-[230px]">
                                   {childs?.map((child, idx) => {
                                     const { name, sub, link } = child;
                                     return (
                                       <li key={idx}>
                                         <Link href={link}>
-                                          <a className="py-2 px-3 rounded-md flex flex-col hover:bg-layer-dark cursor-pointer">
+                                          <a className="py-2 px-3 rounded-md flex flex-col hover:bg-button-light dark:hover:bg-button-dark cursor-pointer">
                                             {name}
                                             <span className="text-xs text-textSecondPrimary-dark">
                                               {sub}
@@ -155,7 +155,7 @@ const SubNav = ({ navs }: { navs: HeaderNav[] }) => {
                             >
                               <button className="w-full">
                                 <Link href={link}>
-                                  <a className="py-2 px-3 rounded-md flex items-center justify-between hover:bg-layer-dark cursor-pointer">
+                                  <a className="py-2 px-3 rounded-md flex items-center justify-between hover:bg-button-light dark:hover:bg-button-dark cursor-pointer">
                                     {name}
                                   </a>
                                 </Link>
@@ -169,9 +169,9 @@ const SubNav = ({ navs }: { navs: HeaderNav[] }) => {
                               <a
                                 className={`${
                                   pathname === getFixLinkPath(link)
-                                    ? "bg-layer-dark text-textMain-dark"
+                                    ? "bg-navBg-light dark:bg-navBg-dark dark:text-textMain-dark text-textMain-light"
                                     : ""
-                                } py-2 px-3 rounded-md flex items-center justify-between hover:bg-layer-dark cursor-pointer`}
+                                } py-2 px-3 rounded-md flex items-center justify-between hover:bg-button-light dark:hover:bg-button-dark cursor-pointer`}
                               >
                                 {name}
                               </a>

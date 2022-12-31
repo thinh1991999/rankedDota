@@ -46,9 +46,9 @@ const HeroAllContainer = ({ heroesStatus }: { heroesStatus: HeroesStatus }) => {
       countMatch += getCountMatch(POSITION_5, id);
       if (countMatch >= 10000) metaArr.push(id);
       const { stats } = hero;
-      if (stats.primaryAttribute === "str") {
+      if (stats?.primaryAttribute === "str") {
         heroAll.str.push(hero);
-      } else if (stats.primaryAttribute === "agi") {
+      } else if (stats?.primaryAttribute === "agi") {
         heroAll.agi.push(hero);
       } else {
         heroAll.int.push(hero);

@@ -1,6 +1,6 @@
 import _ from "lodash";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   Chart as ChartJS,
   LinearScale,
@@ -19,6 +19,7 @@ import {
 import { Chart } from "react-chartjs-2";
 import { MatchGraph } from "../../../interfaces/matches";
 import { nFormatter } from "../../../share";
+import { useGetStylesTheme } from "../../../share/customHooks";
 
 ChartJS.register(
   LinearScale,
@@ -149,72 +150,75 @@ const Rank = ({
     IMMORTAL: MatchGraph[];
   };
 }) => {
+  const { styles } = useGetStylesTheme();
   const [data, setData] = useState<ChartData | null>(null);
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
 
-  const options: ChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: false,
+  const options: ChartOptions = useMemo(() => {
+    return {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false,
+        },
+        title: {
+          display: false,
+        },
+        tooltip: {
+          mode: "index",
+          intersect: false,
+          displayColors: false,
+          enabled: false,
+          external: externalTooltipHandler,
+        },
       },
-      title: {
-        display: false,
-      },
-      tooltip: {
+      hover: {
         mode: "index",
         intersect: false,
-        displayColors: false,
-        enabled: false,
-        external: externalTooltipHandler,
       },
-    },
-    hover: {
-      mode: "index",
-      intersect: false,
-    },
-    maintainAspectRatio: false,
-    scales: {
-      x: {
-        ticks: {
-          callback: function (val: string, index: number, values: any) {
-            if (data?.labels) {
-              const value = data.labels[index];
-              if (typeof value === "number") {
-                const time = moment.unix(value);
-                const year = time.year();
-                const month = time.month() + 1;
-                const date = time.date();
-                if (month === 1 && date === 1) {
-                  return year;
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          ticks: {
+            callback: function (val: string, index: number, values: any) {
+              if (data?.labels) {
+                const value = data.labels[index];
+                if (typeof value === "number") {
+                  const time = moment.unix(value);
+                  const year = time.year();
+                  const month = time.month() + 1;
+                  const date = time.date();
+                  if (month === 1 && date === 1) {
+                    return year;
+                  }
                 }
               }
-            }
+            },
+            color: styles.tick,
+            padding: 10,
           },
-          color: "white",
-          padding: 10,
-        },
-        grid: {
-          color: "rgba(107, 107, 107, 0.5)",
-          tickLength: 8,
-        },
-      } as any,
-      y: {
-        ticks: {
-          callback: function (val: any, index: number, values: any) {
-            if (index % 2 === 0) return nFormatter(val, 0);
+          grid: {
+            color: "rgba(107, 107, 107, 0.5)",
+            tickLength: 8,
           },
-          color: "white",
-          padding: 10,
-        },
-        weight: 10,
-        grid: {
-          color: "rgba(107, 107, 107, 0.5)",
-          tickLength: 0,
+        } as any,
+        y: {
+          ticks: {
+            callback: function (val: any, index: number, values: any) {
+              if (index % 2 === 0) return nFormatter(val, 0);
+            },
+            color: styles.tick,
+            padding: 10,
+          },
+          weight: 10,
+          grid: {
+            color: "rgba(107, 107, 107, 0.5)",
+            tickLength: 0,
+          },
         },
       },
-    },
-  };
+    };
+  }, [styles, data]);
 
   const htmlLegendPlugin = {
     id: "htmlLegend",
@@ -244,13 +248,14 @@ const Rank = ({
       const items = chart.options.plugins.legend.labels.generateLabels(chart);
       const ul = document.createElement("ul");
       ul.style.display = "flex";
+      ul.style.flexWrap = "wrap";
       ul.style.justifyContent = "end";
       items.forEach((item: any, idx: number) => {
         const li = document.createElement("li");
         li.style.display = "flex";
         li.style.alignItems = "center";
         li.style.fontSize = "0.9rem";
-        li.style.marginLeft = "20px";
+        li.style.padding = "10px";
         li.style.cursor = "pointer";
         li.addEventListener("mouseenter", () => {
           const newData = this.getNewDatasets(data, false, idx);
@@ -324,22 +329,28 @@ const Rank = ({
     const dataImomortal: number[] = [];
     _.forEach(HERALD, (match) => {
       const { month } = match;
-      months.push(month);
+      if (!months.includes(month)) months.push(month);
     });
     const newMonths = _.orderBy(months, (month) => month, "asc");
     _.forEach(newMonths, (month) => {
       labels.push(month);
       const getCheckMatch = (arrMatch: MatchGraph[]) => {
-        return _.filter(arrMatch, (match) => match.month === month)[0];
+        let total = 0;
+        _.forEach(arrMatch, (match) => {
+          if (match.month === month) {
+            total += match.matchCount;
+          }
+        });
+        return total;
       };
-      dataHerald.push(Math.round(getCheckMatch(HERALD).matchCount / 10));
-      dataGuarian.push(Math.round(getCheckMatch(GUARDIAN).matchCount / 10));
-      dataCrusader.push(Math.round(getCheckMatch(CRUSADER).matchCount / 10));
-      dataArchon.push(Math.round(getCheckMatch(ARCHON).matchCount / 10));
-      dataLegend.push(Math.round(getCheckMatch(LEGEND).matchCount / 10));
-      dataAncient.push(Math.round(getCheckMatch(ANCIENT).matchCount / 10));
-      dataDivine.push(Math.round(getCheckMatch(DIVINE).matchCount / 10));
-      dataImomortal.push(Math.round(getCheckMatch(IMMORTAL).matchCount / 10));
+      dataHerald.push(Math.round(getCheckMatch(HERALD) / 10));
+      dataGuarian.push(Math.round(getCheckMatch(GUARDIAN) / 10));
+      dataCrusader.push(Math.round(getCheckMatch(CRUSADER) / 10));
+      dataArchon.push(Math.round(getCheckMatch(ARCHON) / 10));
+      dataLegend.push(Math.round(getCheckMatch(LEGEND) / 10));
+      dataAncient.push(Math.round(getCheckMatch(ANCIENT) / 10));
+      dataDivine.push(Math.round(getCheckMatch(DIVINE) / 10));
+      dataImomortal.push(Math.round(getCheckMatch(IMMORTAL) / 10));
     });
     setData({
       labels,
@@ -413,7 +424,7 @@ const Rank = ({
   }, [rank]);
 
   return (
-    <section className="p-2 rounded-md bg-layer-dark">
+    <section className="p-2 rounded-md bg-layer-light dark:bg-layer-dark">
       <h5>Matches by Rank</h5>
       <div className="h-[300px] relative">
         {data && (

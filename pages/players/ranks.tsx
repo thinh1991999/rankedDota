@@ -7,6 +7,11 @@ import stratsApiService from "../../services/stratsApi.service";
 import { Stratz } from "../../interfaces/players";
 import Error from "next/error";
 import { Chart, PlayersSubHeader, RankInfor } from "../../components/Players";
+import { useAppDispatch } from "../../store";
+import {
+  setHeaderImg,
+  setSubHeaderMain,
+} from "../../store/Slices/globalDataSlice";
 
 type Props = {
   stratz: Stratz | null;
@@ -14,9 +19,17 @@ type Props = {
 };
 
 const RanksPage: NextPageWithLayout<Props> = (props) => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setSubHeaderMain(<PlayersSubHeader />));
+    dispatch(setHeaderImg("/playersBg.jpg"));
+  }, [dispatch]);
+
   if (props.statusCode !== 200) {
     return <Error statusCode={props.statusCode} />;
   }
+
   return (
     <div className="container m-auto">
       <Chart stratz={props.stratz} />
@@ -26,13 +39,9 @@ const RanksPage: NextPageWithLayout<Props> = (props) => {
     </div>
   );
 };
-
+// subHeader={<PlayersSubHeader />} imgSrc="/playersBg.jpg"
 RanksPage.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <Layout subHeader={<PlayersSubHeader />} imgSrc="/playersBg.jpg">
-      {page}
-    </Layout>
-  );
+  return <Layout>{page}</Layout>;
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {

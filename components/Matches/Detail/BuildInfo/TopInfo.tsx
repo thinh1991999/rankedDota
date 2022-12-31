@@ -66,7 +66,7 @@ const TopInfo = ({
       actives: activesTl,
       stats: countLv - abilities.length,
     });
-  }, [currentTime, topInfo, talentIds]);
+  }, [topInfo, talentIds, currentTime]);
 
   useEffect(() => {
     const { abilities } = topInfo;

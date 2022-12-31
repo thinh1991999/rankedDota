@@ -26,7 +26,7 @@ const BanRow = ({
         if (!ban) {
           return (
             <div key={idx} className="p-2">
-              <div className="w-[60px] h-[25px] rounded-md bg-layerStrong-dark"></div>
+              <div className="w-[60px] h-[25px] rounded-md bg-layerStrong-light dark:bg-layerStrong-dark"></div>
             </div>
           );
         }
@@ -39,7 +39,7 @@ const BanRow = ({
         const heroIcon = getImgStratsDota("/heroes/" + shortName + "_icon.png");
         return (
           <div key={idx} className="p-2">
-            <div className="w-[60px] h-[25px] flex justify-center items-center rounded-md bg-layerStrong-dark">
+            <div className="w-[60px] h-[25px] flex justify-center items-center rounded-md bg-layerStrong-light dark:bg-layerStrong-dark">
               {detailHero && (
                 <div className="">
                   <ToolTip
@@ -59,7 +59,7 @@ const BanRow = ({
                       </div>
                     }
                     tooltip={
-                      <div className="p-2">
+                      <div className="p-2 flex items-center">
                         <p className="text-textSecondPrimary-dark">
                           <span className="text-textMain-dark">
                             {displayName}
@@ -73,7 +73,7 @@ const BanRow = ({
                             {name}
                           </span>
                         </p>
-                        <p>
+                        <p className="ml-1 font-bold">
                           {wasBannedSuccessfully
                             ? "Successful"
                             : "Unsuccessful"}
@@ -120,7 +120,7 @@ const PickPhase = ({
           );
           return (
             <div key={idx} className="p-2 ">
-              <div className="w-[60px] h-[25px] rounded-md bg-layerStrong-dark">
+              <div className="w-[60px] h-[25px] rounded-md bg-layerStrong-light dark:bg-layerStrong-dark">
                 <ToolTip
                   target={
                     <div className={`flex justify-center items-center`}>
@@ -161,7 +161,7 @@ const PickPhase = ({
           );
           return (
             <div key={idx} className="p-2 ">
-              <div className="w-[60px] h-[25px] rounded-md bg-layerStrong-dark flex items-center justify-center">
+              <div className="w-[60px] h-[25px] rounded-md bg-layerStrong-light dark:bg-layerStrong-dark flex items-center justify-center">
                 <ToolTip
                   target={
                     <div
@@ -207,10 +207,7 @@ const Draft = () => {
 
   useEffect(() => {
     if (!matchDetail) return;
-    const {
-      stats: { pickBans },
-      players,
-    } = matchDetail;
+    const { pickBans, players } = matchDetail;
     const radiantBan: ((PickBan & { name: string }) | null)[] = _.times(
       5,
       _.constant(null)
@@ -255,19 +252,19 @@ const Draft = () => {
     setPickPhase(resultPickPhase);
   }, [matchDetail]);
   return (
-    <section className="p-2 rounded-md bg-layer-dark">
+    <section className="p-2 rounded-md bg-layer-light dark:bg-layer-dark">
       <div className="p-2">
         <h5>Draft</h5>
         <div className="flex flex-wrap -ml-2 -mr-2">
           <div className="p-2 ">
-            <div className="bg-layerSecondary-dark rounded-md p-2">
+            <div className="bg-layerSecondary-light dark:bg-layerSecondary-dark rounded-md p-2">
               <h6 className="text-sm">Player bans</h6>
               {bans?.radiant && <BanRow isRadiant={true} bans={bans.radiant} />}
               {bans?.dire && <BanRow isRadiant={false} bans={bans.dire} />}
             </div>
           </div>
           <div className="p-2">
-            <div className="bg-layerSecondary-dark rounded-md p-2">
+            <div className="bg-layerSecondary-light dark:bg-layerSecondary-dark rounded-md p-2">
               <PickPhase
                 index={1}
                 pickRadiant={pickPhase ? pickPhase.radiant.slice(0, 2) : []}
@@ -276,7 +273,7 @@ const Draft = () => {
             </div>
           </div>
           <div className="p-2">
-            <div className="bg-layerSecondary-dark rounded-md p-2">
+            <div className="bg-layerSecondary-light dark:bg-layerSecondary-dark rounded-md p-2">
               <PickPhase
                 index={2}
                 pickRadiant={pickPhase ? pickPhase.radiant.slice(2, 4) : []}
@@ -285,7 +282,7 @@ const Draft = () => {
             </div>
           </div>
           <div className="p-2">
-            <div className="bg-layerSecondary-dark rounded-md p-2">
+            <div className="bg-layerSecondary-light dark:bg-layerSecondary-dark rounded-md p-2">
               <PickPhase
                 index={3}
                 pickRadiant={pickPhase ? pickPhase.radiant.slice(4, 5) : []}

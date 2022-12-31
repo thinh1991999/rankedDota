@@ -21,7 +21,8 @@ const HeadInfo = () => {
     lobbyType,
     rank,
     endDateTime,
-    stats: { direKills, radiantKills },
+    direKills,
+    radiantKills,
   } = matchDetail;
 
   return (
@@ -34,7 +35,7 @@ const HeadInfo = () => {
           alt="banner"
         />
       </div>
-      <div className="bg-black/10 border-t border-b border-solid border-borderTender-dark relative text-textSecondPrimary-dark">
+      {/* <div className="bg-black/10 border-t border-b border-solid border-borderTender-dark relative text-textSecondPrimary-dark">
         <ul className="flex items-center">
           {mathDetailNav.map((nav, idx) => {
             const { title, childs } = nav;
@@ -49,7 +50,7 @@ const HeadInfo = () => {
             );
           })}
         </ul>
-      </div>
+      </div> */}
       <div className="border-t border-b border-solid border-borderTender-dark py-5 relative">
         <div className="flex justify-between items-center  container m-auto">
           <div

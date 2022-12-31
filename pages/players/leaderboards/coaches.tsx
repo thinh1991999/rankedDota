@@ -8,6 +8,11 @@ import stratsApiService from "../../../services/stratsApi.service";
 import { Leaderboard } from "../../../interfaces/players";
 import { NextPageWithLayout } from "../../_app";
 import { CoachesPage, PlayersSubHeader } from "../../../components/Players";
+import { useAppDispatch } from "../../../store";
+import {
+  setHeaderImg,
+  setSubHeaderMain,
+} from "../../../store/Slices/globalDataSlice";
 
 type Props = {
   leaderboard: Leaderboard | null;
@@ -15,6 +20,13 @@ type Props = {
 };
 
 const CoachPage: NextPageWithLayout<Props> = (props) => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setSubHeaderMain(<PlayersSubHeader />));
+    dispatch(setHeaderImg("/playersBg.jpg"));
+  }, [dispatch]);
+
   if (props.statusCode !== 200) {
     return <Error statusCode={props.statusCode} />;
   }
@@ -26,11 +38,7 @@ const CoachPage: NextPageWithLayout<Props> = (props) => {
 };
 
 CoachPage.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <Layout subHeader={<PlayersSubHeader />} imgSrc="/playersBg.jpg">
-      {page}
-    </Layout>
-  );
+  return <Layout>{page}</Layout>;
 };
 
 export const getStaticProps: GetStaticProps<Props> = async () => {

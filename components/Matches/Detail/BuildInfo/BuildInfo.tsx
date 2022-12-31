@@ -25,9 +25,8 @@ const BuildInfo = () => {
     setRadiants(sortRolesTeam(arrRadi));
     setDires(sortRolesTeam(arrDire));
   }, [matchDetail]);
-
   return (
-    <section className="p-2 rounded-md bg-layer-dark">
+    <section className="p-2 rounded-md bg-layer-light dark:bg-layer-dark">
       <h5>Builds</h5>
       <div className="flex ">
         <div className="w-[calc(50%_-_16px)] flex flex-col ">

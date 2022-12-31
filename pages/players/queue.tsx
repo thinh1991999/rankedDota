@@ -12,6 +12,11 @@ import {
   QueueChart,
   RankInfor,
 } from "../../components/Players";
+import { useAppDispatch } from "../../store";
+import {
+  setHeaderImg,
+  setSubHeaderMain,
+} from "../../store/Slices/globalDataSlice";
 
 type Props = {
   matches: Matches | null;
@@ -19,6 +24,13 @@ type Props = {
 };
 
 const QueuePage: NextPageWithLayout<Props> = (props) => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setSubHeaderMain(<PlayersSubHeader />));
+    dispatch(setHeaderImg("/playersBg.jpg"));
+  }, [dispatch]);
+
   if (props.statusCode !== 200) {
     return <Error statusCode={props.statusCode} />;
   }
@@ -30,11 +42,7 @@ const QueuePage: NextPageWithLayout<Props> = (props) => {
 };
 
 QueuePage.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <Layout subHeader={<PlayersSubHeader />} imgSrc="/playersBg.jpg">
-      {page}
-    </Layout>
-  );
+  return <Layout>{page}</Layout>;
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {

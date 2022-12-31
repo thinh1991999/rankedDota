@@ -1,29 +1,29 @@
 import React from "react";
-import { LeaderBoard } from "../../interfaces/heroes";
 import MyImage from "../MyImage";
 import { getTypeOfHero } from "../../share/ultils";
+import { Leaderboard } from "../../interfaces/heroes";
 
-const LeaderBoards = ({ leaderBoards }: { leaderBoards: LeaderBoard[] }) => {
+const LeaderBoards = ({ leaderboard }: { leaderboard: Leaderboard }) => {
   return (
     <section className="p-2 rounded-md bg-layer-dark">
       <h5>Top players</h5>
-      <div className="">
-        {leaderBoards.map((leaderboard, idx) => {
+      <div className="mt-2">
+        {leaderboard.hero.map((e, idx) => {
           const {
             impAverage,
             position,
             steamAccount: { id, avatar, name },
-          } = leaderboard;
+          } = e;
           const typePosition = getTypeOfHero(position);
           const perform = (impAverage * 50) / 25;
           return (
             <div key={id} className="flex items-center h-[53px]">
-              <span>{idx + 1}</span>
+              <span className="text-sm text-gray-500">{idx + 1}</span>
               <div className="mx-3">
                 <MyImage
                   src={avatar}
-                  width={40}
-                  height={40}
+                  width="40px"
+                  height="40px"
                   alt={name}
                   borderRadius={6}
                 />
@@ -32,8 +32,8 @@ const LeaderBoards = ({ leaderBoards }: { leaderBoards: LeaderBoard[] }) => {
               <div className="">
                 <MyImage
                   src={typePosition.icon}
-                  width={15}
-                  height={15}
+                  width="15px"
+                  height="15px"
                   alt={position}
                 />
               </div>
