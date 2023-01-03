@@ -1,11 +1,9 @@
 import Link from "next/link";
 import React from "react";
 import { homeCards } from "../../share";
-import { useAppSelector } from "../../store";
 import SearchID from "../SearchID";
 
 function HomePage() {
-  // const theme = useAppSelector((state) => state.theme.theme);
   return (
     <section className="">
       <div className="h-[600px] relative">
@@ -16,7 +14,9 @@ function HomePage() {
           }}
         ></div>
         <div className="absolute top-0 left-0 bottom-0 right-0 flex flex-col justify-center items-center text-white">
-          <h1 className="text-5xl font-bold uppercase">RankedDota</h1>
+          <h1 className="text-3xl lg:text-5xl font-bold uppercase">
+            RankedDota
+          </h1>
           <h6 className="my-3">Search by Match ID</h6>
           <SearchID />
         </div>

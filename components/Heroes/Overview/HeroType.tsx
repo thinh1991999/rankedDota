@@ -3,7 +3,11 @@ import Link from "next/link";
 import MyImage from "../../MyImage";
 import { Hero } from "../../../interfaces/heroes";
 import { getImgStratsDota } from "../../../share";
-import ToolTip from "../../ToolTip";
+import dynamic from "next/dynamic";
+
+const ToolTip = dynamic(() => import("../../ToolTip"), {
+  ssr: false,
+});
 
 const HeroType = ({
   data,

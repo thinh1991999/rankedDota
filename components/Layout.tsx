@@ -1,29 +1,30 @@
 import React, { ReactNode, useRef, useEffect } from "react";
-import { useAppSelector } from "../store";
-import Footer from "./Footer";
-import Header from "./Header";
-import { useAppDispatch } from "../store/hook";
-import { handleOffBgHeader, handleOnBgHeader } from "../store/Slices/rootSlice";
-import Head from "next/head";
-import MyImage from "./MyImage";
-import SubHeaderMain from "./SubHeaderMain";
-import { setIsTransparentHeader } from "../store/Slices/globalDataSlice";
-import ScrollToTop from "react-scroll-up";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
+import Head from "next/head";
+
+import { useAppDispatch } from "../store/hook";
+import { setIsTransparentHeader } from "../store/Slices/globalDataSlice";
+
+const Header = dynamic(() => import("./Header"), {
+  loading: () => <></>,
+});
+
+const Footer = dynamic(() => import("./Footer"), {
+  loading: () => <></>,
+});
+
+const SubHeaderMain = dynamic(() => import("./SubHeaderMain"), {
+  loading: () => <></>,
+});
 
 function Layout({ children }: { children: ReactNode }) {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const mainRef = useRef<HTMLInputElement>(null);
-  // const theme = useAppSelector((state) => state.theme.theme);
+  const mainRef = useRef<HTMLDivElement>(null);
   const handleScrollTop = () => {
     if (!mainRef.current) return;
     mainRef.current.scrollTop = 0;
-  };
-
-  const handleScroll = (e: React.UIEvent<HTMLElement>) => {
-    const scrollTop = e.currentTarget.scrollTop;
-    // dispatch(setIsTransparentHeader(scrollTop));
   };
 
   useEffect(() => {
@@ -33,6 +34,24 @@ function Layout({ children }: { children: ReactNode }) {
     }
   }, [router]);
 
+  useEffect(() => {
+    if (!mainRef.current) return;
+    const element = mainRef.current;
+    let timeScroll: any;
+    const handleScroll = (e: Event) => {
+      const target = e.currentTarget as HTMLDivElement;
+      const scrollTop = target.scrollTop;
+      timeScroll = setTimeout(() => {
+        dispatch(setIsTransparentHeader(scrollTop));
+      }, 100);
+    };
+    element.addEventListener("scroll", handleScroll);
+    return () => {
+      element.removeEventListener("scroll", handleScroll);
+      clearTimeout(timeScroll);
+    };
+  }, [mainRef, dispatch]);
+
   return (
     <>
       <Head>
@@ -40,12 +59,12 @@ function Layout({ children }: { children: ReactNode }) {
           name="viewport"
           content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"
         />
+        <link rel="icon" href="/lightLogo.png"></link>
       </Head>
       <div
         ref={mainRef}
         id="main"
         className={`flex flex-col bg-background-light dark:bg-background-dark w-screen h-screen  overflow-y-scroll overflow-x-hidden scroll-smooth  text-textMain-light dark:text-textMain-dark`}
-        onScroll={handleScroll}
       >
         <Header />
         <main className="flex-1">

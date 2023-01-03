@@ -24,7 +24,7 @@ const FeaturedGuides = ({
   const { abilities: abilitiesHero } = hero;
   const items = useAppSelector((state) => state.globalData.items);
   return (
-    <section className="p-2 rounded-md bg-layer-dark">
+    <section className="p-2 rounded-md bg-layer-light dark:bg-layer-dark">
       <h5>Featured guides</h5>
       <div className="">
         {guides.map((guide, idx) => {
@@ -95,33 +95,37 @@ const FeaturedGuides = ({
           return (
             <div
               key={idx}
-              className="my-3 px-3 py-3 rounded-md bg-layerStrong-dark flex items-center"
+              className="my-3 px-3 py-3 rounded-md bg-layerStrong-dark flex xl:flex-nowrap flex-wrap items-center"
             >
-              <div className="w-[20px]">
-                <MyImage
-                  src={typeHero.icon}
-                  width="20px"
-                  height="20px"
-                  alt="sp"
-                />
-              </div>
-              <div className="w-[200px] flex flex-col ml-2">
-                <span className=" one-line-max text-lg font-bold">{name}</span>
-                <div className="flex items-center">
-                  <span className="text-sm">{time}</span>
-                  <div className="mx-5">
-                    <MyImage
-                      src={isRadiant ? RADIANT_ICON : DIRE_ICON}
-                      width="20px"
-                      height="20px"
-                      alt=""
-                      borderRadius={5}
-                    />
+              <div className="xl:w-[200px] w-full flex items-center">
+                <div className="w-[20px]">
+                  <MyImage
+                    src={typeHero.icon}
+                    width="20px"
+                    height="20px"
+                    alt="sp"
+                  />
+                </div>
+                <div className="flex-1 flex flex-col ml-2">
+                  <span className=" one-line-max text-lg font-bold">
+                    {name}
+                  </span>
+                  <div className="flex items-center">
+                    <span className="text-sm">{time}</span>
+                    <div className="mx-5">
+                      <MyImage
+                        src={isRadiant ? RADIANT_ICON : DIRE_ICON}
+                        width="20px"
+                        height="20px"
+                        alt=""
+                        borderRadius={5}
+                      />
+                    </div>
+                    <span className="text-sm">{`${kills} / ${deaths} / ${assists}`}</span>
                   </div>
-                  <span className="text-sm">{`${kills} / ${deaths} / ${assists}`}</span>
                 </div>
               </div>
-              <div className="flex">
+              <div className="xl:flex-1 w-full flex xl:justify-center justify-start xl:my-0 my-5 overflow-x-auto ">
                 {abilitiesHero.map((abi) => {
                   const { abilityId, ability } = abi;
                   const {
@@ -176,7 +180,7 @@ const FeaturedGuides = ({
                           </div>
                         }
                         tooltip={
-                          <div className="flex items-center p-2">
+                          <div className="flex items-center">
                             <MyImage
                               src={getImgStratsDota(`/abilities/${name}.png`)}
                               alt={name}
@@ -206,8 +210,8 @@ const FeaturedGuides = ({
                   />
                 </div>
               </div>
-              <div className="w-[1px] h-[30px] bg-borderSecondary-dark mx-5"></div>
-              <div className="flex ">
+              <div className="xl:block hidden w-[1px] h-[30px] bg-borderSecondary-dark mx-5"></div>
+              <div className="xl:flex-1 w-full flex xl:justify-center justify-start overflow-x-auto">
                 {itemsResult.map((item, idx) => {
                   if (!item) {
                     return (
@@ -261,41 +265,45 @@ const FeaturedGuides = ({
                     </div>
                   );
                 })}
-                <div>
-                  <ToolTip
-                    key={mathchId + neutral0Id}
-                    target={
-                      <div className="mx-1">
-                        <MyImage
-                          src={getImgStratsDota(
-                            "/items/" + itemNeutral?.shortName + ".png"
-                          )}
-                          width="30px"
-                          height="30px"
-                          borderRadius={999}
-                          alt={itemNeutral?.displayName || " "}
-                        />
-                      </div>
-                    }
-                    tooltip={
-                      <div className="flex items-center px-2 py-1 rounded-sm">
-                        <MyImage
-                          src={getImgStratsDota(
-                            "/items/" + itemNeutral?.shortName + ".png"
-                          )}
-                          width="50px"
-                          height="40px"
-                          borderRadius={5}
-                          alt={itemNeutral?.displayName || " "}
-                        />
-                        <span className="font-bold ml-1">
-                          {itemNeutral?.displayName}
-                        </span>
-                      </div>
-                    }
-                    id={mathchId + neutral0Id}
-                  />
-                </div>
+                {neutral0Id ? (
+                  <div>
+                    <ToolTip
+                      key={mathchId + neutral0Id}
+                      target={
+                        <div className="mx-1">
+                          <MyImage
+                            src={getImgStratsDota(
+                              "/items/" + itemNeutral?.shortName + ".png"
+                            )}
+                            width="30px"
+                            height="30px"
+                            borderRadius={999}
+                            alt={itemNeutral?.displayName || " "}
+                          />
+                        </div>
+                      }
+                      tooltip={
+                        <div className="flex items-center px-2 py-1 rounded-sm">
+                          <MyImage
+                            src={getImgStratsDota(
+                              "/items/" + itemNeutral?.shortName + ".png"
+                            )}
+                            width="50px"
+                            height="40px"
+                            borderRadius={5}
+                            alt={itemNeutral?.displayName || " "}
+                          />
+                          <span className="font-bold ml-1">
+                            {itemNeutral?.displayName}
+                          </span>
+                        </div>
+                      }
+                      id={mathchId + neutral0Id}
+                    />
+                  </div>
+                ) : (
+                  <div className="w-[30px] h-[30px] rounded-full dark:bg-layer-dark bg-layer-light mx-1"></div>
+                )}
               </div>
             </div>
           );

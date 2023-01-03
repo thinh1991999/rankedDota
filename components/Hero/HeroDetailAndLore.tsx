@@ -14,10 +14,9 @@ const HeroDetailAndLore = ({ hero }: { hero: Hero }) => {
   return (
     <section className="flex flex-wrap -ml-2 -mr-2">
       <div className="w-full xl:w-1/2 p-2">
-        <div className="h-full rounded-md bg-layer-dark  flex flex-col justify-between">
-          <div className="relative pb-12 px-3 pt-3 border-b">
+        <div className="h-full rounded-md bg-layer-light dark:bg-layer-dark  flex flex-col justify-between">
+          <div className="relative pb-12 px-3 pt-3 border-b border-borderSecondary-light dark:border-borderSecondary-dark">
             <h5>Details</h5>
-            <p className="text-sm mt-2 w-[calc(100%_-_200px)]">{parse(hype)}</p>
             <div className="absolute bottom-0 right-0">
               <MyImage
                 src={img}
@@ -26,19 +25,22 @@ const HeroDetailAndLore = ({ hero }: { hero: Hero }) => {
                 alt={displayName}
               />
             </div>
+            <p className="relative text-sm mt-2 w-full lg:w-[calc(100%_-_200px)]">
+              {parse(hype)}
+            </p>
           </div>
           <div className="px-3 pb-3 pt-10">
             <div className="flex items-end justify-between">
               <h6>Hero ID</h6>
               <div className="flex-1 px-2 pb-[6px]">
-                <div className="border-b-[1px] border-dotted"></div>
+                <div className="border-b-[1px] border-dotted border-borderSecondary-light dark:border-borderSecondary-dark"></div>
               </div>
               <span>{id}</span>
             </div>
             <div className="flex items-end justify-between">
               <h6>Aliases</h6>
               <div className="flex-1 px-2 pb-[6px]">
-                <div className="border-b-[1px] border-dotted"></div>
+                <div className="border-b-[1px] border-dotted border-borderSecondary-light dark:border-borderSecondary-dark"></div>
               </div>
               <span>{displayName}</span>
             </div>
@@ -46,7 +48,7 @@ const HeroDetailAndLore = ({ hero }: { hero: Hero }) => {
         </div>
       </div>
       <div className="w-full xl:w-1/2 p-2">
-        <div className="h-full p-3 rounded-md bg-layer-dark">
+        <div className="h-full p-3 rounded-md bg-layer-light dark:bg-layer-dark">
           <h5>Lore</h5>
           <p className="text-sm mt-2">{parse(lore)}</p>
         </div>

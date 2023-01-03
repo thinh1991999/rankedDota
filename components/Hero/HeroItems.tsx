@@ -1,11 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import _ from "lodash";
-import {
-  Event,
-  Item,
-  ItemNeutral,
-  PurchasePattern,
-} from "../../interfaces/item";
+import { Event, Item, ItemNeutral } from "../../interfaces/item";
 import {
   getDetailItem,
   getImgStratsDota,
@@ -15,12 +10,6 @@ import MyImage from "../MyImage";
 import ToolTip from "../ToolTip";
 import { useAppSelector } from "../../store";
 import { HeroStats, ItemBootPurchase } from "../../interfaces/heroes";
-import { items } from "../../share/data";
-
-type ResultItemNeutral = {
-  item: ItemNeutral;
-  detailItem: Item;
-};
 
 type Tier = {
   title: string;
@@ -31,13 +20,6 @@ type Tier = {
     }[];
     total: number;
   };
-};
-
-type Timeline = {
-  title: string;
-  data: Event[];
-  time: string;
-  total: number;
 };
 
 const ToolTipItem = ({
@@ -363,7 +345,7 @@ const HeroItems = ({ stats }: { stats: HeroStats }) => {
   }, [stats, currentNav, items]);
 
   return (
-    <section className="p-2 rounded-md bg-layer-dark">
+    <section className="p-2 rounded-md bg-layer-light dark:bg-layer-dark">
       <div className="flex justify-between">
         <h5>Items</h5>
         <div className="flex items-center">
@@ -375,13 +357,13 @@ const HeroItems = ({ stats }: { stats: HeroStats }) => {
                   onClick={() => setCurrentNav(idx)}
                   className={`${
                     idx === currentNav
-                      ? "bg-gray-800 border-gray-400"
-                      : "bg-gray-700 opacity-40"
+                      ? "dark:bg-layerStrong-dark bg-layerStrong-light border-gray-400"
+                      : "dark:bg-button-dark bg-button-light opacity-40"
                   } ${
                     idx === 0
                       ? "rounded-tl-2xl rounded-bl-2xl"
                       : "rounded-tr-2xl rounded-br-2xl"
-                  } hover:bg-gray-800 hover:opacity-100 border px-[15px] py-[3px] capitalize text-sm cursor-pointer`}
+                  } dark:hover:bg-layerStrong-dark hover:bg-layerStrong-light border px-[15px] py-[3px] capitalize text-sm cursor-pointer`}
                 >
                   {nav}
                 </li>

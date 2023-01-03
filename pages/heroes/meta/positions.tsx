@@ -4,7 +4,6 @@ import { GetServerSideProps } from "next";
 import {
   HeroesSubHeader,
   PositionsDataInfo,
-  PositionsHeader,
   PositionsSearchHandle,
 } from "../../../components/Heroes";
 import Layout from "../../../components/Layout";

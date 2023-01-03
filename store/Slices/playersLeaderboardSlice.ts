@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import _ from "lodash";
+import cloneDeepWith from "lodash/cloneDeepWith";
 import { PlayerSeason, Season } from "../../interfaces/players";
 import { PlayersLeaderboardData } from "../../interfaces/state";
 import stratsApiService from "../../services/stratsApi.service";
@@ -33,7 +33,7 @@ export const playersLeaderboardSlice = createSlice({
     },
     loadMorePlayers: (state, action: PayloadAction<PlayerSeason[]>) => {
       if (!state.season) return;
-      const clSeason = _.cloneDeepWith(state.season);
+      const clSeason = cloneDeepWith(state.season);
       clSeason.players = [...clSeason.players, ...action.payload];
       state.season = clSeason;
     },

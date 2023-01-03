@@ -1,5 +1,7 @@
-import _ from "lodash";
-import React, { useEffect, useState } from "react";
+import forEach from "lodash/forEach";
+import filter from "lodash/filter";
+import orderBy from "lodash/orderBy";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Chart as ChartJS,
   LinearScale,
@@ -15,10 +17,10 @@ import {
   Filler,
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
-import { GameVersion, WinGameVersion } from "../../interfaces/gameVersion";
+import { GameVersion } from "../../interfaces/gameVersion";
 import { Hero, Win } from "../../interfaces/heroes";
 import { useAppSelector } from "../../store/hook";
-import { nFormatter } from "../../share";
+import { nFormatter, useGetStylesTheme } from "../../share";
 
 ChartJS.register(
   LinearScale,
@@ -151,61 +153,64 @@ const HeroCharWinrate = ({
   winGameVersions: Win[];
   hero: Hero;
 }) => {
+  const { styles } = useGetStylesTheme();
   const gameVersions = useAppSelector((state) => state.globalData.gameVersions);
   const [wrChart, setWrChart] = useState<{
     datasets: any;
   }>();
   const [prAverage, setPrAverage] = useState<number>(0);
-  const options: ChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: false,
-      },
-      title: {
-        display: false,
-      },
-      tooltip: {
-        mode: "index",
-        intersect: false,
-        displayColors: false,
-        enabled: false,
-        external: externalTooltipHandler,
-      },
-    },
-    hover: {
-      mode: "nearest",
-      intersect: false,
-    },
-    maintainAspectRatio: false,
-    scales: {
-      x: {
-        ticks: {
-          color: (c: any) => {
-            if (isNaN(Number(c["tick"]["label"]))) return "gray";
-            else return "white";
-          },
-        },
-        grid: {
-          color: "rgba(107, 107, 107, 0.5)",
-          tickLength: 0,
-        },
-      } as any,
-      y: {
-        ticks: {
-          stepSize: 5,
+  const options: ChartOptions = useMemo(() => {
+    return {
+      responsive: true,
+      plugins: {
+        legend: {
           display: false,
         },
-        suggestedMin: 0,
-        suggestedMax: 10,
-        weight: 10,
-        grid: {
-          color: "rgba(107, 107, 107, 0.5)",
-          tickLength: 0,
+        title: {
+          display: false,
+        },
+        tooltip: {
+          mode: "index",
+          intersect: false,
+          displayColors: false,
+          enabled: false,
+          external: externalTooltipHandler,
         },
       },
-    },
-  };
+      hover: {
+        mode: "nearest",
+        intersect: false,
+      },
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          ticks: {
+            color: (c: any) => {
+              if (isNaN(Number(c["tick"]["label"]))) return "gray";
+              else return styles.tick;
+            },
+          },
+          grid: {
+            color: "rgba(107, 107, 107, 0.5)",
+            tickLength: 0,
+          },
+        } as any,
+        y: {
+          ticks: {
+            stepSize: 5,
+            display: false,
+          },
+          suggestedMin: 0,
+          suggestedMax: 10,
+          weight: 10,
+          grid: {
+            color: "rgba(107, 107, 107, 0.5)",
+            tickLength: 0,
+          },
+        },
+      },
+    };
+  }, [styles]);
 
   const extendPlugin = {
     id: "beforeDraw",
@@ -239,27 +244,27 @@ const HeroCharWinrate = ({
     let totalPr: number = 0;
     const getTotalMatchVersion = (id: number): number => {
       let total: number = 0;
-      _.forEach(winGameVersions, (game) => {
+      forEach(winGameVersions, (game) => {
         if (game.gameVersionId === id) {
           total += game.matchCount;
         }
       });
       return total;
     };
-    _.forEach(winGameVersions, (game) => {
+    forEach(winGameVersions, (game) => {
       if (game.heroId === hero.id) {
-        const filter = _.filter(
+        const filters = filter(
           gameVersions,
           (item) => item.id === game.gameVersionId
         );
         versions.push({
-          gameVersion: filter[0],
+          gameVersion: filters[0],
           winGameVersion: game,
         });
       }
     });
-    versions = _.orderBy(versions, (game) => game.gameVersion.asOfDateTime);
-    _.forEach(versions, (ver) => {
+    versions = orderBy(versions, (game) => game.gameVersion.asOfDateTime);
+    forEach(versions, (ver) => {
       const {
         gameVersion: { name, id },
         winGameVersion: { winCount, matchCount },
@@ -296,7 +301,7 @@ const HeroCharWinrate = ({
   return (
     <>
       {wrChart && (
-        <div className="w-full p-2 rounded-md bg-layer-dark">
+        <div className="w-full p-2 rounded-md bg-layer-light dark:bg-layer-dark">
           <div className="flex items-center">
             <h6 className="text-xl font-bold">Pick Rate</h6>
             <span className="ml-2 text-xl text-blue-500 font-bold">

@@ -45,7 +45,7 @@ const TalentTree = ({ talents }: { talents: Talent[] }) => {
   }, [talents, abilitiesData]);
 
   return (
-    <section className="px-3 py-2 h-[250px] w-[350px] bg-gray-700 rounded-md overflow-hidden">
+    <section className="px-3 py-2 h-[250px] w-[350px] dark:bg-layer-dark bg-layer-light rounded-md overflow-hidden">
       <div className="relative h-full w-full">
         <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center rounded-md overflow-hidden">
           <MyImage

@@ -45,8 +45,8 @@ const MatchupSort = ({
 
   return (
     <section className="flex justify-between p-4 text-sm">
-      <div className="flex-1 flex flex-col">
-        <div className="flex flex-wrap -ml-2 -mr-2 -mt-2 -mb-2">
+      <div className=" flex-1 flex flex-col">
+        <div className="flex flex-wrap -ml-2 -mr-2 ">
           {currentInfo.radiant.map((player) => {
             const {
               heroId,
@@ -70,7 +70,7 @@ const MatchupSort = ({
               checkShow = radiantHero.heroId === heroId;
             }
             return (
-              <div key={heroId} className="w-1/5 p-2">
+              <div key={heroId} className="xl:w-1/5 w-full p-2">
                 <div
                   className="cursor-pointer rounded-md overflow-hidden border border-solid border-borderTender-dark"
                   style={{
@@ -191,11 +191,11 @@ const MatchupSort = ({
           {radiantHero && <SortDetail player={radiantHero} />}
         </div>
       </div>
-      <div className="mx-2 flex items-center">
-        <span className="">vs</span>
+      <div className="mx-2 items-center">
+        <span className="xl:block hidden">vs</span>
       </div>
-      <div className="flex-1 flex flex-col">
-        <div className="flex flex-wrap -ml-2 -mr-2 -mt-2 -mb-2">
+      <div className=" flex-1 flex flex-col">
+        <div className="flex flex-wrap -ml-2 -mr-2 ">
           {currentInfo.dire.map((player) => {
             const {
               heroId,
@@ -219,7 +219,7 @@ const MatchupSort = ({
               checkShow = direHero.heroId === heroId;
             }
             return (
-              <div key={heroId} className="w-1/5 p-2">
+              <div key={heroId} className="xl:w-1/5 w-full p-2">
                 <div
                   className="cursor-pointer rounded-md overflow-hidden border border-solid border-borderTender-dark"
                   style={{

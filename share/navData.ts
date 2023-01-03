@@ -3,6 +3,7 @@ export interface HeaderNav {
   icon?: string;
   fatherLink?: string;
   link: string;
+  hint?: string;
   sub?: string;
   childs?: HeaderNav[];
 }
@@ -103,19 +104,24 @@ export const heroesNavs: HeaderNav[] = [
   {
     name: "Overview",
     link: "/heroes",
+    hint: "/heroes",
   },
   {
     name: "Meta",
-    link: "/heroes/meta",
+    link: "/heroes/meta/trends",
+    hint: "/heroes/meta/trends",
+    fatherLink: "/heroes/meta/trends",
     childs: [
       {
         name: "Trends",
         link: "/heroes/meta/trends",
+        hint: "/heroes/meta/trends",
         sub: "Win and pick rate leaderboard",
       },
       {
         name: "Positions",
         link: "/heroes/meta/positions",
+        hint: "/heroes/meta/positions",
         sub: "Success rating by positions",
       },
     ],
@@ -123,6 +129,7 @@ export const heroesNavs: HeaderNav[] = [
   {
     name: "Guides",
     link: "/heroes/guides",
+    hint: "/heroes/guides",
   },
 ];
 
@@ -130,27 +137,33 @@ export const playersNavs: HeaderNav[] = [
   {
     name: "Rank",
     link: "/players/ranks",
+    hint: "/players/ranks",
   },
   {
     name: "Queue",
     link: "/players/queue",
+    hint: "/players/queue",
   },
   {
     name: "Highlights",
     link: "/players/highlights",
+    hint: "/players/highlights",
   },
   {
     name: "Leaderboard",
     fatherLink: "/players/leaderboards",
     link: "/players/leaderboards/world?divisionId=0",
+    hint: "/players/leaderboards/world",
     childs: [
       {
         name: "World",
         link: "/players/leaderboards/world?divisionIds=0",
+        hint: "/players/leaderboards/world",
       },
       {
         name: "Coaches",
         link: "/players/leaderboards/coaches",
+        hint: "/players/leaderboards/coaches",
       },
     ],
   },
@@ -212,9 +225,11 @@ export const matchesNav = [
   {
     name: "Live",
     link: "/matches/live",
+    hint: "/matches/live",
   },
   {
     name: "Graphs",
     link: "/matches/graphs",
+    hint: "/matches/graphs",
   },
 ];

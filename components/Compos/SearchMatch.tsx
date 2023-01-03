@@ -1,5 +1,5 @@
 import React from "react";
-import _ from "lodash";
+import range from "lodash/range";
 import { useAppSelector } from "../../store";
 import { getImgOpenDota } from "../../share/ultils";
 import MyImage from "../MyImage";
@@ -26,7 +26,7 @@ const SearchMatch = () => {
           <div className="p-2 rounded-md bg-layer-dark border border-blue-500">
             <h6 className="text-center text-blue-500 font-bold">Team A</h6>
             <div className="flex flex-wrap lg:justify-end justify-center relative">
-              {_.range(5 - radiants.length).map((item) => {
+              {range(5 - radiants.length).map((item) => {
                 return (
                   <div
                     key={item}
@@ -68,7 +68,7 @@ const SearchMatch = () => {
           <div className="p-2 rounded-md bg-layer-dark border border-red-500">
             <h6 className="text-center text-red-500 font-bold">Team B</h6>
             <div className="flex flex-wrap lg:justify-end justify-center relative">
-              {_.range(5 - dires.length).map((item) => {
+              {range(5 - dires.length).map((item) => {
                 return (
                   <div
                     key={item}

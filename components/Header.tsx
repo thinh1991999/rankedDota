@@ -1,11 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import tw from "twin.macro";
 import { headerNavs } from "../share/navData";
 import { useAppSelector } from "../store";
 import Logo from "./Logo";
-import MyImage from "./MyImage";
 import ThemeToggle from "./ThemeToggle";
 import Dropdown from "rc-dropdown";
 import "rc-dropdown/assets/index.css";
@@ -15,7 +12,6 @@ import {
   AiOutlineMenu,
   AiOutlineRight,
 } from "react-icons/ai";
-import { useCheckChangeRouter } from "../share/customHooks";
 import HeaderMobile from "./HeaderMobile";
 import { useAppDispatch } from "../store/hook";
 import { handleShowNavBarMobile } from "../store/Slices/globalDataSlice";

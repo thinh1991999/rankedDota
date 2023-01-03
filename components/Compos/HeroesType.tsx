@@ -1,10 +1,10 @@
 import React from "react";
+import findIndex from "lodash/findIndex";
 import MyImage from "../MyImage";
 import { Hero } from "../../interfaces/heroes";
 import { getImgStratsDota } from "../../share";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { addDire, addRadiant } from "../../store/Slices/composSlice";
-import _ from "lodash";
 
 const HeroesType = ({
   data,
@@ -21,12 +21,12 @@ const HeroesType = ({
   const radiants = useAppSelector((state) => state.compos.radiants);
   const dires = useAppSelector((state) => state.compos.dires);
   const addRadiantSearch = (hero: Hero) => {
-    const checked = _.findIndex(radiants, (heroo) => heroo.id === hero.id);
+    const checked = findIndex(radiants, (heroo) => heroo.id === hero.id);
     radiants.length < 5 && checked === -1 && dispatch(addRadiant(hero));
   };
 
   const addDireSearch = (hero: Hero) => {
-    const checked = _.findIndex(radiants, (heroo) => heroo.id === hero.id);
+    const checked = findIndex(radiants, (heroo) => heroo.id === hero.id);
     dires.length < 5 && checked === -1 && dispatch(addDire(hero));
   };
 
@@ -42,14 +42,11 @@ const HeroesType = ({
         {data.map((item) => {
           const { displayName, id, shortName, name } = item;
           let checkPicked = false;
-          const radiantCheck = _.findIndex(
-            radiants,
-            (heroo) => heroo.id === id
-          );
+          const radiantCheck = findIndex(radiants, (heroo) => heroo.id === id);
           if (radiantCheck !== -1) {
             checkPicked = true;
           } else {
-            const direCheck = _.findIndex(dires, (heroo) => heroo.id === id);
+            const direCheck = findIndex(dires, (heroo) => heroo.id === id);
             direCheck === -1 ? (checkPicked = false) : (checkPicked = true);
           }
           let checkSearch = displayName

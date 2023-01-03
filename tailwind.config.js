@@ -86,7 +86,7 @@ module.exports = {
         btnDark: "0 35px 60px -15px rgba(0, 0, 0, 0.3)",
         btnLight: "0 35px 60px -15px rgba(0, 0, 0, 0.3)",
         cardDark: "rgba(149, 157, 165, 0.2) 0px 8px 24px",
-        cardLight: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;",
+        cardLight: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
       },
       border: ["hover"],
       keyframes: {

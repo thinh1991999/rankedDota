@@ -1,9 +1,13 @@
+import dynamic from "next/dynamic";
 import React, { memo, ReactNode } from "react";
 import uniqid from "uniqid";
-import ToolTip from "./ToolTip";
 import { getDetaiHero, getImgStratsDota } from "../share/ultils";
 import { useAppSelector } from "../store/hook";
 import MyImage from "./MyImage";
+
+const ToolTip = dynamic(() => import("./ToolTip"), {
+  loading: () => <></>,
+});
 
 const HeroIcon = ({
   showTooltip = true,
@@ -13,6 +17,7 @@ const HeroIcon = ({
   filterClass,
   tooltip,
   player,
+  full,
 }: {
   showTooltip?: boolean;
   id: number;
@@ -21,6 +26,7 @@ const HeroIcon = ({
   filterClass?: string;
   tooltip?: ReactNode;
   player?: string;
+  full?: boolean;
 }) => {
   const heroes = useAppSelector((state) => state.globalData.heroes);
   const detailHero = getDetaiHero(heroes, id);
@@ -29,35 +35,33 @@ const HeroIcon = ({
   }
   const { shortName } = detailHero;
   const heroIcon = getImgStratsDota("/heroes/" + shortName + "_icon.png");
+  const finalSize = full ? "100%" : size + "px";
   return (
     <div
       style={{
-        width: `${size}px`,
-        height: `${size}px`,
+        width: finalSize,
+        height: finalSize,
       }}
     >
-      {/* ${filterClass} */}
       {showTooltip ? (
         <ToolTip
           target={
             <div
               className={`${
                 gray ? "grayscale" : "grayscale-0"
-              }  flex justify-center items-center `}
+              } w-full h-full flex justify-center items-center ${filterClass}`}
             >
               <MyImage
                 src={heroIcon}
-                width={size + "px"}
-                height={size + "px"}
+                width={finalSize}
+                height={finalSize}
                 alt={shortName}
               />
             </div>
           }
           tooltip={
             tooltip ? (
-              <>
-                {tooltip} as {detailHero.displayName}
-              </>
+              <>{tooltip}</>
             ) : (
               <span className="px-3 py-2 rounded-sm">
                 {detailHero.displayName}
@@ -67,16 +71,15 @@ const HeroIcon = ({
           id={uniqid()}
         />
       ) : (
-        // ${filterClass}
         <div
           className={`${
             gray ? "grayscale" : "grayscale-0"
-          }  flex justify-center items-center `}
+          } w-full h-full flex justify-center items-center ${filterClass}`}
         >
           <MyImage
             src={heroIcon}
-            width={size + "px"}
-            height={size + "px"}
+            width={finalSize}
+            height={finalSize}
             alt={shortName}
           />
         </div>

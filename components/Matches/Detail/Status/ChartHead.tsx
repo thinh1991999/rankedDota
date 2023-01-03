@@ -33,8 +33,8 @@ const ChartHead = () => {
   }, [matchDetail, timeSeek]);
   return (
     <div className="p-2">
-      <div className="flex justify-between">
-        <div className="flex items-center">
+      <div className="flex flex-wrap lg:justify-between ">
+        <div className="lg:m-0 flex items-center lg:text-base text-xs">
           <MyImage
             src={RADIANT_ICON}
             width="25px"
@@ -42,7 +42,9 @@ const ChartHead = () => {
             alt="radiant"
             borderRadius={6}
           />
-          <span className="text-green-500 text-xl ml-2">Radiant</span>
+          <span className="text-green-500 text-sm lg:text-xl ml-2">
+            Radiant
+          </span>
           {nwTotal?.isRadiant && nwTotal?.nw !== 0 && (
             <div className="ml-2 flex items-center px-2  border border-solid border-yellow-500 rounded-md">
               <MyImage src="/gold.png" width="15px" height="10px" alt="gold" />
@@ -60,7 +62,17 @@ const ChartHead = () => {
             </div>
           )}
         </div>
-        <div className="flex items-center">
+        <div className="lg:m-0 mt-2 flex items-center lg:text-base text-xs">
+          <div className="lg:hidden flex items-center mr-2">
+            <MyImage
+              src={DIRE_ICON}
+              width="25px"
+              height="25px"
+              alt="dire"
+              borderRadius={6}
+            />
+            <span className="text-red-500 text-sm lg:text-xl ml-2">Dire</span>
+          </div>
           {!expTotal?.isRadiant && expTotal?.exp !== 0 && (
             <div className="mr-2 flex items-center px-2 border border-solid dark:border-white border-black rounded-md">
               <span>+{nFormatter(expTotal?.exp || 0, 1)}</span>
@@ -77,14 +89,16 @@ const ChartHead = () => {
               </span>
             </div>
           )}
-          <span className="text-red-500 text-xl mr-2">Dire</span>
-          <MyImage
-            src={DIRE_ICON}
-            width="25px"
-            height="25px"
-            alt="dire"
-            borderRadius={6}
-          />
+          <div className="lg:flex hidden items-center">
+            <span className="text-red-500 text-sm lg:text-xl mr-2">Dire</span>
+            <MyImage
+              src={DIRE_ICON}
+              width="25px"
+              height="25px"
+              alt="dire"
+              borderRadius={6}
+            />
+          </div>
         </div>
       </div>
     </div>

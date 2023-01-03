@@ -5,7 +5,7 @@ import { Leaderboard } from "../../interfaces/heroes";
 
 const LeaderBoards = ({ leaderboard }: { leaderboard: Leaderboard }) => {
   return (
-    <section className="p-2 rounded-md bg-layer-dark">
+    <section className="p-2 rounded-md bg-layer-light dark:bg-layer-dark">
       <h5>Top players</h5>
       <div className="mt-2">
         {leaderboard.hero.map((e, idx) => {
@@ -40,7 +40,7 @@ const LeaderBoards = ({ leaderboard }: { leaderboard: Leaderboard }) => {
               <span className="text-end w-[40px] block text-sm">
                 +{impAverage}
               </span>
-              <div className="ml-4 flex-1 h-[10px] rounded-sm bg-layerStrong-dark relative">
+              <div className="ml-4 flex-1 h-[10px] rounded-sm bg-layerStrong-light dark:bg-layerStrong-dark relative">
                 <div className="absolute top-0 bottom-0 left-1/2 w-[2px] bg-white -translate-x-1/2"></div>
                 <div
                   className="absolute top-0 bottom-0 left-[calc(50%_+_1px)] rounded-tl-sm rounded-bl-sm bg-purple-500"

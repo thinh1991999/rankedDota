@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { PlayerMatchDetail } from "../../../../interfaces/matches";
-import { getTimeBySeconds } from "../../../../share";
+import { DIRE_ICON, getTimeBySeconds, RADIANT_ICON } from "../../../../share";
 import { useAppSelector } from "../../../../store";
 import ItemIcon from "../../../ItemIcon";
 import Player from "./Player";
@@ -28,17 +28,27 @@ const BuildInfo = () => {
   return (
     <section className="p-2 rounded-md bg-layer-light dark:bg-layer-dark">
       <h5>Builds</h5>
-      <div className="flex ">
-        <div className="w-[calc(50%_-_16px)] flex flex-col ">
+      <div className="flex flex-wrap">
+        <div className="lg:hidden flex items-center">
+          <MyImage
+            src={RADIANT_ICON}
+            width="15px"
+            height="15px"
+            alt="radiant"
+            borderRadius={2}
+          />
+          <h3 className="ml-2">Radiant</h3>
+        </div>
+        <div className="lg:w-[calc(50%_-_16px)] lg:flex lg:flex-col w-full">
           {radiants.map((player, idx) => {
             return (
-              <div key={idx} className="py-2">
+              <div key={idx} className="lg:py-2 p-2 w-full">
                 <Player player={player} />
               </div>
             );
           })}
         </div>
-        <div className="mx-2 flex flex-col justify-between">
+        <div className="lg:flex hidden mx-2  flex-col justify-between">
           <div className="flex-1 flex items-center ">
             <IconTypeRole
               width={16}
@@ -85,10 +95,20 @@ const BuildInfo = () => {
             />
           </div>
         </div>
-        <div className="w-[calc(50%_-_16px)] flex flex-col ">
+        <div className="lg:hidden flex items-center">
+          <MyImage
+            src={DIRE_ICON}
+            width="15px"
+            height="15px"
+            alt="dire"
+            borderRadius={2}
+          />
+          <h3 className="ml-2">Dire</h3>
+        </div>
+        <div className="lg:w-[calc(50%_-_16px)] lg:flex lg:flex-col w-full ">
           {dires.map((player, idx) => {
             return (
-              <div key={idx} className="py-2">
+              <div key={idx} className="lg:py-2 p-2 w-full">
                 <Player player={player} />
               </div>
             );

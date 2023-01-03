@@ -1,13 +1,13 @@
-import _ from "lodash";
+import forEach from "lodash/forEach";
+import reduce from "lodash/reduce";
 import { Item } from "../interfaces/item";
 import moment from "moment";
-import { Chart as ChartJS } from "chart.js";
 import { AbilityDetail, Hero } from "../interfaces/heroes";
 import {
   COLOR_CHART_RADIANT_BORDER,
   COLOR_CHART_DIRE_BORDER,
 } from "./constant";
-import { Team, TeamSort } from "../interfaces/matches";
+import { TeamSort } from "../interfaces/matches";
 import { COLOR_CHART_BLUE_BORDER } from "./constant";
 import { Region } from "../interfaces/region";
 
@@ -25,7 +25,7 @@ export const getFixIndexHero = (value: number): string => {
 
 export const getDetailItem = (arr: Item[], id: number): Item | null => {
   let result: Item | null = null;
-  _.forEach(arr, (itemm) => {
+  forEach(arr, (itemm) => {
     if (itemm.id === id) {
       result = itemm;
       return;
@@ -36,7 +36,7 @@ export const getDetailItem = (arr: Item[], id: number): Item | null => {
 
 export const getDetaiHero = (arr: Hero[], id: number): Hero | null => {
   let result: Hero | null = null;
-  _.forEach(arr, (hero) => {
+  forEach(arr, (hero) => {
     if (hero.id === id) {
       result = hero;
       return;
@@ -50,7 +50,7 @@ export const getDetaiAbility = (
   id: number
 ): AbilityDetail | null => {
   let result: AbilityDetail | null = null;
-  _.forEach(arr, (abi) => {
+  forEach(arr, (abi) => {
     if (abi.id === id) {
       result = abi;
       return;
@@ -61,7 +61,7 @@ export const getDetaiAbility = (
 
 export const getDetaiRegion = (arr: Region[], id: number): Region | null => {
   let result: Region | null = null;
-  _.forEach(arr, (re) => {
+  forEach(arr, (re) => {
     if (re.id === id) {
       result = re;
       return;
@@ -327,9 +327,9 @@ export const getGradient = (
 
 export function sortRolesTeam<T extends TeamSort>(arr: T[]): T[] {
   const newArr = new Array<T>(5);
-  _.forEach(arr, (item) => {
+  forEach(arr, (item) => {
     const { role, lane, position } = item;
-    const keyCheck = role ? role : position;
+    const keyCheck = role ? role : lane ? lane : position;
     switch (keyCheck) {
       case "POSITION_1":
         newArr[0] = item;
@@ -448,4 +448,14 @@ export function removeEmpty(obj: object) {
 
 export function getFlagImgLink(flag: string) {
   return `https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/${flag}.svg`;
+}
+
+export function getSum(arr: number[]) {
+  return reduce(
+    arr,
+    (prev, curr) => {
+      return prev + curr;
+    },
+    0
+  );
 }

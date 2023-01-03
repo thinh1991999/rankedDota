@@ -33,8 +33,8 @@ const KillRow = ({
   }, [player, heroes]);
 
   return (
-    <div className="p-2 rounded-md bg-layerSecondary-light dark:bg-layerSecondary-dark">
-      <div className="flex items-center">
+    <div className=" p-2 rounded-md bg-layerSecondary-light dark:bg-layerSecondary-dark">
+      <div className="flex items-center ">
         <div className="flex items-center w-[200px]">
           <div className="w-[68px]">
             <MyImage

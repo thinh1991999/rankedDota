@@ -6,13 +6,10 @@ import {
   combineReducers,
   ThunkAction,
   AnyAction,
-  CombinedState,
 } from "@reduxjs/toolkit";
-import { createWrapper, HYDRATE } from "next-redux-wrapper";
-import languageSlice from "./Slices/languageSlice";
-import rootSlice from "./Slices/rootSlice";
+import { createWrapper } from "next-redux-wrapper";
 import globalDataSlice from "./Slices/globalDataSlice";
-import { GlobalData, Root } from "../interfaces/state";
+import { Root } from "../interfaces/state";
 import composSlice from "./Slices/composSlice";
 import matchDetailSlice from "./Slices/matchDetailSlice";
 import lenguesSlice from "./Slices/lenguesSlice";
@@ -32,25 +29,6 @@ export const makeStore = () => {
     heroesTrends: heroesTrendsSlice,
     heroesPositions: heroesPositionsSlice,
   });
-  // return configureStore({
-  //   reducer: (state, action) => {
-  //     const a: Root = action.payload;
-  //     const b: Root = state;
-  //     const c: Root = { ...a, ...b };
-  //     // return combinedReducer(state, action);
-  //     // if (action.type === HYDRATE) {
-  //     //   // console.log("***********HYDRATE***********");
-  //     //   return { ...state, ...action.payload };
-  //     // } else {
-  //     //   // console.log("**********************");
-
-  //     //   console.log(state);
-
-  //     //   return combinedReducer(state, action);
-  //     // }
-  //     return c;
-  //   },
-  // });
   if (isServer) {
     return configureStore({
       reducer: combinedReducer,

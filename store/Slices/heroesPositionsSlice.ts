@@ -1,12 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import _ from "lodash";
-import {
-  HeroesMetaTrends,
-  HeroTrends,
-  MetaPositions,
-  SortedType,
-} from "../../interfaces/heroes";
-import { HeroesPositionsData, HeroesTrendsData } from "../../interfaces/state";
+import { MetaPositions } from "../../interfaces/heroes";
+import { HeroesPositionsData } from "../../interfaces/state";
 import stratsApiService from "../../services/stratsApi.service";
 
 const initialState: HeroesPositionsData = {

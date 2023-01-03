@@ -1,7 +1,6 @@
-import { Chart as ChartJS } from "chart.js";
 export const drawLinePluginChart = {
   id: "beforeDraw",
-  beforeDraw: (chart: ChartJS) => {
+  beforeDraw: (chart: any) => {
     const activeEle = chart.getActiveElements();
     if (activeEle.length <= 0) return;
     const { ctx, scales } = chart;

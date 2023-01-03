@@ -9,7 +9,7 @@ import Link from "next/link";
 
 const HeroRampage = ({ rampages }: { rampages: Rampage[] }) => {
   return (
-    <section className="p-2 rounded-md bg-layer-dark">
+    <section className="p-2 rounded-md bg-layer-light dark:bg-layer-dark">
       <h5>Recent rampages</h5>
       <div className="flex flex-wrap mt-2 -ml-2 -mr-2">
         {rampages.map((ramgage) => {
@@ -25,7 +25,7 @@ const HeroRampage = ({ rampages }: { rampages: Rampage[] }) => {
           return (
             <div key={id} className="w-full xl:w-1/5 p-2 ">
               <Link href="/">
-                <a className="block bg-layerStrong-dark opacity-80 hover:opacity-100 rounded-md border border-borderSecondary-dark">
+                <a className="block bg-layerStrong-light dark:bg-layerStrong-dark opacity-80 hover:opacity-100 rounded-md border border-borderSecondary-dark">
                   <div className="flex items-center justify-between p-2 border-b border-borderSecondary-dark">
                     <div className="flex-1 flex items-center">
                       <MyImage

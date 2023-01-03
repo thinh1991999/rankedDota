@@ -116,11 +116,21 @@ class StratsApiService {
     });
   }
 
-  getHeroInfo(id: number, brackets?: string[]) {
+  getHeroInfo(
+    id: number,
+    bracketBasicIds: string | string[] | undefined,
+    brackets?: string[]
+  ) {
     return this.axios.post("", {
       operationName: "GetHeroOverview",
+      // variables: {
+      //   heroId: id,
+      //   topPlayersBracketIds: brackets ? brackets : ["IMMORTAL"],
+      // },
       variables: {
         heroId: id,
+        bracketIds: brackets ? brackets : ["IMMORTAL"],
+        bracketBasicIds: bracketBasicIds,
         topPlayersBracketIds: brackets ? brackets : ["IMMORTAL"],
       },
       query:
@@ -1504,6 +1514,41 @@ class StratsApiService {
       },
       query:
         "query GetPlayersLeaderboards($leaderboardRequestVariable: FilterSeasonLeaderboardRequestType, $skipUserFollowingData: Boolean!, $skip: Long, $take: Long) {\n  leaderboard {\n    season(request: $leaderboardRequestVariable) {\n      playerCount\n      players(skip: $skip, take: $take) {\n        steamAccountId\n        steamAccount {\n          ...LeaderboardSteamAccount\n          __typename\n        }\n        rank\n        rankShift\n        position\n        __typename\n      }\n      countryData {\n        countryCode\n        playerCount\n        __typename\n      }\n      positionData {\n        position\n        playerCount\n        __typename\n      }\n      teamData {\n        id\n        name\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  stratz @skip(if: $skipUserFollowingData) {\n    user {\n      following {\n        steamAccount {\n          ...FollowingSteamAccount\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment LeaderboardSteamAccount on SteamAccountType {\n  id\n  countryCode\n  isAnonymous\n  proSteamAccount {\n    countries\n    __typename\n  }\n  ...TeamTagPlayerNameColSteamAccountTypeFragment\n  __typename\n}\n\nfragment TeamTagPlayerNameColSteamAccountTypeFragment on SteamAccountType {\n  id\n  name\n  proSteamAccount {\n    name\n    team {\n      tag\n      id\n      name\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment FollowingSteamAccount on SteamAccountType {\n  rankShift\n  seasonLeaderboardRank\n  seasonLeaderboardDivisionId\n  proSteamAccount {\n    position\n    __typename\n  }\n  ...LeaderboardSteamAccount\n  __typename\n}\n",
+    });
+  }
+
+  // Teams
+  getTeamOverview(id: number) {
+    return this.axios.post("", {
+      operationName: "GetTeamOverveiw",
+      variables: {
+        teamId: id,
+        leaguesRequest: {
+          tiers: [
+            "MINOR",
+            "MAJOR",
+            "INTERNATIONAL",
+            "DPC_QUALIFIER",
+            "DPC_LEAGUE_QUALIFIER",
+            "DPC_LEAGUE",
+            "DPC_LEAGUE_FINALS",
+          ],
+          betweenStartDateTime: 1672678800,
+          betweenEndDateTime: 1673110800,
+        },
+      },
+      query:
+        "query GetTeamOverveiw($teamId: Int!, $leaguesRequest: LeagueRequestType!) {\n  team(teamId: $teamId) {\n    id\n    ...TeamOverviewMembersTeamTypeFragment\n    series(request: {take: 6}) {\n      ...TeamSeriesSeriesTypeFragment\n      __typename\n    }\n    ...TeamOverviewSummaryRowTeamTypeFragment\n    __typename\n  }\n  leagues(request: $leaguesRequest) {\n    id\n    ...LeagueSeriesRowLeague\n    __typename\n  }\n}\n\nfragment TeamOverviewMembersTeamTypeFragment on TeamType {\n  id\n  members {\n    lastMatchDateTime\n    firstMatchDateTime\n    player {\n      steamAccountId\n      steamAccount {\n        id\n        name\n        avatar\n        proSteamAccount {\n          name\n          countries\n          realName\n          position\n          __typename\n        }\n        __typename\n      }\n      matchesGroupBy(\n        request: {groupBy: TEAM, teamId: $teamId, playerList: SINGLE, take: 10000}\n      ) {\n        teamId: id\n        matchCount\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  matches(request: {skip: 0, take: 25}) {\n    ...TeamOverviewMembersMatchMatchTypeFragment\n    __typename\n  }\n  __typename\n}\n\nfragment TeamOverviewMembersMatchMatchTypeFragment on MatchType {\n  id\n  players {\n    steamAccountId\n    isVictory\n    heroId\n    __typename\n  }\n  __typename\n}\n\nfragment LeagueSeriesRowLeague on LeagueType {\n  id\n  displayName\n  region\n  nodeGroups {\n    ...LeagueSeriesRowNodeGroup\n    __typename\n  }\n  __typename\n}\n\nfragment LeagueSeriesRowNodeGroup on LeagueNodeGroupType {\n  id\n  name\n  nodes {\n    ...LeagueSeriesRowNode\n    __typename\n  }\n  __typename\n}\n\nfragment LeagueSeriesRowNode on LeagueNodeType {\n  id\n  scheduledTime\n  actualTime\n  teamOne {\n    ...LeagueSeriesRowTeam\n    __typename\n  }\n  teamTwo {\n    ...LeagueSeriesRowTeam\n    __typename\n  }\n  teamOneWins\n  teamTwoWins\n  hasStarted\n  isCompleted\n  nodeType\n  matches {\n    id\n    __typename\n  }\n  __typename\n}\n\nfragment LeagueSeriesRowTeam on TeamType {\n  id\n  name\n  tag\n  __typename\n}\n\nfragment TeamSeriesSeriesTypeFragment on SeriesType {\n  id\n  teamOne {\n    ...LeagueSeriesRowTeam\n    __typename\n  }\n  teamTwo {\n    ...LeagueSeriesRowTeam\n    __typename\n  }\n  teamOneWins: teamOneWinCount\n  teamTwoWins: teamTwoWinCount\n  nodeType: type\n  matches {\n    startDateTime\n    ...LeagueSeriesRowMatch\n    __typename\n  }\n  league {\n    id\n    displayName\n    region\n    __typename\n  }\n  __typename\n}\n\nfragment LeagueSeriesRowMatch on MatchType {\n  id\n  durationSeconds\n  radiantTeamId\n  didRadiantWin\n  players {\n    heroId\n    kills\n    ...MatchHeroPickHoverCardPlayer\n    matchId\n    steamAccountId\n    __typename\n  }\n  radiantKills\n  direKills\n  pickBans {\n    heroId\n    isPick\n    isRadiant\n    order\n    __typename\n  }\n  __typename\n}\n\nfragment MatchHeroPickHoverCardPlayer on MatchPlayerType {\n  heroId\n  position\n  steamAccount {\n    ...SteamAccountHoverCardSteamAccountTypeFragment\n    __typename\n  }\n  __typename\n}\n\nfragment SteamAccountHoverCardSteamAccountTypeFragment on SteamAccountType {\n  id\n  name\n  avatar\n  isAnonymous\n  smurfFlag\n  proSteamAccount {\n    name\n    team {\n      id\n      tag\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment TeamOverviewSummaryRowTeamTypeFragment on TeamType {\n  winCount\n  lossCount\n  countryCode\n  lastMatchDateTime\n  dateCreated\n  __typename\n}\n",
+    });
+  }
+  getTeamHeader(id: number) {
+    return this.axios.post("", {
+      operationName: "GetTeam",
+      variables: {
+        id: id,
+      },
+      query:
+        "query GetTeam($id: Int!) {\n  team(teamId: $id) {\n    id\n    ...TeamHeaderTeamTypeFragment\n    __typename\n  }\n}\n\nfragment TeamHeaderTeamTypeFragment on TeamType {\n  id\n  name\n  __typename\n}\n",
     });
   }
 }

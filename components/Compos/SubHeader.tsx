@@ -1,7 +1,5 @@
 import React from "react";
-import { playersNavs } from "../../share";
 import MyImage from "../MyImage";
-import SubNav from "../SubNav";
 
 const SubHeader = () => {
   return (
