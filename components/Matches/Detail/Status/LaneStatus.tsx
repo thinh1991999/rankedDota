@@ -17,7 +17,7 @@ type LaneType = {
 const Lane = ({ info, lane }: { info: LaneType; lane: string }) => {
   const heroes = useAppSelector((state) => state.globalData.heroes);
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center rounded-md bg-layer-light dark:bg-layer-dark">
+    <div className="xl:p-0 p-2 w-full h-full flex flex-col items-center justify-center rounded-md bg-layer-light dark:bg-layer-dark">
       <div className="flex items-center justify-center">
         {info?.rads.map((player, idx) => {
           const {
@@ -158,14 +158,14 @@ const LaneStatus = () => {
   }, [matchDetail]);
 
   return (
-    <div className="h-full flex flex-col -mt-2 -mb-2">
-      <div className="h-1/3 w-full py-2">
+    <div className="h-full flex flex-col xl:-mt-2 xl:-mb-2 -mx-2 -mr-2">
+      <div className="lg:h-1/3 w-full p-2">
         {topLane && <Lane info={topLane} lane="top lane" />}
       </div>
-      <div className="h-1/3 w-full py-2">
+      <div className="lg:h-1/3 w-full p-2">
         {midLane && <Lane info={midLane} lane="mid lane" />}
       </div>
-      <div className="h-1/3 w-full py-2">
+      <div className="lg:h-1/3 w-full p-2">
         {botLane && <Lane info={botLane} lane="bottom lane" />}
       </div>
     </div>

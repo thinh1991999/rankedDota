@@ -1,14 +1,12 @@
 import React from "react";
 import { ReactElement, useEffect } from "react";
-import { GetServerSideProps, GetStaticProps } from "next";
+import { GetStaticProps } from "next";
 import Head from "next/head";
-import _ from "lodash";
 import { HeroesStatus } from "../../interfaces/heroes";
 import stratsApiService from "../../services/stratsApi.service";
 import HeroAllContainer from "../../components/Heroes/Overview/HeroAllContainer";
 import Layout from "../../components/Layout";
 import { NextPageWithLayout } from "../_app";
-import MyImage from "../../components/MyImage";
 import { HeroesSubHeader, HeroHighWR } from "../../components/Heroes";
 import { useAppDispatch } from "../../store/hook";
 import {

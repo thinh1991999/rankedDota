@@ -79,7 +79,7 @@ const Player = ({ player }: { player: PlayerMatchDetail }) => {
 
   return (
     <section className=" rounded-md bg-layerSecondary-light dark:bg-layerSecondary-dark border border-solid border-borderTender-dark">
-      <div className="flex items-center p-2 border-b border-solid border-borderTender-dark">
+      <div className="p-2 border-b border-solid border-borderTender-dark">
         {topInfo && <TopInfo topInfo={topInfo} />}
       </div>
       <div className="h-[80px] flex items-center">

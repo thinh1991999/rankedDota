@@ -32,7 +32,7 @@ export default function Footer({ handleScrollTop }: { handleScrollTop: any }) {
           <ToolTip
             target={
               <button
-                className="fixed bottom-5 right-5 bg-white text-black p-3 text-xl rounded-md hover:opacity-50"
+                className="fixed bottom-5 right-5 bg-black dark:bg-white dark:text-black text-white p-3 text-xl rounded-md hover:opacity-50"
                 onClick={handleScrollTop}
               >
                 <AiOutlineArrowUp />

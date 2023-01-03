@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Chart as ChartJS,
   LinearScale,
@@ -19,6 +19,7 @@ import { GameVersion, WinGameVersion } from "../../interfaces/gameVersion";
 import { Hero, Win } from "../../interfaces/heroes";
 import { useAppSelector } from "../../store/hook";
 import { nFormatter } from "../../share";
+import { useGetStylesTheme } from "../../share/customHooks";
 
 ChartJS.register(
   LinearScale,
@@ -152,61 +153,64 @@ const HeroCharWinrate = ({
   winGameVersions: Win[];
   hero: Hero;
 }) => {
+  const { styles } = useGetStylesTheme();
   const gameVersions = useAppSelector((state) => state.globalData.gameVersions);
   const [wrChart, setWrChart] = useState<{
     datasets: any;
   }>();
   const [wrAverage, setWrAverage] = useState<number>(0);
-  const options: ChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: false,
-      },
-      title: {
-        display: false,
-      },
-      tooltip: {
-        mode: "index",
-        intersect: false,
-        displayColors: false,
-        enabled: false,
-        external: externalTooltipHandler,
-      },
-    },
-    hover: {
-      mode: "nearest",
-      intersect: false,
-    },
-    maintainAspectRatio: false,
-    scales: {
-      x: {
-        ticks: {
-          color: (c: any) => {
-            if (isNaN(Number(c["tick"]["label"]))) return "gray";
-            else return "white";
-          },
-        },
-        grid: {
-          color: "rgba(107, 107, 107, 0.5)",
-          tickLength: 0,
-        },
-      } as any,
-      y: {
-        ticks: {
-          stepSize: 10,
+  const options: ChartOptions = useMemo(() => {
+    return {
+      responsive: true,
+      plugins: {
+        legend: {
           display: false,
         },
-        suggestedMin: 49,
-        suggestedMax: 51,
-        weight: 10,
-        grid: {
-          color: "rgba(107, 107, 107, 0.5)",
-          tickLength: 0,
+        title: {
+          display: false,
+        },
+        tooltip: {
+          mode: "index",
+          intersect: false,
+          displayColors: false,
+          enabled: false,
+          external: externalTooltipHandler,
         },
       },
-    },
-  };
+      hover: {
+        mode: "nearest",
+        intersect: false,
+      },
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          ticks: {
+            color: (c: any) => {
+              if (isNaN(Number(c["tick"]["label"]))) return "gray";
+              else return styles.tick;
+            },
+          },
+          grid: {
+            color: "rgba(107, 107, 107, 0.5)",
+            tickLength: 0,
+          },
+        } as any,
+        y: {
+          ticks: {
+            stepSize: 10,
+            display: false,
+          },
+          suggestedMin: 49,
+          suggestedMax: 51,
+          weight: 10,
+          grid: {
+            color: "rgba(107, 107, 107, 0.5)",
+            tickLength: 0,
+          },
+        },
+      },
+    };
+  }, [styles]);
 
   const extendPlugin = {
     id: "beforeDraw",
@@ -322,7 +326,7 @@ const HeroCharWinrate = ({
   return (
     <>
       {wrChart && (
-        <div className="w-full p-2 rounded-md bg-layer-dark">
+        <div className="w-full p-2 rounded-md bg-layer-light dark:bg-layer-dark">
           <div className="flex items-center">
             <h6 className="text-xl font-bold">Win Rate</h6>
             <span className="ml-2 text-xl text-green-500 font-bold">

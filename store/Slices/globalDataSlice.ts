@@ -1,13 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { REHYDRATE } from "redux-persist";
 import { AbilityDetail, Hero } from "../../interfaces/heroes";
 import { GlobalData } from "../../interfaces/state";
 import stratsApiService from "../../services/stratsApi.service";
-import { RootState } from "../store";
 import { Item } from "../../interfaces/item";
 import { GameVersion } from "../../interfaces/gameVersion";
-import { heroes, items } from "../../share/data";
-import { regionsData, talentsData, versionData } from "../../share/talentsData";
+import { talentsData } from "../../share/talentsData";
 import { ReactNode } from "react";
 import { Region } from "../../interfaces/region";
 

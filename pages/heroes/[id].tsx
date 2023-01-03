@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Error from "next/error";
 import { ReactElement } from "react";
-import { MoonLoader } from "react-spinners";
 import HeroIntro from "../../components/Hero/HeroIntro";
 import Layout from "../../components/Layout";
 import { Hero, HeroMain } from "../../interfaces/heroes";
@@ -29,6 +28,7 @@ import {
   setHeaderImg,
   setSubHeaderMain,
 } from "../../store/Slices/globalDataSlice";
+import OptionLoading from "../../components/OptionLoading";
 
 type Props = {
   heroOverView: {
@@ -84,7 +84,7 @@ const HeroesPage: NextPageWithLayout<Props> = (props) => {
         }
         setLoading(true);
         stratsApiService
-          .getHeroInfo(Number(id), brackets)
+          .getHeroInfo(Number(id), rankBracketHeroTimeDetail, brackets)
           .then((res) => {
             if (isApiSubcribed) {
               const data = res.data.data as HeroMain;
@@ -113,7 +113,6 @@ const HeroesPage: NextPageWithLayout<Props> = (props) => {
   if (!props.heroOverView) {
     return <Error statusCode={500} />;
   }
-
   return (
     <>
       <Head>
@@ -123,11 +122,7 @@ const HeroesPage: NextPageWithLayout<Props> = (props) => {
       <section>
         <div className="container m-auto mt-5">
           <OptionsRank />
-          {loading && (
-            <div className="py-10 flex justify-center items-center">
-              <MoonLoader color="#fff" size={40} />
-            </div>
-          )}
+          {loading && <OptionLoading />}
           {hero && mainData && !loading && (
             <>
               <div className="my-4 flex flex-wrap -ml-2 -mr-2">
@@ -205,7 +200,11 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     } else {
       brackets.push("IMMORTAL");
     }
-    const res = await stratsApiService.getHeroInfo(id, brackets);
+    const res = await stratsApiService.getHeroInfo(
+      id,
+      rankBracketHeroTimeDetail,
+      brackets
+    );
     if (res.status !== 200) {
       return {
         props: {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Hero } from "../../interfaces/heroes";
 import { useAppSelector } from "../../store";
-import _ from "lodash";
+import forEach from "lodash/forEach";
 import HeroesType from "./HeroesType";
 import { AiOutlineClose, AiOutlineSearch } from "react-icons/ai";
 type HeroPageAll = {
@@ -23,8 +23,7 @@ const Heroes = () => {
       agi: [],
       int: [],
     };
-    _.forEach(heroes, (hero: Hero) => {
-      const { id } = hero;
+    forEach(heroes, (hero: Hero) => {
       const { stats } = hero;
       if (stats?.primaryAttribute === "str") {
         heroAll.str.push(hero);

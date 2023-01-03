@@ -1,16 +1,14 @@
-import _ from "lodash";
+import forEach from "lodash/forEach";
+import moment from "moment";
+import Link from "next/link";
 import React, { useMemo, useState } from "react";
 import { CircleLoader } from "react-spinners";
 import { Match } from "../../interfaces/compos";
 import openDotaApiService from "../../services/openDotaApi.service";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { clear } from "../../store/Slices/composSlice";
-import { getDetaiHero } from "../../share/ultils";
-import MyImage from "../MyImage";
 import HeroIcon from "../HeroIcon";
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
-import moment from "moment";
-import Link from "next/link";
 
 const SearchMatches = () => {
   const dispatch = useAppDispatch();
@@ -28,10 +26,10 @@ const SearchMatches = () => {
   const handleSearch = (): void => {
     if (!checkValidSearch || loading) return;
     let params = new URLSearchParams();
-    _.forEach(radiants, (hero) => {
+    forEach(radiants, (hero) => {
       params.append("teamA", String(hero.id));
     });
-    _.forEach(dires, (hero) => {
+    forEach(dires, (hero) => {
       params.append("teamB", String(hero.id));
     });
     setLoading(true);

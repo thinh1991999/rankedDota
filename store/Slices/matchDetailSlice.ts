@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { MatchDetailData } from "../../interfaces/state";
-import _, { isInteger } from "lodash";
+import range from "lodash/range";
+import isInteger from "lodash/isInteger";
+
 import { MatchDetail } from "../../interfaces/matches";
 import moment from "moment";
 import stratsApiService from "../../services/stratsApi.service";
@@ -38,7 +40,7 @@ export const matchDetailSlice = createSlice({
       const { durationSeconds } = action.payload;
       const arr: number[] = [];
       const timeUtc = moment.duration(durationSeconds * 1000).asMinutes();
-      _.range(timeUtc).forEach((item) => {
+      range(timeUtc).forEach((item) => {
         arr.push(item);
       });
       if (!isInteger(timeUtc)) arr.push(timeUtc);
@@ -69,7 +71,7 @@ export const matchDetailSlice = createSlice({
         const { durationSeconds } = action.payload;
         const arr: number[] = [];
         const timeUtc = moment.duration(durationSeconds * 1000).asMinutes();
-        _.range(timeUtc).forEach((item) => {
+        range(timeUtc).forEach((item) => {
           arr.push(item);
         });
         if (!isInteger(timeUtc)) arr.push(timeUtc);

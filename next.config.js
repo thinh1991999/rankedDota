@@ -15,6 +15,12 @@ module.exports = {
     // config.plugins.push(new webpack.IgnorePlugin(/\/__tests__\//));
 
     // Important: return the modified config
+    config.resolve.extensions = [".mjs", ".js", ".jsx", ".json"];
     return config;
   },
 };
+
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+});
+module.exports = withBundleAnalyzer({ reactStrictMode: true });

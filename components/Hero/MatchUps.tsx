@@ -145,7 +145,7 @@ const MatchUps = ({
     setTotalMatch(total);
   }, [heroVsHeroMatchup, currentNav]);
   return (
-    <div className="p-2 h-full flex flex-col bg-layer-dark rounded-md">
+    <div className="p-2 h-full flex flex-col bg-layer-light dark:bg-layer-dark rounded-md">
       <div className="flex justify-between">
         <h6 className="text-xl font-bold">Matchups</h6>
         <ul className="flex items-center ">
@@ -156,13 +156,13 @@ const MatchUps = ({
                 onClick={() => setCurrentNav(idx)}
                 className={`${
                   idx === currentNav
-                    ? "bg-gray-800 border-gray-400"
-                    : "bg-gray-700 opacity-40"
+                    ? "dark:bg-layerStrong-dark bg-layerStrong-light border-gray-400"
+                    : "dark:bg-button-dark bg-button-light opacity-40"
                 } ${
                   idx === 0
                     ? "rounded-tl-2xl rounded-bl-2xl"
                     : "rounded-tr-2xl rounded-br-2xl"
-                } hover:bg-gray-800 hover:opacity-100 border px-[15px] py-[3px] capitalize text-sm cursor-pointer`}
+                } dark:hover:bg-layerStrong-dark hover:bg-layerStrong-light hover:opacity-100 border px-[15px] py-[3px] capitalize text-sm cursor-pointer`}
               >
                 {nav}
               </li>

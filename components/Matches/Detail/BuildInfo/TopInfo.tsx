@@ -87,37 +87,40 @@ const TopInfo = ({
     setAbiFull(abiFull);
   }, [topInfo, abilitiesData]);
 
-  // const { heroId, name, abilities } = topInfo;
-
   return (
-    <section className="flex items-center justify-between w-full">
-      <div className="w-[250px] flex items-center">
-        <div className="w-[68px]">
-          <MyImage
-            src={imgInfo.img}
-            height="40px"
-            width="68px"
-            alt={imgInfo.name || ""}
-            borderRadius={6}
-          />
+    <>
+      <div className="flex items-center justify-between w-full">
+        <div className="w-[250px] flex items-center">
+          <div className="w-[68px]">
+            <MyImage
+              src={imgInfo.img}
+              height="40px"
+              width="68px"
+              alt={imgInfo.name || ""}
+              borderRadius={6}
+            />
+          </div>
+          <div className="ml-2 flex-1">
+            {/* <h6 className="one-line-max">{name}</h6> */}
+            <span>3-1-1 build</span>
+          </div>
         </div>
-        <div className="ml-2 flex-1">
-          {/* <h6 className="one-line-max">{name}</h6> */}
-          <span>3-1-1 build</span>
+        <div className="flex-1 flex items-center justify-end">
+          <div className="xl:block hidden flex-1">
+            <Abilities abiFull={abiFull} />
+          </div>
+          <div className="w-[36px]">
+            <Talent
+              idHero={topInfo.heroId}
+              talentInfo={talentInfo ? talentInfo : null}
+            />
+          </div>
         </div>
       </div>
-      <div className="flex-1 flex items-center justify-end">
-        <div className="">
-          <Abilities abiFull={abiFull} />
-        </div>
-        <div className="w-[36px]">
-          <Talent
-            idHero={topInfo.heroId}
-            talentInfo={talentInfo ? talentInfo : null}
-          />
-        </div>
+      <div className="xl:hidden w-full mt-2">
+        <Abilities abiFull={abiFull} />
       </div>
-    </section>
+    </>
   );
 };
 

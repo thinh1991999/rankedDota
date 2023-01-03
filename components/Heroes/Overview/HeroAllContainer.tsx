@@ -1,4 +1,5 @@
-import _ from "lodash";
+import filter from "lodash/filter";
+import forEach from "lodash/forEach";
 import React, { useState, useEffect } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { Hero, HeroesStatus, HeroStatus } from "../../../interfaces/heroes";
@@ -25,7 +26,7 @@ const HeroAllContainer = ({ heroesStatus }: { heroesStatus: HeroesStatus }) => {
   const [searchMeta, setSearchMeta] = useState<boolean>(false);
   useEffect(() => {
     const getCountMatch = (arr: HeroStatus[], id: number): number => {
-      const filterHero = _.filter(POSITION_1, (item) => item.heroId === id);
+      const filterHero = filter(POSITION_1, (item) => item.heroId === id);
       return filterHero.length > 0 ? filterHero[0].matchCount : 0;
     };
     const heroAll: HeroPageAll = {
@@ -36,7 +37,7 @@ const HeroAllContainer = ({ heroesStatus }: { heroesStatus: HeroesStatus }) => {
     const metaArr: number[] = [];
     const { POSITION_1, POSITION_2, POSITION_3, POSITION_4, POSITION_5 } =
       heroesStatus;
-    _.forEach(heroes, (hero: Hero) => {
+    forEach(heroes, (hero: Hero) => {
       const { id } = hero;
       let countMatch: number = 0;
       countMatch += getCountMatch(POSITION_1, id);

@@ -1,5 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import _ from "lodash";
+import forEach from "lodash/forEach";
+import orderBy from "lodash/orderBy";
+import findIndex from "lodash/findIndex";
+import findLastIndex from "lodash/findLastIndex";
+
 import {
   HeroesMetaTrends,
   HeroTrends,
@@ -30,7 +34,7 @@ const getSort = (
   type: SortedType,
   status: boolean
 ): HeroTrends[] => {
-  return _.orderBy(
+  return orderBy(
     arr,
     (a) => {
       const {
@@ -81,9 +85,9 @@ const calculateInfo = (
     count: number;
   }[] = [];
   let maxPr = 0;
-  _.forEach(winDay, (win) => {
+  forEach(winDay, (win) => {
     const { matchCount, timestamp } = win;
-    const checkIdx = _.findIndex(
+    const checkIdx = findIndex(
       totalMatches,
       (total) => total.time === timestamp
     );
@@ -102,10 +106,10 @@ const calculateInfo = (
       totalMatches[checkIdx].count += matchCount;
     }
   });
-  _.forEach(winDay, (win) => {
+  forEach(winDay, (win) => {
     const { heroId, matchCount, winCount, gameVersionId, timestamp } = win;
     if (!timestamp) return;
-    const matchesTimeIdx = _.findIndex(
+    const matchesTimeIdx = findIndex(
       totalMatches,
       (total) => total.time === timestamp
     );
@@ -123,7 +127,7 @@ const calculateInfo = (
       matchCount: matchCount,
       wr: (winCount * 100) / matchCount,
     };
-    const checkIdx = _.findIndex(heroes, (hero) => hero.id === heroId);
+    const checkIdx = findIndex(heroes, (hero) => hero.id === heroId);
     if (checkIdx === -1) {
       heroes.push({
         id: heroId,
@@ -136,12 +140,12 @@ const calculateInfo = (
         matches: matchCount,
       });
     } else {
-      const lastIdxWr = _.findLastIndex(
+      const lastIdxWr = findLastIndex(
         heroes[checkIdx].winRate.data,
         (d) => d.time <= timestamp
       );
       heroes[checkIdx].winRate.data.splice(lastIdxWr + 1, 0, wrValue);
-      const lastIdxPr = _.findLastIndex(
+      const lastIdxPr = findLastIndex(
         heroes[checkIdx].pickRate.data,
         (d) => d.time <= timestamp
       );
@@ -163,10 +167,10 @@ const calculateInfo = (
     id: number;
     count: number;
   }[] = [];
-  _.forEach(winGameVersion, (win) => {
+  forEach(winGameVersion, (win) => {
     const { matchCount, gameVersionId } = win;
     if (!gameVersionId) return;
-    const idxCheck = _.findIndex(
+    const idxCheck = findIndex(
       versionMatches,
       (version) => version.id === gameVersionId
     );
@@ -179,11 +183,11 @@ const calculateInfo = (
       versionMatches[idxCheck].count += matchCount;
     }
   });
-  _.forEach(winGameVersion, (win) => {
+  forEach(winGameVersion, (win) => {
     const { heroId, matchCount, winCount, gameVersionId, timestamp } = win;
     if (!gameVersionId) return;
-    const idxCheck = _.findIndex(arrVersions, (a) => a.id === heroId);
-    const idxVersion = _.findIndex(
+    const idxCheck = findIndex(arrVersions, (a) => a.id === heroId);
+    const idxVersion = findIndex(
       versionMatches,
       (version) => version.id === gameVersionId
     );
@@ -203,8 +207,8 @@ const calculateInfo = (
       arrVersions[idxCheck].winGameVersion?.push(value);
     }
   });
-  _.forEach(heroes, (heroes) => {
-    const idx = _.findIndex(arrVersions, (a) => a.id === heroes.id);
+  forEach(heroes, (heroes) => {
+    const idx = findIndex(arrVersions, (a) => a.id === heroes.id);
     if (idx !== -1) {
       heroes.winGameVersion = arrVersions[idx].winGameVersion;
     }

@@ -166,7 +166,7 @@ const RolesStatus = ({ stats }: { stats: HeroStats }) => {
         const { name, icon } = getTypeOfHero(type);
         return (
           <div className="p-2 xl:px-2 xl:m-0 xl:w-1/5 w-full" key={type}>
-            <div className="p-2 bg-layer-dark rounded-md">
+            <div className="p-2 bg-layer-light dark:bg-layer-dark rounded-md">
               <div className="flex items-center">
                 <MyImage src={icon} width="20px" height="20px" alt={name} />
                 <h6 className="font-bold ml-2">{name}</h6>

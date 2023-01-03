@@ -1,7 +1,6 @@
 import _ from "lodash";
-import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { heroRankOptions } from "../../share";
 
@@ -46,7 +45,7 @@ const OptionsRank = () => {
   return (
     <section className="relative inline-block">
       <div
-        className="cursor-pointer flex items-center border border-borderSecondary-dark rounded-md bg-layer-dark"
+        className="cursor-pointer flex items-center border border-borderSecondary-dark rounded-md bg-navBg-light dark:bg-navBg-dark"
         onClick={() => setShow(!show)}
       >
         <span className="px-2">{title}</span>
@@ -55,13 +54,13 @@ const OptionsRank = () => {
         </div>
       </div>
       {show && (
-        <ul className="absolute min-w-[250px] z-50 top-[calc(100%_+_10px)] left-0 whitespace-nowrap p-2 rounded-md border border-borderSecondary-dark bg-stone-700">
+        <ul className="absolute min-w-[250px] z-50 top-[calc(100%_+_10px)] left-0 whitespace-nowrap p-2 rounded-md border border-borderSecondary-dark bg-navBg-light dark:bg-navBg-dark">
           {heroRankOptions.map((option) => {
             const { title, query } = option;
             return (
               <li
                 key={query}
-                className="cursor-pointer px-3 py-2 rounded-md hover:bg-layerStrong-dark"
+                className="cursor-pointer px-3 py-2 rounded-md hover:bg-layer-light dark:hover:bg-layer-dark"
                 onClick={() => handleForward(option)}
               >
                 {title}

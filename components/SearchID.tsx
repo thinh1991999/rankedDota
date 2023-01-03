@@ -16,7 +16,7 @@ function SearchID() {
 
   return (
     <form
-      className="rounded-md border-2 px-2 py-3 flex items-center w-[350px] focus-within:border-blue-800"
+      className="rounded-md border-2 px-2 py-3 flex items-center w-[300px] md:w-[350px] focus-within:border-blue-800"
       onSubmit={handleSubmit}
     >
       <div className="">

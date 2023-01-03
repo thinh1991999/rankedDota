@@ -230,7 +230,7 @@ const Draft = () => {
             })
           : (direBan[playerIndex - 5] = {
               ...pickBan,
-              name: players[playerIndex].steamAccount.name,
+              name: players[playerIndex]?.steamAccount.name || "",
             });
       }
       if (isPick) {
@@ -256,14 +256,14 @@ const Draft = () => {
       <div className="p-2">
         <h5>Draft</h5>
         <div className="flex flex-wrap -ml-2 -mr-2">
-          <div className="p-2 ">
+          <div className="p-2 lg:w-auto w-full">
             <div className="bg-layerSecondary-light dark:bg-layerSecondary-dark rounded-md p-2">
               <h6 className="text-sm">Player bans</h6>
               {bans?.radiant && <BanRow isRadiant={true} bans={bans.radiant} />}
               {bans?.dire && <BanRow isRadiant={false} bans={bans.dire} />}
             </div>
           </div>
-          <div className="p-2">
+          <div className="p-2 lg:w-auto w-full">
             <div className="bg-layerSecondary-light dark:bg-layerSecondary-dark rounded-md p-2">
               <PickPhase
                 index={1}
@@ -272,7 +272,7 @@ const Draft = () => {
               />
             </div>
           </div>
-          <div className="p-2">
+          <div className="p-2 lg:w-auto w-full">
             <div className="bg-layerSecondary-light dark:bg-layerSecondary-dark rounded-md p-2">
               <PickPhase
                 index={2}
@@ -281,7 +281,7 @@ const Draft = () => {
               />
             </div>
           </div>
-          <div className="p-2">
+          <div className="p-2 lg:w-auto w-full">
             <div className="bg-layerSecondary-light dark:bg-layerSecondary-dark rounded-md p-2">
               <PickPhase
                 index={3}

@@ -1,11 +1,13 @@
+import dynamic from "next/dynamic";
 import React from "react";
-import { HeroesStatus } from "../../interfaces/heroes";
 import Heroes from "./Heroes";
-import { useAppSelector } from "../../store/hook";
 import SearchMatch from "./SearchMatch";
-import SearchMatches from "./SearchMatches";
 
-const ComposContainer = ({ heroesStatus }: { heroesStatus: HeroesStatus }) => {
+const SearchMatches = dynamic(() => import("./SearchMatches"), {
+  ssr: false,
+});
+
+const ComposContainer = () => {
   return (
     <div>
       <Heroes />

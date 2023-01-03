@@ -1,6 +1,6 @@
 import { useTheme } from "next-themes";
 import Router, { useRouter } from "next/router";
-import react, { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { StylesConfig } from "react-select";
 import { useAppSelector } from "../store";
 import { useAppDispatch } from "../store/hook";
@@ -194,4 +194,55 @@ export const useGetStylesTheme = () => {
     }
   }, [theme]);
   return { styles };
+};
+
+export const useModal = () => {
+  const [show, setShow] = useState(false);
+  const toggle = () => {
+    setShow(!show);
+  };
+  return {
+    show,
+    toggle,
+  };
+};
+
+export const useResizeList = (baseShow: number) => {
+  const parent = useRef<HTMLDivElement>(null);
+  const [show, setShow] = useState(baseShow);
+  const [hide, setHide] = useState(0);
+
+  useEffect(() => {
+    const resizeEvent = () => {
+      if (!parent.current) return;
+      const { children, scrollWidth } = parent.current;
+      let sizeChild = 0;
+      if (children.length > 0) sizeChild = children[0].clientWidth;
+      if (scrollWidth < sizeChild * 2) {
+        setHide(baseShow);
+        setShow(0);
+        return;
+      }
+      const showCal = Math.floor(scrollWidth / sizeChild);
+      const count = children.length - showCal;
+      if (count > 0) {
+        setHide(count + 1);
+        setShow(showCal - 1);
+      } else {
+        setShow(baseShow);
+        setHide(0);
+      }
+    };
+    resizeEvent();
+    window.addEventListener("resize", resizeEvent);
+    return () => {
+      window.removeEventListener("resize", resizeEvent);
+    };
+  }, [baseShow]);
+
+  return {
+    parent,
+    show,
+    hide,
+  };
 };
