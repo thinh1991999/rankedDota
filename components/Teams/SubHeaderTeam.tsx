@@ -1,4 +1,5 @@
 import React from "react";
+import Head from "next/head";
 import { TeamHeader } from "../../interfaces/teamsPage";
 import MyImage from "../MyImage";
 import { getImgStratsDota } from "../../share/ultils";
@@ -22,6 +23,9 @@ const SubHeader = ({ team: teamInfo }: { team: TeamHeader }) => {
   const img = getImgStratsDota("/teams/" + id + ".png");
   return (
     <>
+      <Head>
+        <title>{name}</title>
+      </Head>
       <div className="border-b  border-borderTender-dark">
         <div className="container flex xl:flex-row flex-col items-center xl:justify-start py-5 ">
           <div className="p-5 bg-layer-dark rounded-md">

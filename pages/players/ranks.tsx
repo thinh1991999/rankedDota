@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { ReactElement } from "react";
+import Head from "next/head";
 import { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
 import Error from "next/error";
@@ -43,12 +44,17 @@ const RanksPage: NextPageWithLayout<Props> = (props) => {
   }
 
   return (
-    <div className="container m-auto">
-      <Chart stratz={props.stratz} />
-      <div className="mt-5">
-        <RankInfor stratz={props.stratz} />
+    <>
+      <Head>
+        <title>Players-Ranks</title>
+      </Head>
+      <div className="container m-auto">
+        <Chart stratz={props.stratz} />
+        <div className="mt-5">
+          <RankInfor stratz={props.stratz} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 // subHeader={<PlayersSubHeader />} imgSrc="/playersBg.jpg"

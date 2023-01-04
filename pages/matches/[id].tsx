@@ -1,6 +1,7 @@
 import { GetServerSideProps } from "next";
 import dynamic from "next/dynamic";
 import React, { ReactElement, useEffect, useState } from "react";
+import Head from "next/head";
 import Error from "next/error";
 import Layout from "../../components/Layout";
 import TimeSeek from "../../components/Matches/Detail/TimeSeek";
@@ -92,32 +93,37 @@ const MatchPage: NextPageWithLayout<Props> = (props) => {
     );
   }
   return (
-    <section>
-      {loading ? (
-        <p>loading</p>
-      ) : errMess ? (
-        <ErrorMess errMess={errMess} />
-      ) : (
-        <div className="container m-auto">
-          <div className="my-4">
-            <Matchup />
+    <>
+      <Head>
+        <title>Matches-{props.match.id}</title>
+      </Head>
+      <section>
+        {loading ? (
+          <p>loading</p>
+        ) : errMess ? (
+          <ErrorMess errMess={errMess} />
+        ) : (
+          <div className="container m-auto">
+            <div className="my-4">
+              <Matchup />
+            </div>
+            <div className="my-4">
+              <Status />
+            </div>
+            <div className="my-4">
+              <Draft />
+            </div>
+            <div className="my-4">
+              <BuildInfo />
+            </div>
+            <div className="my-4">
+              <KillBreakdown />
+            </div>
+            <TimeSeek />
           </div>
-          <div className="my-4">
-            <Status />
-          </div>
-          <div className="my-4">
-            <Draft />
-          </div>
-          <div className="my-4">
-            <BuildInfo />
-          </div>
-          <div className="my-4">
-            <KillBreakdown />
-          </div>
-          <TimeSeek />
-        </div>
-      )}
-    </section>
+        )}
+      </section>
+    </>
   );
 };
 

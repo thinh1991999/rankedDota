@@ -1,8 +1,6 @@
 import React, { ReactNode, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
-import Head from "next/head";
-
 import { useAppDispatch } from "../store/hook";
 import { setIsTransparentHeader } from "../store/Slices/globalDataSlice";
 
@@ -54,13 +52,6 @@ function Layout({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <Head>
-        <meta
-          name="viewport"
-          content="width=device-width, minimum-scale=1.0, maximum-scale=1.0"
-        />
-        <link rel="icon" href="/lightLogo.png"></link>
-      </Head>
       <div
         ref={mainRef}
         id="main"

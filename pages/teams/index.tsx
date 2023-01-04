@@ -1,5 +1,6 @@
 import { GetStaticProps } from "next";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 import Error from "next/error";
 import React, { ReactElement, useEffect } from "react";
 import Layout from "../../components/Layout";
@@ -37,9 +38,14 @@ const TeamsPage: NextPageWithLayout<Props> = (props) => {
     return <Error statusCode={props.statusCode} />;
   }
   return (
-    <section className="container m-auto">
-      <TeamsMain teams={props.teams} />
-    </section>
+    <>
+      <Head>
+        <title>Teams</title>
+      </Head>
+      <section className="container m-auto">
+        <TeamsMain teams={props.teams} />
+      </section>
+    </>
   );
 };
 

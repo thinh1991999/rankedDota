@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 import { ReactElement } from "react";
 import { GetServerSideProps } from "next";
 import Layout from "../../components/Layout";
@@ -40,9 +41,14 @@ const QueuePage: NextPageWithLayout<Props> = (props) => {
     return <Error statusCode={props.statusCode} />;
   }
   return (
-    <div className="container m-auto">
-      <QueueChart matches={props.matches} />
-    </div>
+    <>
+      <Head>
+        <title>Players-Queue</title>
+      </Head>
+      <div className="container m-auto">
+        <QueueChart matches={props.matches} />
+      </div>
+    </>
   );
 };
 
