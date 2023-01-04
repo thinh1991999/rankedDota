@@ -1,6 +1,7 @@
 import React from "react";
 import { ReactElement, useEffect } from "react";
 import { GetStaticProps } from "next";
+import Error from "next/error";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { HeroesStatus } from "../../interfaces/heroes";
@@ -33,16 +34,24 @@ const HeroAllContainer = dynamic(
 );
 
 type Props = {
-  heroesStatus: HeroesStatus;
+  heroesStatus: HeroesStatus | null;
+  statusCode: number;
 };
 
 const HeroesPage: NextPageWithLayout<Props> = (props) => {
-  const { heroesStatus } = props;
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(setSubHeaderMain(<HeroesSubHeader />));
     dispatch(setHeaderImg("/card1.jpg"));
   }, [dispatch]);
+  if (props.statusCode !== 200) {
+    return <Error statusCode={props.statusCode} />;
+  }
+
+  if (!props.heroesStatus) {
+    return <Error statusCode={500} />;
+  }
+  const { heroesStatus } = props;
   return (
     <>
       <Head>
@@ -63,14 +72,32 @@ HeroesPage.getLayout = function getLayout(page: ReactElement) {
   return <Layout>{page}</Layout>;
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-  const res = await stratsApiService.getHeroStats();
-  const heroesStatus: HeroesStatus = res.data.data.heroStats;
-  return {
-    props: {
-      heroesStatus,
-    },
-  };
+export const getStaticProps: GetStaticProps<Props> = async () => {
+  try {
+    const res = await stratsApiService.getHeroStats();
+    if (res.status !== 200) {
+      return {
+        props: {
+          heroesStatus: null,
+          statusCode: res.status,
+        },
+      };
+    }
+    const heroesStatus: HeroesStatus = res.data.data.heroStats;
+    return {
+      props: {
+        heroesStatus,
+        statusCode: 200,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        heroesStatus: null,
+        statusCode: 500,
+      },
+    };
+  }
 };
 
 export default HeroesPage;
