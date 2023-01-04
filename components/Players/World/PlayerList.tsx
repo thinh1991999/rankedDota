@@ -1,30 +1,23 @@
 import React, { useEffect, useState } from "react";
-import {
-  AiFillHeart,
-  AiOutlineDown,
-  AiOutlineHeart,
-  AiOutlineUp,
-} from "react-icons/ai";
+import dynamic from "next/dynamic";
+import { AiOutlineDown, AiOutlineHeart, AiOutlineUp } from "react-icons/ai";
 import { ClipLoader } from "react-spinners";
 import InfiniteScroll from "react-infinite-scroll-component";
-import _ from "lodash";
 import uniqid from "uniqid";
 
 import { getFlagImgLink, getTypeOfHero } from "../../../share";
 import { useAppSelector } from "../../../store";
 import IconTypeRole from "../../IconTypeRole";
 import MyImage from "../../MyImage";
-import ToolTip from "../../ToolTip";
-import { PlayerSeason, Season } from "../../../interfaces/players";
+import { PlayerSeason } from "../../../interfaces/players";
 import RankIcon from "../../RankIcon";
 import stratsApiService from "../../../services/stratsApi.service";
 import { useAppDispatch } from "../../../store/hook";
-import {
-  loadMorePlayers,
-  setSeason,
-} from "../../../store/Slices/playersLeaderboardSlice";
+import { loadMorePlayers } from "../../../store/Slices/playersLeaderboardSlice";
 import { useRouter } from "next/router";
 import { useGetStylesTheme } from "../../../share/customHooks";
+
+const ToolTip = dynamic(() => import("../../ToolTip"), { ssr: false });
 
 const Row = ({ s }: { s: PlayerSeason }) => {
   const {

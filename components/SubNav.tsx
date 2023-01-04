@@ -1,21 +1,14 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import _ from "lodash";
+import forEach from "lodash/forEach";
 import Dropdown from "rc-dropdown";
 import React, { useMemo } from "react";
 import { AiOutlineDown, AiOutlineRight } from "react-icons/ai";
-import { HeaderNav } from "../share/navData";
+import { getFixLinkPath } from "../share/ultils";
+import { HeaderNav } from "../share/data";
 
 const SubNav = ({ navs }: { navs: HeaderNav[] }) => {
   const { pathname } = useRouter();
-  const getFixLinkPath = (path: string) => {
-    const idx = path.indexOf("?");
-    if (idx !== -1) {
-      return path.substring(0, idx);
-    }
-    return path;
-  };
-
   const pathCurr = useMemo((): {
     main: HeaderNav | null;
     child: HeaderNav | null;
@@ -33,7 +26,7 @@ const SubNav = ({ navs }: { navs: HeaderNav[] }) => {
           }
         } else {
           let checked = false;
-          _.forEach(childs, (navChild) => {
+          forEach(childs, (navChild) => {
             const { hint } = navChild;
             if (hint === linkFix) {
               finalNav = arr[i];

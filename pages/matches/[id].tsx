@@ -1,16 +1,9 @@
 import { GetServerSideProps } from "next";
-import React, { ReactElement, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import React, { ReactElement, useEffect, useState } from "react";
+import Error from "next/error";
 import Layout from "../../components/Layout";
-import {
-  Status,
-  Matchup,
-  TimeSeek,
-  Draft,
-  BuildInfo,
-  KillBreakdown,
-  HeadInfo,
-  MatchDetailSubHeader,
-} from "../../components/Matches";
+import TimeSeek from "../../components/Matches/Detail/TimeSeek";
 import stratsApiService from "../../services/stratsApi.service";
 import { NextPageWithLayout } from "../_app";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
@@ -20,13 +13,40 @@ import {
   setMatchDetail,
 } from "../../store/Slices/matchDetailSlice";
 import { MatchDetail } from "../../interfaces/matches";
-import Error from "next/error";
-import { useDispatch } from "react-redux";
 import ErrorMess from "../../components/ErrorMess";
 import {
   setHeaderImg,
   setSubHeaderMain,
 } from "../../store/Slices/globalDataSlice";
+
+const Matchup = dynamic(
+  () => import("../../components/Matches/Detail/Matchup/Matchup"),
+  { ssr: false }
+);
+
+const Draft = dynamic(() => import("../../components/Matches/Detail/Draft"), {
+  ssr: false,
+});
+
+const BuildInfo = dynamic(
+  () => import("../../components/Matches/Detail/BuildInfo/BuildInfo"),
+  { ssr: false }
+);
+
+const KillBreakdown = dynamic(
+  () => import("../../components/Matches/Detail/KillBreakdown/KillBreakdown"),
+  { ssr: false }
+);
+
+const Status = dynamic(
+  () => import("../../components/Matches/Detail/Status/Status"),
+  { ssr: false }
+);
+
+const MatchDetailSubHeader = dynamic(
+  () => import("../../components/Matches/Detail/SubHeader"),
+  { ssr: false }
+);
 
 type Props = {
   match: MatchDetail | null;

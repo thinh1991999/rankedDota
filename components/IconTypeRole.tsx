@@ -1,8 +1,12 @@
 import React, { memo } from "react";
+import dynamic from "next/dynamic";
 import uniqid from "uniqid";
-import ToolTip from "./ToolTip";
 import { getTypeOfHero } from "../share/ultils";
 import MyImage from "./MyImage";
+
+const ToolTip = dynamic(() => import("./ToolTip"), {
+  ssr: false,
+});
 
 const IconTypeRole = ({
   role,

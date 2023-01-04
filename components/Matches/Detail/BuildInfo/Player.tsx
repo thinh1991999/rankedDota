@@ -1,4 +1,5 @@
-import _ from "lodash";
+import forEach from "lodash/forEach";
+import findIndex from "lodash/findIndex";
 import React, { useState, useEffect } from "react";
 import { Ability, PlayerMatchDetail } from "../../../../interfaces/matches";
 import { getDetailItem } from "../../../../share";
@@ -46,7 +47,7 @@ const Player = ({ player }: { player: PlayerMatchDetail }) => {
     item4Id && arr.push(item4Id);
     item5Id && arr.push(item5Id);
     const itemsResult: (Item & { time: number })[] = [];
-    _.forEach(itemPurchases, (item) => {
+    forEach(itemPurchases, (item) => {
       const detail = getDetailItem(items, item.itemId);
       if (!detail) return;
       if (detail.stat) {
@@ -55,7 +56,7 @@ const Player = ({ player }: { player: PlayerMatchDetail }) => {
           itemsResult.push({ ...detail, time: item.time });
         }
         if (isSupport && isStackable) {
-          const checkIdx = _.findIndex(
+          const checkIdx = findIndex(
             spItemsResult,
             (item) => item.id === detail.id
           );

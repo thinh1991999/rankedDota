@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import _ from "lodash";
-
+import forEach from "lodash/forEach";
+import orderBy from "lodash/orderBy";
 import MyImage from "../../MyImage";
 import { useAppSelector } from "../../../store/hook";
 import { Hero, HeroesPos } from "../../../interfaces/heroes";
@@ -86,7 +86,7 @@ const Content = () => {
     const getPos = (pos: HeroesPos): Position[] => {
       const result: Position[] = [];
       const { winDay } = pos;
-      _.forEach(winDay, (w) => {
+      forEach(winDay, (w) => {
         const { heroId, matchCount, winCount } = w;
         const herDetail = getDetaiHero(heroes, heroId);
         const wr = (winCount * 100) / matchCount;
@@ -94,7 +94,7 @@ const Content = () => {
           result.push({ hero: herDetail, wr, matches: matchCount });
         }
       });
-      return _.orderBy(result, (r) => r.wr, "desc");
+      return orderBy(result, (r) => r.wr, "desc");
     };
     const { heroesPos1, heroesPos2, heroesPos3, heroesPos4, heroesPos5 } =
       heroesPositions;

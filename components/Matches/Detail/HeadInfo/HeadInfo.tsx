@@ -1,14 +1,13 @@
 import React from "react";
-import { AiOutlineDown, AiOutlineMinus } from "react-icons/ai";
+import { AiOutlineMinus } from "react-icons/ai";
 import { BsCalendar4Week, BsFiles } from "react-icons/bs";
 import moment from "moment";
-import _ from "lodash";
+import sum from "lodash/sum";
 import { DIRE_ICON, getTimeBySeconds, RADIANT_ICON } from "../../../../share";
 import { useAppSelector } from "../../../../store/hook";
 import MyImage from "../../../MyImage";
 import RankIcon from "../../../RankIcon";
 import { getRankName } from "../../../../share/ultils";
-import { mathDetailNav } from "../../../../share/navData";
 
 const HeadInfo = () => {
   const matchDetail = useAppSelector((state) => state.matchDetail.matchDetail);
@@ -76,7 +75,7 @@ const HeadInfo = () => {
           </div>
           <div className="p-2 flex items-center bg-layer-dark rounded-md">
             <div className="rounded-md w-[60px] h-[50px] bg-black text-white flex items-center justify-center">
-              <span className="text-2xl font-bold">{_.sum(radiantKills)}</span>
+              <span className="text-2xl font-bold">{sum(radiantKills)}</span>
             </div>
             <div className="mx-3">
               <span className="text-textMain-dark font-bold">
@@ -84,7 +83,7 @@ const HeadInfo = () => {
               </span>
             </div>
             <div className="rounded-md w-[60px] h-[50px] bg-black text-white flex items-center justify-center">
-              <span className="text-2xl font-bold">{_.sum(direKills)}</span>
+              <span className="text-2xl font-bold">{sum(direKills)}</span>
             </div>
           </div>
           <div

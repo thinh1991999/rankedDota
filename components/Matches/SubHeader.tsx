@@ -1,8 +1,7 @@
 import React from "react";
-import { heroesNavs } from "../../share";
+import { matchesNav } from "../../share/data";
 import MyImage from "../MyImage";
 import SubNav from "../SubNav";
-import { matchesNav } from "../../share/navData";
 
 const SubHeader = () => {
   return (

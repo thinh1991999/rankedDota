@@ -1,34 +1,66 @@
-import _ from "lodash";
 import { GetServerSideProps } from "next";
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Error from "next/error";
 import { ReactElement } from "react";
-import HeroIntro from "../../components/Hero/HeroIntro";
 import Layout from "../../components/Layout";
 import { Hero, HeroMain } from "../../interfaces/heroes";
 import stratsApiService from "../../services/stratsApi.service";
 import { getDetaiHero, getImgStratsDota } from "../../share";
 import { NextPageWithLayout } from "../_app";
-import FeaturedGuides from "../../components/Hero/FeaturedGuides";
-import HeroItems from "../../components/Hero/HeroItems";
-import HeroRampage from "../../components/Hero/HeroRampage";
-import HeroDetailAndLore from "../../components/Hero/HeroDetailAndLore";
-import {
-  ChartPickRate,
-  HeroCharWinrate,
-  MatchUps,
-  OptionsRank,
-  RolesStatus,
-} from "../../components";
-import { LeaderBoards } from "../../components/Hero";
 import { useAppSelector, useAppDispatch } from "../../store/hook";
 import {
   setHeaderImg,
   setSubHeaderMain,
 } from "../../store/Slices/globalDataSlice";
 import OptionLoading from "../../components/OptionLoading";
+
+const HeroCharWinrate = dynamic(
+  () => import("../../components/Hero/HeroCharWinrate"),
+  { ssr: false }
+);
+const ChartPickRate = dynamic(
+  () => import("../../components/Hero/ChartPickRate"),
+  { ssr: false }
+);
+const HeroIntro = dynamic(() => import("../../components/Hero/HeroIntro"), {
+  ssr: false,
+});
+const MatchUps = dynamic(() => import("../../components/Hero/MatchUps"), {
+  ssr: false,
+});
+const OptionsRank = dynamic(() => import("../../components/Hero/OptionsRank"), {
+  ssr: false,
+});
+const RolesStatus = dynamic(() => import("../../components/Hero/RolesStatus"), {
+  ssr: false,
+});
+const LeaderBoards = dynamic(
+  () => import("../../components/Hero/LeaderBoards"),
+  {
+    ssr: false,
+  }
+);
+const FeaturedGuides = dynamic(
+  () => import("../../components/Hero/FeaturedGuides"),
+  {
+    ssr: false,
+  }
+);
+const HeroItems = dynamic(() => import("../../components/Hero/HeroItems"), {
+  ssr: false,
+});
+const HeroRampage = dynamic(() => import("../../components/Hero/HeroRampage"), {
+  ssr: false,
+});
+const HeroDetailAndLore = dynamic(
+  () => import("../../components/Hero/HeroDetailAndLore"),
+  {
+    ssr: false,
+  }
+);
 
 type Props = {
   heroOverView: {
@@ -38,6 +70,8 @@ type Props = {
 };
 
 const HeroesPage: NextPageWithLayout<Props> = (props) => {
+  console.log(props);
+
   const dispatch = useAppDispatch();
   const router = useRouter();
   const heroes = useAppSelector((state) => state.globalData.heroes);
@@ -50,7 +84,12 @@ const HeroesPage: NextPageWithLayout<Props> = (props) => {
   useEffect(() => {
     if (mounted || !props.heroOverView) return;
     setMounted(true);
-    const id = props.heroOverView.heroMain.constants.hero.id;
+    const {
+      heroMain: {
+        constants: { hero },
+      },
+    } = props.heroOverView;
+    const id = props.heroOverView.heroMain.constants.hero?.id;
     const heroo = getDetaiHero(heroes, id);
     if (heroo) {
       setHero(heroo);
@@ -59,6 +98,8 @@ const HeroesPage: NextPageWithLayout<Props> = (props) => {
       dispatch(
         setHeaderImg(getImgStratsDota(`/heroes/${heroo.shortName}_vert.png`))
       );
+    } else {
+      dispatch(setSubHeaderMain(<HeroIntro hero={null} />));
     }
   }, [heroes, dispatch, props, mounted]);
 

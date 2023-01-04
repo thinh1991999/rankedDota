@@ -326,10 +326,11 @@ export const getGradient = (
 };
 
 export function sortRolesTeam<T extends TeamSort>(arr: T[]): T[] {
+  console.log(arr);
   const newArr = new Array<T>(5);
   forEach(arr, (item) => {
     const { role, lane, position } = item;
-    const keyCheck = role ? role : lane ? lane : position;
+    const keyCheck = role ? role : position ? position : lane;
     switch (keyCheck) {
       case "POSITION_1":
         newArr[0] = item;
@@ -368,6 +369,15 @@ export function sortRolesTeam<T extends TeamSort>(arr: T[]): T[] {
     }
   });
   return newArr;
+}
+
+export function getFixLinkPath(path: string | undefined) {
+  if (!path) return path;
+  const idx = path.indexOf("?");
+  if (idx !== -1) {
+    return path.substring(0, idx);
+  }
+  return path;
 }
 
 export const getRankName = (rank: number): string => {

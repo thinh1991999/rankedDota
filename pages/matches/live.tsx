@@ -2,18 +2,26 @@ import React, { ReactElement, useEffect } from "react";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Error from "next/error";
-
+import dynamic from "next/dynamic";
 import Layout from "../../components/Layout";
 import { NextPageWithLayout } from "../_app";
 import stratsApiService from "../../services/stratsApi.service";
 import { MatchLive } from "../../interfaces/matches";
-import { Matches, MatchesSubHeader } from "../../components/Matches";
 import ErrorMess from "../../components/ErrorMess";
 import { useAppDispatch } from "../../store";
 import {
   setHeaderImg,
   setSubHeaderMain,
 } from "../../store/Slices/globalDataSlice";
+
+const Matches = dynamic(() => import("../../components/Matches/Live/Matches"), {
+  ssr: false,
+});
+
+const MatchesSubHeader = dynamic(
+  () => import("../../components/Matches/SubHeader"),
+  { ssr: false }
+);
 
 type Props = {
   matches: MatchLive[] | null;

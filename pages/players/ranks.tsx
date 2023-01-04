@@ -1,17 +1,29 @@
 import React, { useEffect } from "react";
-import Layout from "../../components/Layout";
-import { NextPageWithLayout } from "../_app";
 import { ReactElement } from "react";
 import { GetServerSideProps } from "next";
+import dynamic from "next/dynamic";
+import Error from "next/error";
 import stratsApiService from "../../services/stratsApi.service";
 import { Stratz } from "../../interfaces/players";
-import Error from "next/error";
-import { Chart, PlayersSubHeader, RankInfor } from "../../components/Players";
+import Layout from "../../components/Layout";
+import { NextPageWithLayout } from "../_app";
 import { useAppDispatch } from "../../store";
 import {
   setHeaderImg,
   setSubHeaderMain,
 } from "../../store/Slices/globalDataSlice";
+
+const Chart = dynamic(() => import("../../components/Players/Rank/Chart"), {
+  ssr: false,
+});
+const RankInfor = dynamic(
+  () => import("../../components/Players/Rank/RankInfor"),
+  { ssr: false }
+);
+const PlayersSubHeader = dynamic(
+  () => import("../../components/Players/SubHeader"),
+  { ssr: false }
+);
 
 type Props = {
   stratz: Stratz | null;

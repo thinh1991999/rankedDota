@@ -1,5 +1,5 @@
 import React from "react";
-import { playersNavs } from "../../share";
+import { playersNavs } from "../../share/data";
 import MyImage from "../MyImage";
 import SubNav from "../SubNav";
 

@@ -1,8 +1,7 @@
-import _ from "lodash";
+import forEach from "lodash/forEach";
 import React, { useState, useEffect } from "react";
 import { Talent } from "../../../../interfaces/heroes";
 import { useAppSelector } from "../../../../store";
-import TalentTree from "../../../TalentTree";
 
 const TalentDetail = ({
   idHero,
@@ -25,7 +24,7 @@ const TalentDetail = ({
   });
 
   useEffect(() => {
-    _.forEach(heroes, (hero) => {
+    forEach(heroes, (hero) => {
       if (hero.id === idHero) {
         setTalents(hero.talents);
       }

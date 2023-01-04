@@ -2,9 +2,14 @@ import React from "react";
 import { Hero, Rampage } from "../../interfaces/heroes";
 import { RootState } from "../../store/store";
 import { useAppSelector } from "../../store/hook";
-import FeaturedGuides from "./FeaturedGuides";
 
-const HeroMain = ({ hero, rampages }: { hero: Hero; rampages: Rampage[] }) => {
+const HeroMain = ({
+  hero,
+  rampages = [],
+}: {
+  hero: Hero;
+  rampages: Rampage[];
+}) => {
   const abilitiesData = useAppSelector(
     (state: RootState) => state.globalData.abilitiesData
   );

@@ -1,11 +1,11 @@
 import React from "react";
 import moment from "moment";
-import _ from "lodash";
+import Link from "next/link";
+import filter from "lodash/filter";
 import { Rampage } from "../../interfaces/heroes";
 import MyImage from "../MyImage";
 import HeroIcon from "../HeroIcon";
 import RankIcon from "../RankIcon";
-import Link from "next/link";
 
 const HeroRampage = ({ rampages }: { rampages: Rampage[] }) => {
   return (
@@ -17,7 +17,7 @@ const HeroRampage = ({ rampages }: { rampages: Rampage[] }) => {
             match: { id, rank, endDateTime, players },
             steamAccount: { name, avatar, id: idAccount },
           } = ramgage;
-          const { isRadiant } = _.filter(players, (play) => {
+          const { isRadiant } = filter(players, (play) => {
             return play.steamAccountId === idAccount;
           })[0];
 

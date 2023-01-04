@@ -1,17 +1,21 @@
-import _ from "lodash";
+import forEach from "lodash/forEach";
+import dynamic from "next/dynamic";
+import orderBy from "lodash/orderBy";
 import React, { useEffect, useRef, useState } from "react";
 import { getDetaiHero, getImgStratsDota, nFormatter } from "../../share/ultils";
 import { useAppSelector } from "../../store/hook";
 import {
-  Advantage,
   Hero,
   HeroVsHeroMatchup,
   MatchupDetail,
 } from "../../interfaces/heroes";
 import MyImage from "../MyImage";
-import ToolTip from "../ToolTip";
 import uniqid from "uniqid";
 import HeroIcon from "../HeroIcon";
+
+const ToolTip = dynamic(() => import("../ToolTip"), {
+  ssr: false,
+});
 
 const MatchUp = ({
   matchupsDetail,
@@ -120,7 +124,7 @@ const MatchUps = ({
   useEffect(() => {
     let total = 0;
     const getSort = (arr: MatchupDetail[], type: "desc" | "asc") => {
-      return _.orderBy(
+      return orderBy(
         arr,
         (item) => {
           return item.winCount / item.matchCount;
@@ -129,7 +133,7 @@ const MatchUps = ({
       );
     };
     const { advantage, disadvantage } = heroVsHeroMatchup;
-    _.forEach(advantage[0].vs, (match) => {
+    forEach(advantage[0].vs, (match) => {
       total += match.matchCount;
     });
     const vsAdvantage =

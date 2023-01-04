@@ -1,10 +1,12 @@
 import React from "react";
-import { headerNavs } from "../share/navData";
 import { useAppSelector } from "../store";
 import MyImage from "./MyImage";
 import { useAppDispatch } from "../store/hook";
 import { useRouter } from "next/router";
 import { handleShowNavBarMobile } from "../store/Slices/globalDataSlice";
+import { getFixLinkPath } from "../share/ultils";
+import { forEach } from "lodash";
+import { headerNavs } from "../share/data";
 
 const HeaderMobile = () => {
   const router = useRouter();
@@ -26,11 +28,27 @@ const HeaderMobile = () => {
     >
       <ul className="max-w-[600px] m-auto py-3 px-4">
         {headerNavs.map((nav, idx) => {
-          const { name, link, icon } = nav;
+          const { name, link, hint, icon, childs } = nav;
+          const linkFix = getFixLinkPath(router.pathname);
+          let checkLink = false;
+          if (getFixLinkPath(hint) === linkFix) checkLink = true;
+          if (childs) {
+            forEach(childs, (child) => {
+              console.log(child);
+
+              const { hint } = child;
+              if (getFixLinkPath(hint) === linkFix) {
+                checkLink = true;
+                return false;
+              }
+            });
+          }
           return (
             <li
               key={idx}
-              className="px-2 py-4 hover:bg-layer-dark rounded-md cursor-pointer flex items-center"
+              className={`${
+                checkLink ? "bg-layer-dark" : ""
+              } px-2 py-4 hover:bg-layer-dark rounded-md cursor-pointer flex items-center`}
               onClick={() => handleLink(link)}
             >
               <div className="w-[25px] h-[25px]">

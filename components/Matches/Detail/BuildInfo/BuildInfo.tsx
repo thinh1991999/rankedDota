@@ -1,9 +1,8 @@
-import _ from "lodash";
+import forEach from "lodash/forEach";
 import React, { useEffect, useState } from "react";
 import { PlayerMatchDetail } from "../../../../interfaces/matches";
-import { DIRE_ICON, getTimeBySeconds, RADIANT_ICON } from "../../../../share";
+import { DIRE_ICON, RADIANT_ICON } from "../../../../share";
 import { useAppSelector } from "../../../../store";
-import ItemIcon from "../../../ItemIcon";
 import Player from "./Player";
 import { sortRolesTeam } from "../../../../share/ultils";
 import MyImage from "../../../MyImage";
@@ -19,9 +18,10 @@ const BuildInfo = () => {
     if (!matchDetail) return;
     const arrRadi: PlayerMatchDetail[] = [];
     const arrDire: PlayerMatchDetail[] = [];
-    _.forEach(matchDetail.players, (player) => {
+    forEach(matchDetail.players, (player) => {
       player.isRadiant ? arrRadi.push(player) : arrDire.push(player);
     });
+    console.log(arrRadi);
     setRadiants(sortRolesTeam(arrRadi));
     setDires(sortRolesTeam(arrDire));
   }, [matchDetail]);

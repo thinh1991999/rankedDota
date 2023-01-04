@@ -1,18 +1,36 @@
 import React from "react";
 import { ReactElement, useEffect } from "react";
 import { GetStaticProps } from "next";
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import { HeroesStatus } from "../../interfaces/heroes";
 import stratsApiService from "../../services/stratsApi.service";
-import HeroAllContainer from "../../components/Heroes/Overview/HeroAllContainer";
 import Layout from "../../components/Layout";
 import { NextPageWithLayout } from "../_app";
-import { HeroesSubHeader, HeroHighWR } from "../../components/Heroes";
 import { useAppDispatch } from "../../store/hook";
 import {
   setHeaderImg,
   setSubHeaderMain,
 } from "../../store/Slices/globalDataSlice";
+
+const HeroesSubHeader = dynamic(
+  () => import("../../components/Heroes/SubHeader"),
+  {
+    ssr: false,
+  }
+);
+const HeroHighWR = dynamic(
+  () => import("../../components/Heroes/Overview/HeroHighWR"),
+  {
+    ssr: false,
+  }
+);
+const HeroAllContainer = dynamic(
+  () => import("../../components/Heroes/Overview/HeroAllContainer"),
+  {
+    ssr: false,
+  }
+);
 
 type Props = {
   heroesStatus: HeroesStatus;

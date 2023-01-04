@@ -1,12 +1,16 @@
-import _ from "lodash";
+import times from "lodash/times";
+import dynamic from "next/dynamic";
+import forEach from "lodash/forEach";
+import constant from "lodash/constant";
 import React, { useEffect, useState } from "react";
 import uniqid from "uniqid";
 import { PickBan } from "../../../interfaces/matches";
 import { useAppSelector } from "../../../store";
-import HeroIcon from "../../HeroIcon";
 import { getDetaiHero, getImgStratsDota } from "../../../share/ultils";
-import ToolTip from "../../ToolTip";
 import MyImage from "../../MyImage";
+
+const ToolTip = dynamic(() => import("../../ToolTip"), { ssr: false });
+
 type PickPhase = {
   radiant: (PickBan & { name: string })[];
   dire: (PickBan & { name: string })[];
@@ -208,19 +212,19 @@ const Draft = () => {
   useEffect(() => {
     if (!matchDetail) return;
     const { pickBans, players } = matchDetail;
-    const radiantBan: ((PickBan & { name: string }) | null)[] = _.times(
+    const radiantBan: ((PickBan & { name: string }) | null)[] = times(
       5,
-      _.constant(null)
+      constant(null)
     );
-    const direBan: ((PickBan & { name: string }) | null)[] = _.times(
+    const direBan: ((PickBan & { name: string }) | null)[] = times(
       5,
-      _.constant(null)
+      constant(null)
     );
     const resultPickPhase: PickPhase = {
       radiant: [],
       dire: [],
     };
-    _.forEach(pickBans, (pickBan) => {
+    forEach(pickBans, (pickBan) => {
       const { isRadiant, playerIndex, isPick } = pickBan;
       if (!isPick) {
         isRadiant

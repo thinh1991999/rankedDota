@@ -9,11 +9,10 @@ import {
   Tooltip,
   Filler,
   Legend,
-  ChartData,
   ChartOptions,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { drawLinePluginChart, getGradient, nFormatter } from "../../../share";
+import { drawLinePluginChart, nFormatter } from "../../../share";
 import moment from "moment";
 import { useAppSelector } from "../../../store/hook";
 import {

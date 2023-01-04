@@ -1,4 +1,4 @@
-import _ from "lodash";
+import forEach from "lodash/forEach";
 import React, { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { Stratz } from "../../../interfaces/players";
@@ -19,7 +19,7 @@ const RankInfor = ({ stratz }: { stratz: Stratz | null }) => {
     } = stratz;
     let countTotalUR = 0;
     let countTotalR = 0;
-    _.forEach(steamAccountByRank, (s) => {
+    forEach(steamAccountByRank, (s) => {
       if (s.rank) {
         countTotalR += s.playerCount;
       } else {

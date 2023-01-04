@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ReactNode } from "react";
 import { AbilityDetail, Hero } from "../../interfaces/heroes";
 import { GlobalData } from "../../interfaces/state";
 import stratsApiService from "../../services/stratsApi.service";
 import { Item } from "../../interfaces/item";
 import { GameVersion } from "../../interfaces/gameVersion";
-import { talentsData } from "../../share/talentsData";
-import { ReactNode } from "react";
 import { Region } from "../../interfaces/region";
+import { talentsData } from "../../share/data";
 
 const initialState: GlobalData = {
   abilitiesData: [],

@@ -6,7 +6,7 @@ import { useAppSelector } from "../store/hook";
 import MyImage from "./MyImage";
 
 const ToolTip = dynamic(() => import("./ToolTip"), {
-  loading: () => <></>,
+  ssr: false,
 });
 
 const HeroIcon = ({

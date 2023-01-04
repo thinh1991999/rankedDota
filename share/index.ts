@@ -1,11 +1,3 @@
-export {
-  mathDetailNav,
-  headerNavs,
-  playersNavs,
-  heroesNavs,
-  matchesNav,
-} from "./navData";
-
 export { heroRankOptions, homeCards } from "./data";
 
 export {

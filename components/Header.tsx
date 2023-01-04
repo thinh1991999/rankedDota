@@ -1,6 +1,5 @@
 import Link from "next/link";
 import React from "react";
-import { headerNavs } from "../share/navData";
 import { useAppSelector } from "../store";
 import Logo from "./Logo";
 import ThemeToggle from "./ThemeToggle";
@@ -15,6 +14,7 @@ import {
 import HeaderMobile from "./HeaderMobile";
 import { useAppDispatch } from "../store/hook";
 import { handleShowNavBarMobile } from "../store/Slices/globalDataSlice";
+import { headerNavs } from "../share/data";
 
 export default function Navbar() {
   const dispatch = useAppDispatch();

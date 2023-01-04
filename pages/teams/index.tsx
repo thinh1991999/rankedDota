@@ -1,8 +1,8 @@
 import { GetStaticProps } from "next";
+import dynamic from "next/dynamic";
 import Error from "next/error";
 import React, { ReactElement, useEffect } from "react";
 import Layout from "../../components/Layout";
-import { TeamsMain, TeamsSubHeader } from "../../components/Teams";
 import { Team } from "../../interfaces/teamsPage";
 import openDotaApiService from "../../services/openDotaApi.service";
 import { useAppDispatch } from "../../store";
@@ -11,6 +11,15 @@ import {
   setSubHeaderMain,
 } from "../../store/Slices/globalDataSlice";
 import { NextPageWithLayout } from "../_app";
+
+const TeamsSubHeader = dynamic(
+  () => import("../../components/Teams/SubHeader"),
+  { ssr: false }
+);
+
+const TeamsMain = dynamic(() => import("../../components/Teams/TeamsMain"), {
+  ssr: false,
+});
 
 type Props = {
   teams: Team[];

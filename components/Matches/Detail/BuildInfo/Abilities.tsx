@@ -1,13 +1,15 @@
 import React, { memo } from "react";
 import uniqid from "uniqid";
+import dynamic from "next/dynamic";
 import { AbilityDetail } from "../../../../interfaces/heroes";
 import {
   getImgStratsDota,
   useGetTimeCurrentMatchDetail,
 } from "../../../../share";
 import MyImage from "../../../MyImage";
-import ToolTip from "../../../ToolTip";
 import { useResizeList } from "../../../../share/customHooks";
+
+const ToolTip = dynamic(() => import("../../../ToolTip"), { ssr: false });
 
 const Abilities = ({
   abiFull,

@@ -1,4 +1,7 @@
-import _ from "lodash";
+import forEach from "lodash/forEach";
+import reduce from "lodash/reduce";
+import findLast from "lodash/findLast";
+import findLastIndex from "lodash/findLastIndex";
 import React, { useState, useEffect, useMemo } from "react";
 import { AiOutlineUngroup, AiOutlineUnorderedList } from "react-icons/ai";
 import { PlayerTimeline } from "../../../../interfaces/matches";
@@ -33,7 +36,7 @@ const Matchup = () => {
       const currTime = timeIdx * 60;
       const resultRadiant: PlayerTimeline[] = [];
       const resultDire: PlayerTimeline[] = [];
-      _.forEach(players, (player, idx) => {
+      forEach(players, (player, idx) => {
         const {
           heroId,
           partyId,
@@ -95,25 +98,24 @@ const Matchup = () => {
           steamAccount,
         };
 
-        infoPlayer.lv = _.findLastIndex(lvArr, (lv) => lv <= currTime) + 1;
+        infoPlayer.lv = findLastIndex(lvArr, (lv) => lv <= currTime) + 1;
         infoPlayer.kills =
-          _.findLastIndex(killEvents, (kill) => kill.time <= currTime) + 1;
+          findLastIndex(killEvents, (kill) => kill.time <= currTime) + 1;
         infoPlayer.deaths =
-          _.findLastIndex(deathEvents, (death) => death.time <= currTime) + 1;
+          findLastIndex(deathEvents, (death) => death.time <= currTime) + 1;
         infoPlayer.assists =
-          _.findLastIndex(assistEvents, (assist) => assist.time <= currTime) +
-          1;
-        const nw = _.findLast(
+          findLastIndex(assistEvents, (assist) => assist.time <= currTime) + 1;
+        const nw = findLast(
           [...networthPerMinute, networth],
           (nw, idx) => idx <= timeIdx
         );
         infoPlayer.networth = nw !== undefined ? nw : networth;
-        const newImp = _.findLast(
+        const newImp = findLast(
           [...impPerMinute, imp],
           (imp, idx) => idx <= timeIdx
         );
         infoPlayer.imp = newImp !== undefined ? newImp : imp;
-        infoPlayer.numLastHits = _.reduce(
+        infoPlayer.numLastHits = reduce(
           lastHitsPerMinute,
           (prev, curr, idx) => {
             if (timeIdx - 1 === lastHitsPerMinute.length) return numLastHits;
@@ -125,7 +127,7 @@ const Matchup = () => {
           },
           0
         );
-        infoPlayer.numDenies = _.reduce(
+        infoPlayer.numDenies = reduce(
           deniesPerMinute,
           (prev, curr, idx) => {
             if (timeIdx - 1 === deniesPerMinute.length) return numDenies;
@@ -137,13 +139,13 @@ const Matchup = () => {
           },
           0
         );
-        const newGpm = _.findLast(
+        const newGpm = findLast(
           [0, ...goldArr, goldPerMinute],
           (nw, idx) => idx <= timeIdx
         );
         infoPlayer.goldPerMinute =
           newGpm !== undefined ? newGpm : goldPerMinute;
-        const newExp = _.findLast(
+        const newExp = findLast(
           [0, ...expArr, experiencePerMinute],
           (nw, idx) => idx <= timeIdx
         );
@@ -152,7 +154,7 @@ const Matchup = () => {
         isRadiant
           ? resultRadiant.push(infoPlayer)
           : resultDire.push(infoPlayer);
-        infoPlayer.heroDamage = _.reduce(
+        infoPlayer.heroDamage = reduce(
           heroDamagePerMinute,
           (prev, curr, idx) => {
             if (timeIdx - 1 === heroDamagePerMinute.length) return heroDamage;
@@ -164,7 +166,7 @@ const Matchup = () => {
           },
           0
         );
-        infoPlayer.towerDamage = _.reduce(
+        infoPlayer.towerDamage = reduce(
           towerDamagePerMinute,
           (prev, curr, idx) => {
             if (timeIdx - 1 === towerDamagePerMinute.length) return towerDamage;
@@ -176,7 +178,7 @@ const Matchup = () => {
           },
           0
         );
-        infoPlayer.heroHealing = _.reduce(
+        infoPlayer.heroHealing = reduce(
           healPerMinute,
           (prev, curr, idx) => {
             if (timeIdx - 1 === healPerMinute.length) return heroHealing;
@@ -188,7 +190,7 @@ const Matchup = () => {
           },
           0
         );
-        const newInvent = _.findLast(
+        const newInvent = findLast(
           inventoryReport,
           (nw, idx) => idx <= timeIdx + 1
         );

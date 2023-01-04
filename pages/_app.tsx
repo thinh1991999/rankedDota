@@ -6,9 +6,9 @@ import { ClockLoader } from "react-spinners";
 import { wrapper } from "../store/store";
 import { useAppDispatch, useAppSelector } from "../store";
 import { fetchDefaultData } from "../store/Slices/globalDataSlice";
-import "../styles/globals.css";
 import { usePageLoading } from "../share";
 import PageLoading from "../components/PageLoading";
+import "../styles/globals.css";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -27,8 +27,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     dispatch(fetchDefaultData());
     setMounted(true);
   }, [dispatch]);
-
   const getLayout = Component.getLayout ?? ((page) => page);
+
   if (loading)
     return (
       <div className="w-screen h-screen bg-background-dark flex justify-center items-center">

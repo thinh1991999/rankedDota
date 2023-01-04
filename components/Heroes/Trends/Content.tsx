@@ -1,5 +1,7 @@
-import _ from "lodash";
 import React, { useState } from "react";
+import uniqid from "uniqid";
+import dynamic from "next/dynamic";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { useAppSelector } from "../../../store/hook";
 import {
   getDetaiHero,
@@ -7,21 +9,23 @@ import {
   nFormatter,
 } from "../../../share/ultils";
 import MyImage from "../../MyImage";
-import WrChart from "./WrChart";
-import PrChart from "./PrChart";
-import ToolTip from "../../ToolTip";
-import uniqid from "uniqid";
-import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { COLOR_CHART_PINK_BORDER } from "../../../share/constant";
 import {
-  COLOR_CHART_PINK,
-  COLOR_CHART_PINK_BORDER,
-} from "../../../share/constant";
-import {
-  COLOR_CHART_BLUE,
   COLOR_CHART_BLUE_BORDER,
-  COLOR_CHART_DIRE_BG,
   COLOR_CHART_DIRE_BORDER,
 } from "../../../share";
+
+const WrChart = dynamic(() => import("./WrChart"), {
+  ssr: false,
+});
+
+const PrChart = dynamic(() => import("./PrChart"), {
+  ssr: false,
+});
+
+const ToolTip = dynamic(() => import("../../ToolTip"), {
+  ssr: false,
+});
 
 const Content = () => {
   const searchName = useAppSelector((state) => state.heroesTrends.searchName);
