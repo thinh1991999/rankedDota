@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@netlify/plugin-nextjs": "^4.29.4",
     "@next/bundle-analyzer": "^13.1.1",
     "@popperjs/core": "^2.11.6",
     "@reduxjs/toolkit": "^1.8.5",
