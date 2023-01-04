@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 import Error from "next/error";
 import { ReactElement } from "react";
 import { GetStaticProps } from "next";
@@ -39,9 +40,14 @@ const CoachPage: NextPageWithLayout<Props> = (props) => {
     return <Error statusCode={props.statusCode} />;
   }
   return (
-    <div className="container m-auto">
-      <CoachesPage leaderboard={props.leaderboard} />
-    </div>
+    <>
+      <Head>
+        <title>Players-Leaderboards-Coaches</title>
+      </Head>
+      <div className="container m-auto">
+        <CoachesPage leaderboard={props.leaderboard} />
+      </div>
+    </>
   );
 };
 

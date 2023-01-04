@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Error from "next/error";
 import { ReactElement } from "react";
+import Head from "next/head";
+import { GetServerSideProps } from "next";
+
 import { NextPageWithLayout } from "../../_app";
 import Layout from "../../../components/Layout";
-import { GetServerSideProps } from "next";
 import stratsApiService from "../../../services/stratsApi.service";
 import { HeroesMetaTrends } from "../../../interfaces/heroes";
 import { useAppDispatch } from "../../../store/hook";
@@ -66,14 +68,19 @@ const TrendsPage: NextPageWithLayout<Props> = (props) => {
     return <Error statusCode={props.statusCode} />;
   }
   return (
-    <div className="container m-auto">
-      <div className="my-5">
-        <TrendsSearchHandle />
+    <>
+      <Head>
+        <title>Heroes-Meta-Trends</title>
+      </Head>
+      <div className="container m-auto">
+        <div className="my-5">
+          <TrendsSearchHandle />
+        </div>
+        <div className="">
+          <TrendsHeroesData />
+        </div>
       </div>
-      <div className="">
-        <TrendsHeroesData />
-      </div>
-    </div>
+    </>
   );
 };
 

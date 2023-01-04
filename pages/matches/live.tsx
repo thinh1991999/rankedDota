@@ -44,7 +44,7 @@ const LivePage: NextPageWithLayout<Props> = (props) => {
   return (
     <>
       <Head>
-        <title>{`Matches > Live`} </title>
+        <title>Matches-Live</title>
       </Head>
       <section className="container m-auto">
         {errMess ? (

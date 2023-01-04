@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ReactElement } from "react";
 import { GetServerSideProps } from "next";
+import Head from "next/head";
 import dynamic from "next/dynamic";
 import Error from "next/error";
 import stratsApiService from "../../../services/stratsApi.service";
@@ -61,21 +62,26 @@ const WorldPage: NextPageWithLayout<Props> = (props) => {
   }
 
   return (
-    <div className="container m-auto">
-      <div className="my-5">
-        <SearchHandle />
-      </div>
-      <div className="flex flex-wrap -ml-2 -mr-2">
-        <div className="lg:w-1/2 w-full p-2">
-          <div className="mt-2">
-            <MapHandle />
+    <>
+      <Head>
+        <title>Players-Leaderboards-World</title>
+      </Head>
+      <div className="container m-auto">
+        <div className="my-5">
+          <SearchHandle />
+        </div>
+        <div className="flex flex-wrap -ml-2 -mr-2">
+          <div className="lg:w-1/2 w-full p-2">
+            <div className="mt-2">
+              <MapHandle />
+            </div>
+          </div>
+          <div className="lg:w-1/2 w-full p-2">
+            <PlayerList />
           </div>
         </div>
-        <div className="lg:w-1/2 w-full p-2">
-          <PlayerList />
-        </div>
       </div>
-    </div>
+    </>
   );
 };
 

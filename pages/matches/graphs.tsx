@@ -71,7 +71,7 @@ const GraphsPage: NextPageWithLayout<Props> = (props) => {
   return (
     <>
       <Head>
-        <title>{`Matches > Graphs`} </title>
+        <title>Matches-Graphs</title>
       </Head>
       <section className="container m-auto">
         <div className="my-10">
