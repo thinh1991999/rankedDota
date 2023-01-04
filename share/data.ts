@@ -265,8 +265,9 @@ export const homeCards: any = [
     link: "/matches/live",
   },
   {
-    name: "Pro Matches",
+    name: "Combos",
     img: "/card3.jpg",
+    link: "/combos",
   },
   {
     name: "Pro Teams",
