@@ -70,8 +70,6 @@ type Props = {
 };
 
 const HeroesPage: NextPageWithLayout<Props> = (props) => {
-  console.log(props);
-
   const dispatch = useAppDispatch();
   const router = useRouter();
   const heroes = useAppSelector((state) => state.globalData.heroes);
