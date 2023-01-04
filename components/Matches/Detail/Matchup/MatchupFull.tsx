@@ -1,10 +1,5 @@
-import _ from "lodash";
-import React, { useEffect, useState, memo } from "react";
-import {
-  BackPack0,
-  PlayerMatchDetail,
-  PlayerTimeline,
-} from "../../../../interfaces/matches";
+import React, { memo } from "react";
+import { BackPack0, PlayerTimeline } from "../../../../interfaces/matches";
 import {
   getDetaiHero,
   getImgStratsDota,

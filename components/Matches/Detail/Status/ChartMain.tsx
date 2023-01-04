@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import {
   Chart as ChartJS,
@@ -17,9 +17,13 @@ import {
   ScriptableLineSegmentContext,
   ChartDataset,
 } from "chart.js";
-import { Chart, ChartProps } from "react-chartjs-2";
+import { Chart } from "react-chartjs-2";
+import isInteger from "lodash/isInteger";
+import forEach from "lodash/forEach";
+import cloneDeep from "lodash/cloneDeep";
+import range from "lodash/range";
+import max from "lodash/max";
 import { useAppSelector } from "../../../../store";
-import _, { isInteger } from "lodash";
 import {
   COLOR_CHART_RADIANT_BG,
   COLOR_CHART_DIRE_BG,
@@ -310,7 +314,7 @@ const ChartMain = () => {
     ): ChartData | null => {
       if (chartData) {
         const newChartData = { ...chartData };
-        _.forEach(newChartData.datasets, (item: ChartDataset, idx) => {
+        forEach(newChartData.datasets, (item: ChartDataset, idx) => {
           if (clear) {
             item.hidden = false;
           } else {
@@ -349,7 +353,7 @@ const ChartMain = () => {
           const newData = this.getNewDatasets(dataChart, false, idx);
           newData &&
             idx !== hoverIdx && [
-              setDataChart(_.cloneDeep(newData)),
+              setDataChart(cloneDeep(newData)),
               setHoverIdx(idx),
             ];
         });
@@ -358,7 +362,7 @@ const ChartMain = () => {
           li.style.borderRadius = "0";
           const newData = this.getNewDatasets(dataChart, true, idx);
           console.log(newData);
-          newData && [setDataChart(_.cloneDeep(newData)), setHoverIdx(null)];
+          newData && [setDataChart(cloneDeep(newData)), setHoverIdx(null)];
         });
         li.appendChild(img);
         li.appendChild(document.createTextNode(item.text));
@@ -378,11 +382,11 @@ const ChartMain = () => {
       matchDetail;
     const arr: number[] = [];
     const timeUtc = moment.duration(durationSeconds * 1000).asMinutes();
-    _.range(timeUtc).forEach((item) => {
+    range(timeUtc).forEach((item) => {
       arr.push(item);
     });
     if (!isInteger(timeUtc)) arr.push(timeUtc);
-    const maxY = _.max(radiantNetworthLeads.concat(radiantExperienceLeads));
+    const maxY = max(radiantNetworthLeads.concat(radiantExperienceLeads));
     setDataChart({
       labels: arr,
       datasets: [

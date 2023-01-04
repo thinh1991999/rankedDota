@@ -1,6 +1,4 @@
 import axios from "axios";
-import _ from "lodash";
-import { removeEmpty } from "../share/ultils";
 class StratsApiService {
   axiosConfig: any;
   axios = axios.create({

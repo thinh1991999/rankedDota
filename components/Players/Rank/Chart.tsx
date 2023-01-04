@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,19 +12,20 @@ import {
   ChartOptions,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { SteamAccountByRank, Stratz } from "../../../interfaces/players";
-import _ from "lodash";
-import { nFormatter } from "../../../share";
-import {
-  getImgStratsDota,
-  makeArray,
-  formatNumber,
-} from "../../../share/ultils";
-import MyImage from "../../MyImage";
-import ToolTip from "../../ToolTip";
+import dynamic from "next/dynamic";
 import uniqid from "uniqid";
+import forEach from "lodash/forEach";
+import sumBy from "lodash/sumBy";
+import orderBy from "lodash/orderBy";
+import findIndex from "lodash/findIndex";
+import { nFormatter, useGetStylesTheme } from "../../../share";
+import { SteamAccountByRank, Stratz } from "../../../interfaces/players";
+import { getImgStratsDota, formatNumber } from "../../../share/ultils";
+import MyImage from "../../MyImage";
 import { getRankName } from "../../../share/ultils";
-import { useTheme } from "next-themes";
+
+const ToolTip = dynamic(() => import("../../ToolTip"), { ssr: false });
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -179,9 +180,8 @@ const externalTooltipHandler = (context: any) => {
 };
 
 const Chart = ({ stratz }: { stratz: Stratz | null }) => {
-  const { theme } = useTheme();
+  const { styles } = useGetStylesTheme();
   const [chartData, setChartData] = useState<ChartData<"bar"> | null>(null);
-  const [options, setOptions] = useState<ChartOptions<"bar"> | null>(null);
   const [customLabels, setCustomLabels] = useState<
     {
       rank: number;
@@ -189,6 +189,61 @@ const Chart = ({ stratz }: { stratz: Stratz | null }) => {
       percent: number;
     }[]
   >([]);
+
+  const options: ChartOptions<"bar"> = useMemo(() => {
+    return {
+      responsive: true,
+      skipNull: true,
+      plugins: {
+        legend: {
+          display: false,
+        },
+        title: {
+          display: false,
+        },
+        tooltip: {
+          mode: "point",
+          intersect: false,
+          displayColors: false,
+          enabled: false,
+          external: externalTooltipHandler,
+        },
+      },
+      maintainAspectRatio: false,
+      hover: {
+        mode: "point",
+        intersect: false,
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: styles.tick,
+            display: false,
+          },
+          grid: {
+            display: false,
+          },
+        },
+        y: {
+          max: 600000,
+          ticks: {
+            color: styles.tick,
+            stepSize: 150000,
+            callback(tickValue, index, ticks) {
+              if (typeof tickValue === "number")
+                return nFormatter(tickValue, 1);
+            },
+            padding: 10,
+          },
+          weight: 10,
+          grid: {
+            color: "rgba(107, 107, 107, 0.5)",
+            tickLength: 0,
+          },
+        },
+      },
+    };
+  }, [styles]);
 
   useEffect(() => {
     if (!stratz) return;
@@ -198,11 +253,11 @@ const Chart = ({ stratz }: { stratz: Stratz | null }) => {
       },
     } = stratz;
     const data: SteamAccountByRank[] = [];
-    _.forEach(steamAccountByRank, (e) => {
+    forEach(steamAccountByRank, (e) => {
       if (e.rank && e.rank % 10 <= 5) data.push(e);
     });
-    const order = _.orderBy(data, (e) => e.rank);
-    const totalAcc = _.sumBy(order, (o) => o.playerCount);
+    const order = orderBy(data, (e) => e.rank);
+    const totalAcc = sumBy(order, (o) => o.playerCount);
     const finalLabels: number[] = [];
     const finalCustomLabels: {
       rank: number;
@@ -210,7 +265,7 @@ const Chart = ({ stratz }: { stratz: Stratz | null }) => {
       percent: number;
     }[] = [];
     const datasets: ChartDataset<"bar", number[]>[] = [];
-    _.forEach(order, (o) => {
+    forEach(order, (o) => {
       if (o.rank) {
         const data = new Array<number>(8);
         const nb = Math.floor(o.rank / 10);
@@ -245,7 +300,7 @@ const Chart = ({ stratz }: { stratz: Stratz | null }) => {
             break;
         }
         if (!finalLabels.includes(nb)) finalLabels.push(nb);
-        const checkIdxCustomLabel = _.findIndex(
+        const checkIdxCustomLabel = findIndex(
           finalCustomLabels,
           (label) => label.rank === nb
         );
@@ -289,59 +344,7 @@ const Chart = ({ stratz }: { stratz: Stratz | null }) => {
       labels: finalLabels,
       datasets,
     });
-    setOptions({
-      responsive: true,
-      skipNull: true,
-      plugins: {
-        legend: {
-          display: false,
-        },
-        title: {
-          display: false,
-        },
-        tooltip: {
-          mode: "point",
-          intersect: false,
-          displayColors: false,
-          enabled: false,
-          external: externalTooltipHandler,
-        },
-      },
-      maintainAspectRatio: false,
-      hover: {
-        mode: "point",
-        intersect: false,
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: theme === "dark" ? "white" : "black",
-            display: false,
-          },
-          grid: {
-            display: false,
-          },
-        },
-        y: {
-          max: 600000,
-          ticks: {
-            color: theme === "dark" ? "white" : "black",
-            stepSize: 150000,
-            callback(tickValue, index, ticks) {
-              if (typeof tickValue === "number")
-                return nFormatter(tickValue, 1);
-            },
-            padding: 10,
-          },
-          weight: 10,
-          grid: {
-            color: "rgba(107, 107, 107, 0.5)",
-            tickLength: 0,
-          },
-        },
-      },
-    });
-  }, [stratz, theme]);
+  }, [stratz]);
 
   return (
     <div>

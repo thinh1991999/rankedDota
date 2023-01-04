@@ -1,19 +1,12 @@
 import { useRouter } from "next/router";
+import filter from "lodash/filter";
 import React, { useState, useEffect } from "react";
-import Select, {
-  ActionMeta,
-  MultiValue,
-  SingleValue,
-  StylesConfig,
-  components as components,
-  ValueContainerProps,
-} from "react-select";
-import { ranks, regions, useGetStylesReactSelect } from "../../../share";
+import Select, { ActionMeta, SingleValue } from "react-select";
+import { ranks, useGetStylesReactSelect } from "../../../share";
 import { gameModes, ItemList } from "../../../share/reactSelectData";
 import { FormatOptionLabel } from "../../CustomReactSelectContainer";
 import { useAppDispatch } from "../../../store/hook";
 import { fetchHeroesMetaPositions } from "../../../store/Slices/heroesPositionsSlice";
-import _ from "lodash";
 
 const SearchHandle = () => {
   const router = useRouter();
@@ -84,11 +77,11 @@ const SearchHandle = () => {
       query: { bracketIds, regionIds, gameModeIds, positionIds },
     } = router;
     if (bracketIds) {
-      const filterBracketIds = _.filter(ranks, (r) => r.value === bracketIds);
+      const filterBracketIds = filter(ranks, (r) => r.value === bracketIds);
       setRank(filterBracketIds[0]);
     }
     if (gameModeIds) {
-      const filterGameModeIds = _.filter(
+      const filterGameModeIds = filter(
         gameModes,
         (g) => g.value === gameModeIds
       );

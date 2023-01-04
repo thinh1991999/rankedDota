@@ -1,15 +1,11 @@
 import React, { useState, useEffect } from "react";
+import maxBy from "lodash/maxBy";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { Leaderboard, Player } from "../../../interfaces/players";
 import MyImage from "../../MyImage";
 import RankIcon from "../../RankIcon";
-import {
-  formatNumber,
-  nFormatter,
-  getImgStratsDota,
-} from "../../../share/ultils";
+import { nFormatter } from "../../../share/ultils";
 import { GOLD_ICON } from "../../../share";
-import _ from "lodash";
-import InfiniteScroll from "react-infinite-scroll-component";
 import stratsApiService from "../../../services/stratsApi.service";
 import { useAppSelector } from "../../../store/hook";
 import { getDetaiRegion } from "../../../share/ultils";
@@ -30,9 +26,9 @@ const Coaches = ({ leaderboard }: { leaderboard: Leaderboard | null }) => {
   };
 
   useEffect(() => {
-    setMaxPoints(_.maxBy(coaches, (player) => player.rating)?.rating || 50000);
+    setMaxPoints(maxBy(coaches, (player) => player.rating)?.rating || 50000);
     setMaxCoaches(
-      _.maxBy(coaches, (player) => player.matchCount)?.matchCount || 1000
+      maxBy(coaches, (player) => player.matchCount)?.matchCount || 1000
     );
   }, [coaches]);
 

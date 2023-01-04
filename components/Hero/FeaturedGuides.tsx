@@ -1,17 +1,22 @@
 import React from "react";
 import moment from "moment";
-import { Guide, GuideSymbol, ItemPurchase } from "../../interfaces/guide";
+import dynamic from "next/dynamic";
+import forEach from "lodash/forEach";
+import findIndex from "lodash/findIndex";
+import { ItemPurchase } from "../../interfaces/guide";
 import { Hero, HeroStatsGuide } from "../../interfaces/heroes";
 import { useAppSelector } from "../../store/hook";
 import MyImage from "../MyImage";
 import { RADIANT_ICON, DIRE_ICON } from "../../share/constant";
-import _ from "lodash";
 import {
   getDetailItem,
   getImgStratsDota,
   getTypeOfHero,
 } from "../../share/ultils";
-import ToolTip from "../ToolTip";
+
+const ToolTip = dynamic(() => import("../ToolTip"), {
+  ssr: false,
+});
 
 const FeaturedGuides = ({
   hero,
@@ -51,7 +56,7 @@ const FeaturedGuides = ({
           let checkedScepter = false;
           let checkShard = false;
           const itemsResult: (ItemPurchase | null)[] = [];
-          _.forEach(itemPurchases, (item) => {
+          forEach(itemPurchases, (item) => {
             if (item.itemId === 108) {
               checkedScepter = true;
             }
@@ -66,7 +71,7 @@ const FeaturedGuides = ({
               item.itemId === item4Id ||
               item.itemId === item5Id
             ) {
-              const idx = _.findIndex(itemsResult, (itemm) => {
+              const idx = findIndex(itemsResult, (itemm) => {
                 return itemm?.itemId === item.itemId;
               });
               if (idx !== -1) {
@@ -136,7 +141,7 @@ const FeaturedGuides = ({
                   } = ability;
                   if (!uri) return;
                   let countLv = 0;
-                  _.forEach(abilities, (abili) => {
+                  forEach(abilities, (abili) => {
                     if (abili.abilityId === abi.abilityId) countLv++;
                   });
                   const arrLv = Array.from(Array(countLv).keys());

@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../../../components/Layout";
-import { NextPageWithLayout } from "../../_app";
 import { ReactElement } from "react";
 import { GetServerSideProps } from "next";
+import dynamic from "next/dynamic";
+import Error from "next/error";
 import stratsApiService from "../../../services/stratsApi.service";
 import { Season } from "../../../interfaces/players";
-import Error from "next/error";
-import {
-  MapHandle,
-  PlayerList,
-  PlayersSubHeader,
-  SearchHandle,
-} from "../../../components/Players";
 import { useAppDispatch } from "../../../store/hook";
+import Layout from "../../../components/Layout";
+import { NextPageWithLayout } from "../../_app";
 import {
   setLoading,
   setSeason,
@@ -21,6 +16,23 @@ import {
   setHeaderImg,
   setSubHeaderMain,
 } from "../../../store/Slices/globalDataSlice";
+
+const MapHandle = dynamic(
+  () => import("../../../components/Players/World/MapHandle"),
+  { ssr: false }
+);
+const PlayerList = dynamic(
+  () => import("../../../components/Players/World/PlayerList"),
+  { ssr: false }
+);
+const SearchHandle = dynamic(
+  () => import("../../../components/Players/World/SearchHandle"),
+  { ssr: false }
+);
+const PlayersSubHeader = dynamic(
+  () => import("../../../components/Players/SubHeader"),
+  { ssr: false }
+);
 
 type Props = {
   season: Season;

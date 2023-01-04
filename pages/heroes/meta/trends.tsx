@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { NextPageWithLayout } from "../../_app";
+import dynamic from "next/dynamic";
+import Error from "next/error";
 import { ReactElement } from "react";
+import { NextPageWithLayout } from "../../_app";
 import Layout from "../../../components/Layout";
 import { GetServerSideProps } from "next";
 import stratsApiService from "../../../services/stratsApi.service";
 import { HeroesMetaTrends } from "../../../interfaces/heroes";
-import Error from "next/error";
 import { useAppDispatch } from "../../../store/hook";
 import {
   setErrMess,
@@ -13,15 +14,30 @@ import {
   setLoading,
 } from "../../../store/Slices/heroesTrendsSlice";
 import {
-  HeroesSubHeader,
-  TrendsHeroesData,
-  TrendsSearchHandle,
-} from "../../../components/Heroes";
-import _ from "lodash";
-import {
   setHeaderImg,
   setSubHeaderMain,
 } from "../../../store/Slices/globalDataSlice";
+
+const HeroesSubHeader = dynamic(
+  () => import("../../../components/Heroes/SubHeader"),
+  {
+    ssr: false,
+  }
+);
+
+const TrendsSearchHandle = dynamic(
+  () => import("../../../components/Heroes/Trends/SearchHandle"),
+  {
+    ssr: false,
+  }
+);
+
+const TrendsHeroesData = dynamic(
+  () => import("../../../components/Heroes/Trends/HeroesData"),
+  {
+    ssr: false,
+  }
+);
 
 type Props = {
   heroesTrends: HeroesMetaTrends;

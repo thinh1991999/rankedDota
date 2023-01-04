@@ -1,47 +1,8 @@
 import React, { memo } from "react";
 import { MatchLive } from "../interfaces/matches";
-import MyImage from "./MyImage";
 import { useAppSelector } from "../store/hook";
 import { getDetaiHero, normalizeCoords } from "../share";
-
-const towerPos = [
-  { npcId: 41, x: 10, y: 184, type: "TOWER" },
-  { npcId: 47, x: 187, y: 23, type: "TOWER" },
-  { npcId: 38, x: 19.0354, y: 184, type: "TOWER" },
-  { npcId: 44, x: 187, y: 33.0394, type: "TOWER" },
-  { npcId: 40, x: 52.189, y: 227.925, type: "TOWER" },
-  { npcId: 49, x: 222, y: 67, type: "TOWER" },
-  { npcId: 43, x: 52.189, y: 217.886, type: "TOWER" },
-  { npcId: 46, x: 232.04, y: 67, type: "TOWER" },
-  { npcId: 42, x: 39, y: 191, type: "TOWER" },
-  { npcId: 48, x: 193, y: 53, type: "TOWER" },
-  { npcId: 39, x: 46.0276, y: 197.024, type: "TOWER" },
-  { npcId: 45, x: 200.027, y: 59.0236, type: "TOWER" },
-  { npcId: 26, x: 45, y: 23, type: "TOWER" },
-  { npcId: 29, x: 119, y: 21, type: "TOWER" },
-  { npcId: 32, x: 180, y: 25, type: "TOWER" },
-  { npcId: 28, x: 225, y: 149, type: "TOWER" },
-  { npcId: 18, x: 204, y: 222, type: "TOWER" },
-  { npcId: 16, x: 18, y: 91, type: "TOWER" },
-  { npcId: 19, x: 18, y: 136, type: "TOWER" },
-  { npcId: 22, x: 13, y: 177, type: "TOWER" },
-  { npcId: 21, x: 117, y: 224, type: "TOWER" },
-  { npcId: 24, x: 57.2046, y: 221.902, type: "TOWER" },
-  { npcId: 31, x: 225, y: 115, type: "TOWER" },
-  { npcId: 34, x: 225, y: 72, type: "TOWER" },
-  { npcId: 33, x: 191, y: 59, type: "TOWER" },
-  { npcId: 35, x: 203, y: 42, type: "TOWER" },
-  { npcId: 35, x: 209.024, y: 48.0236, type: "TOWER" },
-  { npcId: 30, x: 162, y: 86, type: "TOWER" },
-  { npcId: 27, x: 131.516, y: 110.433, type: "TOWER" },
-  { npcId: 17, x: 96, y: 144, type: "TOWER" },
-  { npcId: 20, x: 67, y: 166, type: "TOWER" },
-  { npcId: 23, x: 45, y: 188, type: "TOWER" },
-  { npcId: 25, x: 27, y: 201, type: "TOWER" },
-  { npcId: 25, x: 33.0234, y: 207.024, type: "TOWER" },
-  { npcId: 50, x: 23, y: 207, type: "FORT" },
-  { npcId: 51, x: 211, y: 36, type: "FORT" },
-];
+import { towerPos } from "../share/data";
 
 const Map = ({ match, size = 200 }: { match: MatchLive; size?: number }) => {
   const heroes = useAppSelector((state) => state.globalData.heroes);

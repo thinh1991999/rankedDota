@@ -1,16 +1,18 @@
 import React, { useMemo } from "react";
-import _ from "lodash";
 import uniqid from "uniqid";
+import dynamic from "next/dynamic";
+import forEach from "lodash/forEach";
 import MyImage from "../../../MyImage";
 import {
   getImgStratsDota,
   useGetTimeCurrentMatchDetail,
 } from "../../../../share";
-import ToolTip from "../../../ToolTip";
 import { Item } from "../../../../interfaces/item";
 import { getTimeBySeconds } from "../../../../share/ultils";
 import { useResizeList } from "../../../../share/customHooks";
 import { AiOutlineClockCircle } from "react-icons/ai";
+
+const ToolTip = dynamic(() => import("../../../ToolTip"), { ssr: false });
 
 const BotInfo = ({
   itemsBuild,
@@ -136,7 +138,7 @@ const BotInfo = ({
               {spItems.map((item, idx) => {
                 const { displayName, times, shortName } = item;
                 let count = 0;
-                _.forEach(times, (time) => {
+                forEach(times, (time) => {
                   time <= currSeconds && count++;
                 });
                 const itemIcon = getImgStratsDota(`/items/${shortName}.png`);

@@ -1,21 +1,18 @@
-import _ from "lodash";
+import forEach from "lodash/forEach";
+import dynamic from "next/dynamic";
+import orderBy from "lodash/orderBy";
+import reduce from "lodash/reduce";
+import findIndex from "lodash/findIndex";
 import React, { useEffect, useState } from "react";
-import {
-  Against,
-  HeroStats,
-  Position,
-  RoleStatus,
-} from "../../interfaces/heroes";
-import {
-  getTypeOfHero,
-  getDetaiHero,
-  getImgStratsDota,
-} from "../../share/ultils";
-import ToolTip from "../ToolTip";
-import { useAppSelector } from "../../store/hook";
+import { HeroStats } from "../../interfaces/heroes";
+import { getTypeOfHero } from "../../share/ultils";
 import MyImage from "../MyImage";
 import HeroIcon from "../HeroIcon";
 import { LaneOutcome } from "../../interfaces/heroes";
+
+const ToolTip = dynamic(() => import("../ToolTip"), {
+  ssr: false,
+});
 
 type Roles = {
   type: string;
@@ -47,7 +44,7 @@ const RolesStatus = ({ stats }: { stats: HeroStats }) => {
       laneOutcomeWith_POSITION_4,
       laneOutcomeWith_POSITION_5,
     } = stats;
-    const total = _.reduce(
+    const total = reduce(
       position,
       (prev, curr) => {
         return (prev += curr.matchCount);
@@ -60,7 +57,7 @@ const RolesStatus = ({ stats }: { stats: HeroStats }) => {
       wr: string | number;
       pr: string | number;
     } => {
-      const idx = _.findIndex(position, (pos) => pos.position === key);
+      const idx = findIndex(position, (pos) => pos.position === key);
       if (idx !== -1) {
         const { matchCount, winCount } = position[idx];
         return {
@@ -83,7 +80,7 @@ const RolesStatus = ({ stats }: { stats: HeroStats }) => {
       let loss = 0;
       let stompLoss = 0;
       let total = 0;
-      _.forEach([...againstHeroes, ...withHeroes], (value) => {
+      forEach([...againstHeroes, ...withHeroes], (value) => {
         const {
           stompWinCount,
           matchCount,
@@ -100,7 +97,7 @@ const RolesStatus = ({ stats }: { stats: HeroStats }) => {
         total += matchCount;
       });
       const sortAgainst = (arr: LaneOutcome[], type: "desc" | "asc") => {
-        return _.orderBy(
+        return orderBy(
           arr,
           (item) => {
             const { matchCount, winCount } = item;

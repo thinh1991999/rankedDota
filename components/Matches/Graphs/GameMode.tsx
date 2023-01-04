@@ -1,4 +1,5 @@
-import _ from "lodash";
+import forEach from "lodash/forEach";
+import orderBy from "lodash/orderBy";
 import moment from "moment";
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -40,7 +41,7 @@ const externalTooltipHandler = (context: any) => {
     dataset: { data },
     dataIndex,
   } = tooltip.dataPoints[0];
-  const sortDataPoints = _.orderBy(
+  const sortDataPoints = orderBy(
     tooltip.dataPoints,
     (item) => {
       return item.raw;
@@ -87,7 +88,7 @@ const externalTooltipHandler = (context: any) => {
     headerDiv.appendChild(titleEl);
     const bodyDiv = document.createElement("div");
     bodyDiv.style.padding = "5px 10px";
-    _.forEach(sortDataPoints, (item) => {
+    forEach(sortDataPoints, (item) => {
       const {
         dataset: { label, borderColor },
         formattedValue,
@@ -225,7 +226,7 @@ const GameMode = ({
     ): ChartData | null => {
       if (chartData) {
         const newChartData = { ...chartData };
-        _.forEach(newChartData.datasets, (item: any, idx) => {
+        forEach(newChartData.datasets, (item: any, idx) => {
           if (clear) {
             item.fill = true;
           } else {
@@ -310,18 +311,18 @@ const GameMode = ({
     const dataCaptainsMode: number[] = [];
     const dataAllPickRanked: number[] = [];
     const dataTurbo: number[] = [];
-    _.forEach(ALL_PICK, (match) => {
+    forEach(ALL_PICK, (match) => {
       const { month } = match;
       if (!months.includes(month)) months.push(month);
     });
-    const newMonths = _.orderBy(months, (month) => month, "asc");
+    const newMonths = orderBy(months, (month) => month, "asc");
 
-    _.forEach(newMonths, (month) => {
+    forEach(newMonths, (month) => {
       // labels.push(moment.unix(month).format("MMMM D, YYYY h:mm A"));
       labels.push(month);
       const getCheckMatch = (arrMatch: MatchGraph[]) => {
         let total = 0;
-        _.forEach(arrMatch, (match) => {
+        forEach(arrMatch, (match) => {
           if (match.month === month) {
             total += match.matchCount;
           }

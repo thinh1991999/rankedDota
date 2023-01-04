@@ -2,11 +2,20 @@ import React, { ReactElement, useEffect } from "react";
 import Layout from "../components/Layout";
 import { NextPageWithLayout } from "./_app";
 import { useAppDispatch } from "../store/hook";
-import { ComposContainer, ComposSubHeader } from "../components/Compos";
+import dynamic from "next/dynamic";
 import {
   setHeaderImg,
   setSubHeaderMain,
 } from "../store/Slices/globalDataSlice";
+
+const ComposSubHeader = dynamic(
+  () => import("../components/Compos/SubHeader"),
+  { ssr: false }
+);
+const ComposContainer = dynamic(
+  () => import("../components/Compos/ComposContainer"),
+  { ssr: false }
+);
 
 const ComposPage: NextPageWithLayout = () => {
   const dispatch = useAppDispatch();

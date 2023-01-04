@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { NextPageWithLayout } from "../../_app";
+import dynamic from "next/dynamic";
 import { GetServerSideProps } from "next";
-import {
-  HeroesSubHeader,
-  PositionsDataInfo,
-  PositionsSearchHandle,
-} from "../../../components/Heroes";
+import { NextPageWithLayout } from "../../_app";
 import Layout from "../../../components/Layout";
 import { ReactElement } from "react";
 import stratsApiService from "../../../services/stratsApi.service";
@@ -21,6 +17,27 @@ import {
   setHeaderImg,
   setSubHeaderMain,
 } from "../../../store/Slices/globalDataSlice";
+
+const HeroesSubHeader = dynamic(
+  () => import("../../../components/Heroes/SubHeader"),
+  {
+    ssr: false,
+  }
+);
+
+const PositionsSearchHandle = dynamic(
+  () => import("../../../components/Heroes/Positions/SearchHandle"),
+  {
+    ssr: false,
+  }
+);
+
+const PositionsDataInfo = dynamic(
+  () => import("../../../components/Heroes/Positions/DataInfo"),
+  {
+    ssr: false,
+  }
+);
 
 type Props = {
   heroesPositions: MetaPositions;

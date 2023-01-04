@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import orderBy from "lodash/orderBy";
+import forEach from "lodash/forEach";
+import moment from "moment";
 import { Member, TeamOverview } from "../../../interfaces/teamsPage";
 import MyImage from "../../MyImage";
 import {
@@ -6,9 +9,6 @@ import {
   getImgStratsDota,
   sortRolesTeam,
 } from "../../../share/ultils";
-import _ from "lodash";
-import { TeamSort } from "../../../interfaces/matches";
-import moment from "moment";
 import IconTypeRole from "../../IconTypeRole";
 
 const Members = ({ team: teamInfo }: { team: TeamOverview }) => {
@@ -20,17 +20,18 @@ const Members = ({ team: teamInfo }: { team: TeamOverview }) => {
   }>();
 
   useEffect(() => {
+    if (!teamInfo.team) return;
     const {
       team: { members, lastMatchDateTime, winCount, lossCount },
     } = teamInfo;
     const teams: (Member & { lane: string })[] = [];
-    const newTeams = _.orderBy(members, (m) => {
+    const newTeams = orderBy(members, (m) => {
       return m.lastMatchDateTime;
     });
-    _.forEach(newTeams, (m) => {
+    forEach(newTeams, (m) => {
       teams.push({
         ...m,
-        lane: m.player.steamAccount.proSteamAccount.position,
+        lane: m.player.steamAccount.proSteamAccount?.position || "",
       });
     });
     setData(sortRolesTeam(teams));
@@ -41,6 +42,7 @@ const Members = ({ team: teamInfo }: { team: TeamOverview }) => {
     });
   }, [teamInfo]);
 
+  if (!teamInfo.team) return <></>;
   return (
     <>
       <div className="flex flex-wrap items-center my-4">

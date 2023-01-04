@@ -13,12 +13,13 @@ import {
   ChartOptions,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { Matches } from "../../../interfaces/players";
-import _ from "lodash";
-import { getRandomRgba } from "../../../share/ultils";
+import forEach from "lodash/forEach";
+import cloneDeep from "lodash/cloneDeep";
+import reverse from "lodash/reverse";
 import moment from "moment";
+import { Matches } from "../../../interfaces/players";
+import { getRandomRgba } from "../../../share/ultils";
 import { drawLinePluginChart } from "../../../share";
-import { useTheme } from "next-themes";
 import { useGetStylesTheme } from "../../../share/customHooks";
 
 ChartJS.register(
@@ -76,7 +77,7 @@ const externalTooltipHandler = (context: any) => {
     headerDiv.appendChild(titleEl);
     const bodyDiv = document.createElement("div");
     bodyDiv.style.padding = "5px 10px";
-    _.forEach(dataPoints, (item) => {
+    forEach(dataPoints, (item) => {
       const {
         dataset: { label, borderColor },
         raw,
@@ -198,7 +199,7 @@ const Chart = ({ matches }: { matches: Matches | null }) => {
     ): ChartData<"line"> | null => {
       if (chartData) {
         const newChartData = { ...chartData };
-        _.forEach(newChartData.datasets, (item: any, idx) => {
+        forEach(newChartData.datasets, (item: any, idx) => {
           if (clear) {
             item.fill = true;
           } else {
@@ -231,13 +232,13 @@ const Chart = ({ matches }: { matches: Matches | null }) => {
         const handleMouseenter = () => {
           const newData = this.getNewDatasets(chartData, false, idx);
           setHoverIdx(idx);
-          idx !== hoverIdx && setChartData(_.cloneDeep(newData));
+          idx !== hoverIdx && setChartData(cloneDeep(newData));
         };
         li.removeEventListener("mouseenter", handleMouseenter);
         li.addEventListener("mouseenter", handleMouseenter);
         const handleMouseleave = () => {
           const newData = this.getNewDatasets(chartData, true, idx);
-          setChartData(_.cloneDeep(newData));
+          setChartData(cloneDeep(newData));
           setHoverIdx(null);
         };
         li.removeEventListener("mouseleave", handleMouseleave);
@@ -285,7 +286,7 @@ const Chart = ({ matches }: { matches: Matches | null }) => {
     const taiwan: number[] = [];
     const usEast: number[] = [];
     const usWest: number[] = [];
-    _.forEach(_.reverse(matchmakingStats), (match) => {
+    forEach(reverse(matchmakingStats), (match) => {
       labels.push(match.timestamp);
       australia.push(match.australia);
       austria.push(match.austria);

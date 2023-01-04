@@ -1,5 +1,7 @@
-import _ from "lodash";
-import React, { useState, useEffect, useMemo } from "react";
+import forEach from "lodash/forEach";
+import uniqid from "uniqid";
+import dynamic from "next/dynamic";
+import React, { useMemo } from "react";
 import { PlayerMatchDetail } from "../../../../interfaces/matches";
 import {
   getDetaiHero,
@@ -9,9 +11,9 @@ import {
 import { useAppSelector } from "../../../../store/hook";
 import HeroIcon from "../../../HeroIcon";
 import MyImage from "../../../MyImage";
-import ToolTip from "../../../ToolTip";
-import uniqid from "uniqid";
 import { nFormatter } from "../../../../share/ultils";
+
+const ToolTip = dynamic(() => import("../../../ToolTip"), { ssr: false });
 
 const KillRow = ({
   player,
@@ -61,7 +63,7 @@ const KillRow = ({
             let count = 0;
             let goldEarn = 0;
             let expEarn = 0;
-            _.forEach(player.stats.killEvents, (e) => {
+            forEach(player.stats.killEvents, (e) => {
               const { target, time, gold, xp } = e;
               if (target === id && time <= currTime) {
                 count++;

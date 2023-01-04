@@ -1,20 +1,39 @@
 import React from "react";
-import { AbilityDetail, Hero, Talent } from "../../interfaces/heroes";
+import dynamic from "next/dynamic";
+import { Hero } from "../../interfaces/heroes";
 import { getImgStratsDota } from "../../share";
 import MyImage from "../MyImage";
-import ToolTip from "../ToolTip";
 import { getFixIndexHero } from "../../share/ultils";
 import { BsFillTagFill } from "react-icons/bs";
-import { useAppSelector } from "../../store";
 import TalentTree from "./TalentTree";
 import DetailAbility from "./DetailAbility";
 import { useModal } from "../../share/customHooks";
-import Modal from "../Modal";
 
-const HeroIntro = ({ hero }: { hero: Hero }) => {
+const Modal = dynamic(() => import("../Modal"), {
+  ssr: false,
+});
+
+const ToolTip = dynamic(() => import("../ToolTip"), {
+  ssr: false,
+});
+
+const HeroIntro = ({ hero }: { hero: Hero | null }) => {
   const { show, toggle } = useModal();
   const { show: showSkills, toggle: toggleSkills } = useModal();
-
+  if (!hero) {
+    return (
+      <section className=" text-textMain-light dark:text-textMain-dark">
+        <div className="container m-auto py-5 flex flex-wrap items-center">
+          <div className="flex xl:w-5/12 w-full xl:flex-row flex-col xl:justify-start justify-center items-center">
+            <div className="w-[100px] h-[100px] rounded-md bg-layer-light dark:bg-layer-dark"></div>
+            <div className="ml-2 flex items-center">
+              <h6 className="text-3xl  font-bold">Unknown</h6>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
   const { shortName, displayName, abilities, stats, roles, talents } = hero;
   if (!stats) {
     return <></>;

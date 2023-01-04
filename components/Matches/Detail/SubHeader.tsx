@@ -1,5 +1,7 @@
-import _ from "lodash";
+import forEach from "lodash/forEach";
+import sum from "lodash/sum";
 import moment from "moment";
+import dynamic from "next/dynamic";
 import React, { useEffect, useMemo } from "react";
 import { AiOutlineMinus } from "react-icons/ai";
 import { BsCalendar4Week, BsFiles } from "react-icons/bs";
@@ -7,14 +9,11 @@ import {
   DIRE_ICON,
   getRankName,
   getTimeBySeconds,
-  heroesNavs,
   RADIANT_ICON,
 } from "../../../share";
 import { useAppSelector } from "../../../store";
 import MyImage from "../../MyImage";
 import RankIcon from "../../RankIcon";
-import SubNav from "../../SubNav";
-import HeadInfo from "./HeadInfo/HeadInfo";
 import { useAppDispatch } from "../../../store/hook";
 import { setHeaderImg } from "../../../store/Slices/globalDataSlice";
 import { PlayerMatchDetail } from "../../../interfaces/matches";
@@ -22,8 +21,9 @@ import { sortRolesTeam, getDetaiHero } from "../../../share/ultils";
 import { Hero } from "../../../interfaces/heroes";
 import HeroIcon from "../../HeroIcon";
 import IconTypeRole from "../../IconTypeRole";
-import Modal from "../../Modal";
 import { useModal } from "../../../share/customHooks";
+
+const Modal = dynamic(() => import("../../Modal"), { ssr: false });
 
 const SubHeader = () => {
   const dispatch = useAppDispatch();
@@ -38,7 +38,7 @@ const SubHeader = () => {
 
     const radiant: (PlayerMatchDetail & { hero: Hero })[] = [];
     const dire: (PlayerMatchDetail & { hero: Hero })[] = [];
-    _.forEach(players, (pl) => {
+    forEach(players, (pl) => {
       const { heroId, isRadiant } = pl;
       const heroDetail = getDetaiHero(heroes, heroId);
       if (!heroDetail) return;
@@ -126,7 +126,7 @@ const SubHeader = () => {
               <div className="p-2 flex items-center bg-layer-dark rounded-md">
                 <div className="rounded-md w-[60px] h-[50px] bg-black text-white flex items-center justify-center">
                   <span className="text-2xl font-bold">
-                    {_.sum(radiantKills)}
+                    {sum(radiantKills)}
                   </span>
                 </div>
                 <div className="mx-3">
@@ -135,7 +135,7 @@ const SubHeader = () => {
                   </span>
                 </div>
                 <div className="rounded-md w-[60px] h-[50px] bg-black text-white flex items-center justify-center">
-                  <span className="text-2xl font-bold">{_.sum(direKills)}</span>
+                  <span className="text-2xl font-bold">{sum(direKills)}</span>
                 </div>
               </div>
               <div

@@ -3,20 +3,30 @@ import Error from "next/error";
 import Head from "next/head";
 import React, { ReactElement, useEffect } from "react";
 import Layout from "../../components/Layout";
-import {
-  GameMode,
-  MatchesSubHeader,
-  Rank,
-  Region,
-} from "../../components/Matches";
 import { MatchGraph } from "../../interfaces/matches";
 import stratsApiService from "../../services/stratsApi.service";
 import { NextPageWithLayout } from "../_app";
 import { useAppDispatch } from "../../store/hook";
+import dynamic from "next/dynamic";
 import {
   setHeaderImg,
   setSubHeaderMain,
 } from "../../store/Slices/globalDataSlice";
+
+const GameMode = dynamic(
+  () => import("../../components/Matches/Graphs/GameMode"),
+  { ssr: false }
+);
+const Rank = dynamic(() => import("../../components/Matches/Graphs/Rank"), {
+  ssr: false,
+});
+const Region = dynamic(() => import("../../components/Matches/Graphs/Region"), {
+  ssr: false,
+});
+const MatchesSubHeader = dynamic(
+  () => import("../../components/Matches/SubHeader"),
+  { ssr: false }
+);
 
 type Props = {
   data: {

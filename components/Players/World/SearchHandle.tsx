@@ -1,9 +1,8 @@
-import _ from "lodash";
 import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import Select, { SingleValue } from "react-select";
 import { useGetStylesReactSelect } from "../../../share";
-import { useAppDispatch, useAppSelector } from "../../../store/hook";
+import { useAppDispatch } from "../../../store/hook";
 import { fetchPlayersLeaderboard } from "../../../store/Slices/playersLeaderboardSlice";
 
 type ItemList = {
@@ -17,24 +16,7 @@ const divisionIdsValue: ItemList[] = [
   { value: "2", label: "Europe" },
   { value: "3", label: "China" },
 ];
-const customStyles = {
-  option: (provided: any, state: any) => ({
-    ...provided,
-    borderBottom: "1px dotted pink",
-    color: state.isSelected ? "red" : "blue",
-    padding: 20,
-  }),
-  control: () => ({
-    // none of react-select's styles are passed to <Control />
-    width: 200,
-  }),
-  singleValue: (provided: any, state: any) => {
-    const opacity = state.isDisabled ? 0.5 : 1;
-    const transition = "opacity 300ms";
 
-    return { ...provided, opacity, transition };
-  },
-};
 const SearchHandle = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();

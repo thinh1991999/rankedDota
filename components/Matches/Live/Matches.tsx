@@ -1,19 +1,22 @@
-import _ from "lodash";
+import forEach from "lodash/forEach";
+import orderBy from "lodash/orderBy";
+import map from "lodash/map";
+import findLast from "lodash/findLast";
+import { ClipLoader } from "react-spinners";
 import React, { useState, useEffect } from "react";
 import Match from "./Match";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { MatchLive, MatchLiveCal } from "../../../interfaces/matches";
 import stratsApiService from "../../../services/stratsApi.service";
-import { ClipLoader } from "react-spinners";
 
 const handleMatches = (matches: MatchLive[]) => {
-  const newMatches = _.orderBy(matches, (match) => match.averageRank, "desc");
-  const finalMatches = _.map(newMatches, (match) => {
+  const newMatches = orderBy(matches, (match) => match.averageRank, "desc");
+  const finalMatches = map(newMatches, (match) => {
     const { players, liveWinRateValues } = match;
-    const wr = _.findLast(liveWinRateValues);
+    const wr = findLast(liveWinRateValues);
     let radiantNw = 0;
     let direNw = 0;
-    _.forEach(players, (player) => {
+    forEach(players, (player) => {
       if (player.isRadiant) {
         radiantNw += player.networth;
       } else {

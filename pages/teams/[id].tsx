@@ -1,12 +1,8 @@
 import { GetServerSideProps } from "next";
 import Error from "next/error";
+import dynamic from "next/dynamic";
 import React, { ReactElement, useEffect } from "react";
 import Layout from "../../components/Layout";
-import {
-  TeamOverviewMembers,
-  TeamOverviewSeries,
-  TeamSubHeader,
-} from "../../components/Teams";
 import { TeamHeader, TeamOverview } from "../../interfaces/teamsPage";
 import stratsApiService from "../../services/stratsApi.service";
 import { useAppDispatch } from "../../store";
@@ -16,6 +12,19 @@ import {
 } from "../../store/Slices/globalDataSlice";
 import { NextPageWithLayout } from "../_app";
 import { getImgStratsDota } from "../../share/ultils";
+
+const TeamSubHeader = dynamic(
+  () => import("../../components/Teams/SubHeaderTeam"),
+  { ssr: false }
+);
+const TeamOverviewSeries = dynamic(
+  () => import("../../components/Teams/Overview/Series"),
+  { ssr: false }
+);
+const TeamOverviewMembers = dynamic(
+  () => import("../../components/Teams/Overview/Members"),
+  { ssr: false }
+);
 
 type Props = {
   data: {
@@ -32,9 +41,12 @@ const TeamPage: NextPageWithLayout<Props> = (props) => {
   useEffect(() => {
     if (!props.data) return;
     dispatch(setSubHeaderMain(<TeamSubHeader team={props.data.header} />));
-    dispatch(
-      setHeaderImg(getImgStratsDota("/teams/" + props.data.header.id + ".png"))
-    );
+    if (props.data.header?.id)
+      dispatch(
+        setHeaderImg(
+          getImgStratsDota("/teams/" + props.data.header.id + ".png")
+        )
+      );
   }, [dispatch, props]);
 
   if (props.statusCode !== 200) {

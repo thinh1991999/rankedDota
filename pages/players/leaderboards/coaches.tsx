@@ -1,18 +1,26 @@
 import React, { useEffect } from "react";
+import dynamic from "next/dynamic";
 import Error from "next/error";
 import { ReactElement } from "react";
 import { GetStaticProps } from "next";
-
 import Layout from "../../../components/Layout";
 import stratsApiService from "../../../services/stratsApi.service";
 import { Leaderboard } from "../../../interfaces/players";
 import { NextPageWithLayout } from "../../_app";
-import { CoachesPage, PlayersSubHeader } from "../../../components/Players";
 import { useAppDispatch } from "../../../store";
 import {
   setHeaderImg,
   setSubHeaderMain,
 } from "../../../store/Slices/globalDataSlice";
+
+const CoachesPage = dynamic(
+  () => import("../../../components/Players/Coaches/Coaches"),
+  { ssr: false }
+);
+const PlayersSubHeader = dynamic(
+  () => import("../../../components/Players/SubHeader"),
+  { ssr: false }
+);
 
 type Props = {
   leaderboard: Leaderboard | null;

@@ -1,22 +1,27 @@
 import React, { useEffect } from "react";
-import Layout from "../../components/Layout";
-import { NextPageWithLayout } from "../_app";
+import dynamic from "next/dynamic";
 import { ReactElement } from "react";
 import { GetServerSideProps } from "next";
+import Layout from "../../components/Layout";
+import { NextPageWithLayout } from "../_app";
 import stratsApiService from "../../services/stratsApi.service";
-import { Matches, Stratz } from "../../interfaces/players";
+import { Matches } from "../../interfaces/players";
 import Error from "next/error";
-import {
-  Chart,
-  PlayersSubHeader,
-  QueueChart,
-  RankInfor,
-} from "../../components/Players";
 import { useAppDispatch } from "../../store";
 import {
   setHeaderImg,
   setSubHeaderMain,
 } from "../../store/Slices/globalDataSlice";
+
+const QueueChart = dynamic(
+  () => import("../../components/Players/Queue/Chart"),
+  { ssr: false }
+);
+
+const PlayersSubHeader = dynamic(
+  () => import("../../components/Players/SubHeader"),
+  { ssr: false }
+);
 
 type Props = {
   matches: Matches | null;

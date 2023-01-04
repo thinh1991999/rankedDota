@@ -1,4 +1,4 @@
-import _ from "lodash";
+import forEach from "lodash/forEach";
 import React, { useEffect, useState } from "react";
 import { PlayerMatchDetail } from "../../../../interfaces/matches";
 import { DIRE_ICON, RADIANT_ICON, sortRolesTeam } from "../../../../share";
@@ -16,17 +16,17 @@ const KillBreakdown = () => {
 
   useEffect(() => {
     if (!matchDetail) return;
-    const { players, durationSeconds } = matchDetail;
+    const { players } = matchDetail;
     const arrRadi: PlayerMatchDetail[] = [];
     const arrDire: PlayerMatchDetail[] = [];
     const arrEneRad: number[] = [];
     const arrEneDire: number[] = [];
-    _.forEach(players, (player) =>
+    forEach(players, (player) =>
       player.isRadiant
         ? arrEneDire.push(player.heroId)
         : arrEneRad.push(player.heroId)
     );
-    _.forEach(players, (player) =>
+    forEach(players, (player) =>
       player.isRadiant ? arrRadi.push(player) : arrDire.push(player)
     );
     const sortRad = sortRolesTeam(arrRadi);

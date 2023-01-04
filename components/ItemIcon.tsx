@@ -1,9 +1,13 @@
 import React, { memo } from "react";
 import uniqid from "uniqid";
-import ToolTip from "./ToolTip";
+import dynamic from "next/dynamic";
 import { getImgStratsDota, getDetailItem } from "../share/ultils";
 import { useAppSelector } from "../store/hook";
 import MyImage from "./MyImage";
+
+const ToolTip = dynamic(() => import("./ToolTip"), {
+  ssr: false,
+});
 
 const ItemIcon = ({
   id,

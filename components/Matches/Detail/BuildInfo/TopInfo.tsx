@@ -1,8 +1,6 @@
-import _ from "lodash";
+import forEach from "lodash/forEach";
 import React, { useEffect, useState, useMemo } from "react";
-import uniqid from "uniqid";
 import { AbilityDetail } from "../../../../interfaces/heroes";
-
 import { Ability } from "../../../../interfaces/matches";
 import {
   getDetaiAbility,
@@ -13,9 +11,7 @@ import {
 import { useAppSelector } from "../../../../store";
 import MyImage from "../../../MyImage";
 import Talent from "../../../Talent";
-import ToolTip from "../../../ToolTip";
 import Abilities from "./Abilities";
-import TalentDetail from "./TalentDetail";
 
 const TopInfo = ({
   topInfo,
@@ -55,10 +51,10 @@ const TopInfo = ({
     const { lvArr, abilities } = topInfo;
     let countLv = 1;
     const activesTl: number[] = [];
-    _.forEach(lvArr, (time) => {
+    forEach(lvArr, (time) => {
       if (time <= currentTime && time > 0) countLv++;
     });
-    _.forEach(talentIds, (tl) => {
+    forEach(talentIds, (tl) => {
       const { time, abilityId } = tl;
       if (time <= currentTime) activesTl.push(abilityId);
     });
@@ -72,7 +68,7 @@ const TopInfo = ({
     const { abilities } = topInfo;
     const abiFull: (AbilityDetail & { time: number })[] = [];
     const tlIds: Ability[] = [];
-    _.forEach(abilities, (abi) => {
+    forEach(abilities, (abi) => {
       const { abilityId, time } = abi;
       const detailAbility = getDetaiAbility(abilitiesData, abilityId);
       if (!detailAbility) return;

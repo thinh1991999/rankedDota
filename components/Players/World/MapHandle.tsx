@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useMemo } from "react";
 import { BeatLoader } from "react-spinners";
-
 import { useAppSelector } from "../../../store/hook";
 
 const MapHandle = () => {

@@ -1,4 +1,5 @@
-import _ from "lodash";
+import forEach from "lodash/forEach";
+import findIndex from "lodash/findIndex";
 import React, { useState, useEffect } from "react";
 import { Talent, AbilityDetail } from "../../interfaces/heroes";
 import { useAppSelector } from "../../store";
@@ -19,9 +20,9 @@ const TalentTree = ({ talents }: { talents: Talent[] }) => {
   useEffect(() => {
     const results: AbilityDetail[] = new Array(talents.length);
     let count = 0;
-    _.forEach(abilitiesData, (ability, key) => {
+    forEach(abilitiesData, (ability, key) => {
       const { id } = ability;
-      const idx = _.findIndex(talents, (talent) => {
+      const idx = findIndex(talents, (talent) => {
         return talent.abilityId === id;
       });
       if (idx !== -1) {
@@ -34,7 +35,7 @@ const TalentTree = ({ talents }: { talents: Talent[] }) => {
       lv: number;
       talents: AbilityDetail[];
     }[] = [];
-    _.forEach([10, 15, 20, 25], (lv) => {
+    forEach([10, 15, 20, 25], (lv) => {
       const res = {
         lv,
         talents: results.splice(0, 2),

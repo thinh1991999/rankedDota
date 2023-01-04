@@ -1,4 +1,3 @@
-import _ from "lodash";
 import moment from "moment";
 import React from "react";
 import { MatchLiveCal } from "../../../interfaces/matches";

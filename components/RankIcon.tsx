@@ -1,7 +1,11 @@
 import React, { memo, useEffect, useState } from "react";
 import { getImgStratsDota } from "../share/ultils";
-import ToolTip from "./ToolTip";
 import uniqid from "uniqid";
+import dynamic from "next/dynamic";
+
+const ToolTip = dynamic(() => import("./ToolTip"), {
+  ssr: false,
+});
 
 const RankIcon = ({
   rank,

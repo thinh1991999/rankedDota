@@ -1,15 +1,10 @@
 import React, { useState } from "react";
-import { TeamOverview } from "../../../interfaces/teamsPage";
-import {
-  DIRE_ICON,
-  getImgStratsDota,
-  makeArray,
-  RADIANT_ICON,
-} from "../../../share";
-
-import MyImage from "../../MyImage";
-import ToolTip from "../../ToolTip";
+import forEach from "lodash/forEach";
+import sortBy from "lodash/sortBy";
 import uniqid from "uniqid";
+import Link from "next/link";
+import dynamic from "next/dynamic";
+import { TeamOverview } from "../../../interfaces/teamsPage";
 import {
   AiOutlineCheckCircle,
   AiOutlineMinus,
@@ -17,16 +12,23 @@ import {
 } from "react-icons/ai";
 import { getSum, getTimeBySeconds } from "../../../share/ultils";
 import HeroIcon from "../../HeroIcon";
-import _ from "lodash";
-import IconTypeRole from "../../IconTypeRole";
-import Link from "next/link";
+import {
+  DIRE_ICON,
+  getImgStratsDota,
+  makeArray,
+  RADIANT_ICON,
+} from "../../../share";
+import MyImage from "../../MyImage";
+
+const ToolTip = dynamic(() => import("../../ToolTip"), { ssr: false });
 
 const Series = ({ team: teamInfo }: { team: TeamOverview }) => {
   const [showId, setShowId] = useState<number | null>(null);
+
+  if (!teamInfo.team) return <></>;
   const {
     team: { series },
   } = teamInfo;
-
   return (
     <div className="p-2 rounded-md dark:bg-layer-dark bg-layer-light my-4">
       <h5>Recently Completed Series</h5>
@@ -159,7 +161,7 @@ const Series = ({ team: teamInfo }: { team: TeamOverview }) => {
               </div>
               {id === showId && (
                 <div className="dark:text-textSecondPrimary-dark text-textSecondPrimary-light">
-                  {_.sortBy(matches, (match) => match.startDateTime).map(
+                  {sortBy(matches, (match) => match.startDateTime).map(
                     (match, idx) => {
                       const {
                         id,
@@ -170,7 +172,7 @@ const Series = ({ team: teamInfo }: { team: TeamOverview }) => {
                         durationSeconds,
                       } = match;
                       let firstPickRadiant = true;
-                      _.forEach(pickBans, (p) => {
+                      forEach(pickBans, (p) => {
                         if (p.isPick) {
                           firstPickRadiant = p.isRadiant;
                           return false;

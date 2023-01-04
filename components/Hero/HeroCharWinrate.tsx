@@ -1,4 +1,6 @@
-import _ from "lodash";
+import forEach from "lodash/forEach";
+import orderBy from "lodash/orderBy";
+import filter from "lodash/filter";
 import React, { useEffect, useMemo, useState } from "react";
 import {
   Chart as ChartJS,
@@ -265,20 +267,20 @@ const HeroCharWinrate = ({
       matchCount: number;
     }[] = [];
     let totalWr: number = 0;
-    _.forEach(winGameVersions, (game) => {
+    forEach(winGameVersions, (game) => {
       if (game.heroId === hero.id) {
-        const filter = _.filter(
+        const filters = filter(
           gameVersions,
           (item) => item.id === game.gameVersionId
         );
         versions.push({
-          gameVersion: filter[0],
+          gameVersion: filters[0],
           winGameVersion: game,
         });
       }
     });
-    versions = _.orderBy(versions, (game) => game.gameVersion.asOfDateTime);
-    _.forEach(versions, (ver) => {
+    versions = orderBy(versions, (game) => game.gameVersion.asOfDateTime);
+    forEach(versions, (ver) => {
       const {
         gameVersion: { name },
         winGameVersion: { winCount, matchCount },

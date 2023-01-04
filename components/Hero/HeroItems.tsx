@@ -1,15 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
-import _ from "lodash";
-import { Event, Item, ItemNeutral } from "../../interfaces/item";
+import dynamic from "next/dynamic";
+import forEach from "lodash/forEach";
+import orderBy from "lodash/orderBy";
+import sortBy from "lodash/sortBy";
+import reduce from "lodash/reduce";
+import findIndex from "lodash/findIndex";
+import { Item, ItemNeutral } from "../../interfaces/item";
 import {
   getDetailItem,
   getImgStratsDota,
   getTimeBySeconds,
 } from "../../share/ultils";
 import MyImage from "../MyImage";
-import ToolTip from "../ToolTip";
 import { useAppSelector } from "../../store";
 import { HeroStats, ItemBootPurchase } from "../../interfaces/heroes";
+
+const ToolTip = dynamic(() => import("../ToolTip"), {
+  ssr: false,
+});
 
 type Tier = {
   title: string;
@@ -220,14 +228,14 @@ const HeroItems = ({ stats }: { stats: HeroStats }) => {
 
   useEffect(() => {
     const getNewArr = (itemList: ItemBootPurchase[]) => {
-      const total = _.reduce(
+      const total = reduce(
         itemList,
         (prev, curr) => {
           return prev + curr.matchCount;
         },
         0
       );
-      const items = _.orderBy(
+      const items = orderBy(
         itemList,
         (item) => {
           const { matchCount, winCount } = item;
@@ -275,11 +283,11 @@ const HeroItems = ({ stats }: { stats: HeroStats }) => {
       { title: "Tier 4", data: { items: [], total: 0 } },
       { title: "Tier 5", data: { items: [], total: 0 } },
     ];
-    _.forEach(items, (item) => {
+    forEach(items, (item) => {
       const { id, stat } = item;
       if (stat) {
         const { neutralItemTier } = stat;
-        const idx = _.findIndex(itemNeutral, (itemm) => itemm.itemId === id);
+        const idx = findIndex(itemNeutral, (itemm) => itemm.itemId === id);
         if (idx !== -1) {
           switch (neutralItemTier) {
             case "TIER_1":
@@ -323,11 +331,11 @@ const HeroItems = ({ stats }: { stats: HeroStats }) => {
         }
       }
     });
-    _.forEach(resultTiers, (tier) => {
+    forEach(resultTiers, (tier) => {
       const {
         data: { items, total },
       } = tier;
-      tier.data.items = _.sortBy(
+      tier.data.items = sortBy(
         items,
         (item) => {
           const { equippedMatchCount, equippedMatchWinCount } =

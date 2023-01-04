@@ -15,7 +15,19 @@ module.exports = {
     // config.plugins.push(new webpack.IgnorePlugin(/\/__tests__\//));
 
     // Important: return the modified config
-    config.resolve.extensions = [".mjs", ".js", ".jsx", ".json"];
+    if (!isServer) {
+      // config.plugins.push(new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/));
+      config.plugins.push(
+        new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /de/)
+      );
+      // config.plugins.push(new DuplicatePackageCheckerPlugin());
+      // config.resolve.alias["fast-deep-equal"] = path.resolve(
+      //   __dirname,
+      //   "node_modules",
+      //   "fast-deep-equal"
+      // );
+      config.resolve.extensions = [".mjs", ".js", ".jsx", ".json"];
+    }
     return config;
   },
 };

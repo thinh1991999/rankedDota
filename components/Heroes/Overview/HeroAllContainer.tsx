@@ -1,12 +1,16 @@
 import filter from "lodash/filter";
 import forEach from "lodash/forEach";
+import dynamic from "next/dynamic";
 import React, { useState, useEffect } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import { Hero, HeroesStatus, HeroStatus } from "../../../interfaces/heroes";
 import { useAppSelector } from "../../../store";
 import MyImage from "../../MyImage";
-import ToolTip from "../../ToolTip";
 import HeroType from "./HeroType";
+
+const ToolTip = dynamic(() => import("../../ToolTip"), {
+  ssr: false,
+});
 
 type HeroPageAll = {
   agi: Hero[];

@@ -1,4 +1,5 @@
-import _ from "lodash";
+import filter from "lodash/filter";
+import omit from "lodash/omit";
 import { useRouter } from "next/router";
 import React, { useState, useMemo } from "react";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
@@ -16,7 +17,7 @@ const OptionsRank = () => {
       rankBracketHeroTimeDetail &&
       typeof rankBracketHeroTimeDetail === "string"
     ) {
-      const result = _.filter(heroRankOptions, (option) =>
+      const result = filter(heroRankOptions, (option) =>
         option.query.includes(rankBracketHeroTimeDetail)
       );
       return result[0]?.title || "Error";
@@ -33,7 +34,7 @@ const OptionsRank = () => {
     };
     let url = `/heroes/${id}?rankBracketHeroTimeDetail=${query}`;
     if (!query) {
-      link = _.omit(link, ["query"]);
+      link = omit(link, ["query"]);
       url = `/heroes/${id}`;
     }
     router.push(link, url, {
