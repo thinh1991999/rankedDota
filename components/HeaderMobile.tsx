@@ -24,7 +24,7 @@ const HeaderMobile = () => {
     <div
       className={`${
         showNavBarMobile ? "translate-y-0" : "-translate-y-[calc(100%_+_80px)]"
-      } fixed pt-[80px] top-0 left-0 transition-all duration-[0.4s] bottom-0 right-0 bg-black z-40`}
+      } fixed pt-[80px] top-0 left-0 transition-all duration-[0.4s] bottom-0 right-0  dark:bg-black bg-white  z-40`}
     >
       <ul className="max-w-[600px] m-auto py-3 px-4">
         {headerNavs.map((nav, idx) => {
@@ -47,8 +47,8 @@ const HeaderMobile = () => {
             <li
               key={idx}
               className={`${
-                checkLink ? "bg-layer-dark" : ""
-              } px-2 py-4 hover:bg-layer-dark rounded-md cursor-pointer flex items-center`}
+                checkLink ? "dark:bg-layer-dark bg-layer-light" : ""
+              } px-2 py-4 hover:bg-layer-light dark:hover:bg-layer-dark rounded-md cursor-pointer flex items-center`}
               onClick={() => handleLink(link)}
             >
               <div className="w-[25px] h-[25px]">
