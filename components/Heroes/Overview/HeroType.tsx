@@ -31,7 +31,7 @@ const HeroType = ({
         <h6 className="ml-2">{title}</h6>
       </div>
       <div className="grid grid-cols-[repeat(auto-fill,minmax(44px,1fr))] gap-2 mt-3">
-        {data.map((item) => {
+        {data.map((item, idx) => {
           const { displayName, id, shortName, name } = item;
           const isMeta = metaHeroes.includes(id);
           let checkSearch = true;
@@ -48,7 +48,7 @@ const HeroType = ({
           return (
             <>
               <ToolTip
-                key={id}
+                key={idx}
                 target={
                   <Link href={`/heroes/${id.toString()}`}>
                     <a

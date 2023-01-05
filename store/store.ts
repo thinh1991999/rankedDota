@@ -6,7 +6,18 @@ import {
   combineReducers,
   ThunkAction,
   AnyAction,
+  getDefaultMiddleware,
 } from "@reduxjs/toolkit";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
 import { createWrapper } from "next-redux-wrapper";
 import globalDataSlice from "./Slices/globalDataSlice";
 import { Root } from "../interfaces/state";
@@ -34,9 +45,8 @@ export const makeStore = () => {
       reducer: combinedReducer,
     });
   } else {
-    const { persistStore, persistReducer } = require("redux-persist");
+    const { persistReducer } = require("redux-persist");
     const storage = require("redux-persist/lib/storage").default;
-
     const persistConfig = {
       key: "root",
       storage,
