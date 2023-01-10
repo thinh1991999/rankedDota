@@ -104,22 +104,28 @@ const MatchPage: NextPageWithLayout<Props> = (props) => {
           <ErrorMess errMess={errMess} />
         ) : (
           <div className="container m-auto">
-            <div className="my-4">
-              <Matchup />
-            </div>
-            <div className="my-4">
-              <Status />
-            </div>
-            <div className="my-4">
-              <Draft />
-            </div>
-            <div className="my-4">
-              <BuildInfo />
-            </div>
-            <div className="my-4">
-              <KillBreakdown />
-            </div>
-            <TimeSeek />
+            {props.match.gameMode !== "TURBO" ? (
+              <>
+                <div className="my-4">
+                  <Matchup />
+                </div>
+                <div className="my-4">
+                  <Status />
+                </div>
+                <div className="my-4">
+                  <Draft />
+                </div>
+                <div className="my-4">
+                  <BuildInfo />
+                </div>
+                <div className="my-4">
+                  <KillBreakdown />
+                </div>
+                <TimeSeek />
+              </>
+            ) : (
+              <ErrorMess errMess="This match is taking an unusually long time to parse." />
+            )}
           </div>
         )}
       </section>

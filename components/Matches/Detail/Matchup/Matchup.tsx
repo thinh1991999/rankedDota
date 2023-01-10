@@ -75,7 +75,9 @@ const Matchup = () => {
           impPerMinute,
           inventoryReport,
         } = stats;
-        const initInven = inventoryReport[inventoryReport.length - 1];
+        const initInven = inventoryReport
+          ? inventoryReport[inventoryReport.length - 1]
+          : null;
         let infoPlayer: PlayerTimeline = {
           heroId,
           partyId,
@@ -97,7 +99,6 @@ const Matchup = () => {
           inventory: initInven,
           steamAccount,
         };
-
         infoPlayer.lv = findLastIndex(lvArr, (lv) => lv <= currTime) + 1;
         infoPlayer.kills =
           findLastIndex(killEvents, (kill) => kill.time <= currTime) + 1;
@@ -105,50 +106,60 @@ const Matchup = () => {
           findLastIndex(deathEvents, (death) => death.time <= currTime) + 1;
         infoPlayer.assists =
           findLastIndex(assistEvents, (assist) => assist.time <= currTime) + 1;
-        const nw = findLast(
-          [...networthPerMinute, networth],
-          (nw, idx) => idx <= timeIdx
-        );
+        const nw = networthPerMinute
+          ? findLast(
+              [...networthPerMinute, networth],
+              (nw, idx) => idx <= timeIdx
+            )
+          : 0;
         infoPlayer.networth = nw !== undefined ? nw : networth;
-        const newImp = findLast(
-          [...impPerMinute, imp],
-          (imp, idx) => idx <= timeIdx
-        );
+        const newImp = impPerMinute
+          ? findLast([...impPerMinute, imp], (imp, idx) => idx <= timeIdx)
+          : 0;
         infoPlayer.imp = newImp !== undefined ? newImp : imp;
-        infoPlayer.numLastHits = reduce(
-          lastHitsPerMinute,
-          (prev, curr, idx) => {
-            if (timeIdx - 1 === lastHitsPerMinute.length) return numLastHits;
-            if (idx <= timeIdx - 1) {
-              return prev + curr;
-            } else {
-              return prev;
-            }
-          },
-          0
-        );
-        infoPlayer.numDenies = reduce(
-          deniesPerMinute,
-          (prev, curr, idx) => {
-            if (timeIdx - 1 === deniesPerMinute.length) return numDenies;
-            if (idx <= timeIdx - 1) {
-              return prev + curr;
-            } else {
-              return prev;
-            }
-          },
-          0
-        );
-        const newGpm = findLast(
-          [0, ...goldArr, goldPerMinute],
-          (nw, idx) => idx <= timeIdx
-        );
+        infoPlayer.numLastHits = lastHitsPerMinute
+          ? reduce(
+              lastHitsPerMinute,
+              (prev, curr, idx) => {
+                if (timeIdx - 1 === lastHitsPerMinute.length)
+                  return numLastHits;
+                if (idx <= timeIdx - 1) {
+                  return prev + curr;
+                } else {
+                  return prev;
+                }
+              },
+              0
+            )
+          : 0;
+        infoPlayer.numDenies = deniesPerMinute
+          ? reduce(
+              deniesPerMinute,
+              (prev, curr, idx) => {
+                if (timeIdx - 1 === deniesPerMinute.length) return numDenies;
+                if (idx <= timeIdx - 1) {
+                  return prev + curr;
+                } else {
+                  return prev;
+                }
+              },
+              0
+            )
+          : 0;
+        const newGpm = goldArr
+          ? findLast(
+              [0, ...goldArr, goldPerMinute],
+              (nw, idx) => idx <= timeIdx
+            )
+          : 0;
         infoPlayer.goldPerMinute =
           newGpm !== undefined ? newGpm : goldPerMinute;
-        const newExp = findLast(
-          [0, ...expArr, experiencePerMinute],
-          (nw, idx) => idx <= timeIdx
-        );
+        const newExp = expArr
+          ? findLast(
+              [0, ...expArr, experiencePerMinute],
+              (nw, idx) => idx <= timeIdx
+            )
+          : 0;
         infoPlayer.experiencePerMinute =
           newExp !== undefined ? newExp : experiencePerMinute;
         isRadiant

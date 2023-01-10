@@ -25,10 +25,9 @@ const Map = ({ size = 300 }: { size?: number }) => {
       </g>
       {towerPos.map((e, idx) => {
         const { x, y, npcId, type, isRadiant } = e;
-        const npc = towerDeaths.filter((build) => build.npcId === npcId);
-        console.log(npc);
+        const npc = towerDeaths?.filter((build) => build.npcId === npcId);
         let color = isRadiant ? "rgba(6, 195, 88, 1)" : "rgba(195, 6, 6, 1)";
-        if (npc.length > 0) {
+        if (npc && npc.length > 0) {
           const { time } = npc[0];
           if (time <= currentTime) color = "rgba(255, 255, 255, 0.16)";
         }

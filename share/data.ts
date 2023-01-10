@@ -145,11 +145,11 @@ export const heroesNavs: HeaderNav[] = [
       },
     ],
   },
-  {
-    name: "Guides",
-    link: "/heroes/guides",
-    hint: "/heroes/guides",
-  },
+  // {
+  //   name: "Guides",
+  //   link: "/heroes/guides",
+  //   hint: "/heroes/guides",
+  // },
 ];
 
 export const playersNavs: HeaderNav[] = [
@@ -163,11 +163,11 @@ export const playersNavs: HeaderNav[] = [
     link: "/players/queue",
     hint: "/players/queue",
   },
-  {
-    name: "Highlights",
-    link: "/players/highlights",
-    hint: "/players/highlights",
-  },
+  // {
+  //   name: "Highlights",
+  //   link: "/players/highlights",
+  //   hint: "/players/highlights",
+  // },
   {
     name: "Leaderboard",
     fatherLink: "/players/leaderboards",

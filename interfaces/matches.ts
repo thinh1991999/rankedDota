@@ -463,7 +463,7 @@ export interface PlayerTimeline extends TeamSort {
   heroDamage: number;
   towerDamage: number;
   heroHealing: number;
-  inventory: InventoryReport;
+  inventory: InventoryReport | null;
   steamAccount: SteamAccountMatchDetail;
 }
 
