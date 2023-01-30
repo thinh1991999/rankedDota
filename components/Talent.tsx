@@ -17,7 +17,6 @@ const ToolTipTree = memo(function ToolTipTree({
     stats: number;
   };
 }) {
-  // console.log("ToolTipTree");
   return (
     <div className="flex items-center w-[500px]">
       <div className="flex-1 flex flex-col-reverse">
@@ -48,11 +47,7 @@ const ToolTipTree = memo(function ToolTipTree({
       <div className="flex-1 flex flex-col-reverse">
         {talents.map((talent, idx) => {
           if (idx % 2 !== 0) return;
-          const {
-            slot,
-            abilityId,
-            language: { displayName },
-          } = talent;
+          const { slot, abilityId, language } = talent;
           let checked: boolean = treeActive.slotActives.includes(slot);
           return (
             <div key={abilityId} className="flex justify-center">
@@ -63,7 +58,7 @@ const ToolTipTree = memo(function ToolTipTree({
                     : "text-textSecondPrimary-dark opacity-30"
                 } text-xs text-center`}
               >
-                {displayName}
+                {language?.displayName || ""}
               </span>
             </div>
           );

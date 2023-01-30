@@ -119,7 +119,7 @@ const Members = ({ team: teamInfo }: { team: TeamOverview }) => {
                     />
                   </div>
                   <div className="flex flex-col justify-center items-center py-2 text-textSecondPrimary-light dark:text-textSecondPrimary-dark">
-                    <span className="text-textMain-light dark:text-textMain-dark mb-1">
+                    <span className="text-textMain-light dark:text-textMain-dark mb-1 one-line-max">
                       {proName}
                     </span>
                     <MyImage
@@ -129,7 +129,9 @@ const Members = ({ team: teamInfo }: { team: TeamOverview }) => {
                       alt=""
                       borderRadius={2}
                     />
-                    <span className="my-1">{realName}</span>
+                    <span className="my-1 one-line-max text-center">
+                      {realName}
+                    </span>
                     <div className="my-1">
                       <IconTypeRole role={lane} width={20} height={20} />
                     </div>

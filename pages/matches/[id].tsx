@@ -60,6 +60,7 @@ const MatchPage: NextPageWithLayout<Props> = (props) => {
   const loading = useAppSelector((state) => state.matchDetail.loading);
   const errMess = useAppSelector((state) => state.matchDetail.errMess);
   const [mounted, setMounted] = useState<boolean>(false);
+
   useEffect(() => {
     if (mounted) return;
     dispatch(setLoading(true));
@@ -76,9 +77,14 @@ const MatchPage: NextPageWithLayout<Props> = (props) => {
   }, [props, dispatch, mounted]);
 
   useEffect(() => {
-    dispatch(setSubHeaderMain(<MatchDetailSubHeader />));
-    dispatch(setHeaderImg("/card2.jpg"));
-  }, [dispatch]);
+    if (!props.match) {
+      dispatch(setSubHeaderMain(null));
+      dispatch(setHeaderImg("/card2.jpg"));
+    } else {
+      dispatch(setSubHeaderMain(<MatchDetailSubHeader />));
+      dispatch(setHeaderImg("/card2.jpg"));
+    }
+  }, [dispatch, props]);
 
   if (props.statusCode !== 200) {
     return <Error statusCode={props.statusCode} />;
@@ -104,7 +110,7 @@ const MatchPage: NextPageWithLayout<Props> = (props) => {
           <ErrorMess errMess={errMess} />
         ) : (
           <div className="container m-auto">
-            {props.match.gameMode !== "TURBO" ? (
+            {props.match.analysisOutcome ? (
               <>
                 <div className="my-4">
                   <Matchup />

@@ -326,7 +326,6 @@ export const getGradient = (
 };
 
 export function sortRolesTeam<T extends TeamSort>(arr: T[]): T[] {
-  console.log(arr);
   const newArr = new Array<T>(5);
   forEach(arr, (item) => {
     const { role, lane, position } = item;

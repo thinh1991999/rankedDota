@@ -20,8 +20,10 @@ const ChartHead = () => {
   useEffect(() => {
     if (!matchDetail) return;
     const { radiantExperienceLeads, radiantNetworthLeads } = matchDetail;
-    const expLead = radiantExperienceLeads[timeSeek];
-    const goldLead = radiantNetworthLeads[timeSeek];
+    const expLead = radiantExperienceLeads
+      ? radiantExperienceLeads[timeSeek]
+      : 0;
+    const goldLead = radiantNetworthLeads ? radiantNetworthLeads[timeSeek] : 0;
     setNwTotal({
       isRadiant: goldLead >= 0,
       nw: goldLead < 0 ? goldLead * -1 : goldLead || 0,
