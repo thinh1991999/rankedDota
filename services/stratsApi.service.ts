@@ -131,8 +131,497 @@ class StratsApiService {
         bracketBasicIds: bracketBasicIds,
         topPlayersBracketIds: brackets ? brackets : ["IMMORTAL"],
       },
-      query:
-        "query GetHeroOverview($heroId: Short!, $bracketIds: [RankBracket], $bracketBasicIds: [RankBracketBasicEnum], $topPlayersBracketIds: [RankBracket]) {\n  heroStats {\n    ...HeroOverviewGuidesHeroStatsQueryFragment\n    ...HeroOverviewItemsHeroStatsQueryFragment\n    ...HeroOverviewMatchupsHeroStatsQueryFragment\n    ...HeroOverviewGraphsHeroStatsQueryFragment\n    ...HeroOverviewAbilitiesHeroStatsQueryFragment\n    ...HeroOverviewTalentsHeroStatsQueryFragment\n    ...HeroOverviewPositionsHeroStatsQueryFragment\n    ...HeroOverviewRampagesHeroStatsQueryFragment\n    __typename\n  }\n  constants {\n    ...HeroOverviewAbilitiesConstantQueryFragment\n    ...HeroOverviewConstantsConstantQueryFragment\n    ...HeroOverviewItemsConstantQueryFragment\n    __typename\n  }\n  leaderboard {\n    ...HeroOverviewPlayersLeaderboardQueryFragment\n    __typename\n  }\n}\n\nfragment HeroOverviewGuidesHeroStatsQueryFragment on HeroStatsQuery {\n  guide(heroId: $heroId) {\n    heroId\n    guides(take: 3) {\n      ...GuidePreviewHeroGuide\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment GuidePreviewHeroGuide on HeroGuideType {\n  heroId\n  match {\n    id\n    durationSeconds\n    players {\n      matchId\n      steamAccountId\n      heroId\n      position\n      __typename\n    }\n    __typename\n  }\n  matchPlayer {\n    matchId\n    steamAccountId\n    heroId\n    position\n    steamAccount {\n      id\n      name\n      proSteamAccount {\n        name\n        __typename\n      }\n      __typename\n    }\n    assists\n    deaths\n    imp\n    isRadiant\n    item0Id\n    item1Id\n    item2Id\n    item3Id\n    item4Id\n    item5Id\n    neutral0Id\n    kills\n    additionalUnit {\n      item0Id\n      item1Id\n      item2Id\n      item3Id\n      item4Id\n      item5Id\n      neutral0Id\n      __typename\n    }\n    stats {\n      itemPurchases {\n        itemId\n        time\n        __typename\n      }\n      level\n      __typename\n    }\n    level\n    abilities {\n      abilityId\n      time\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewAbilitiesConstantQueryFragment on ConstantQuery {\n  hero(id: $heroId) {\n    id\n    abilities {\n      abilityId\n      ability {\n        id\n        name\n        stat {\n          maxLevel\n          behavior\n          unitTargetTeam\n          unitTargetType\n          hasScepterUpgrade\n          isGrantedByScepter\n          isGrantedByShard\n          isUltimate\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewAbilitiesHeroStatsQueryFragment on HeroStatsQuery {\n  abilityMaxLevel(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {\n    abilityId\n    level\n    winCount\n    matchCount\n    __typename\n  }\n  abilityMinLevel(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {\n    abilityId\n    level\n    winCount\n    matchCount\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewItemsHeroStatsQueryFragment on HeroStatsQuery {\n  ...HeroOverviewItemsStagesHeroStatsQueryFragment\n  ...HeroOverviewItemsNeutralsHeroStatsQueryFragment\n  ...HeroOverviewItemsBootsHeroStatsQueryFragment\n  __typename\n}\n\nfragment HeroOverviewItemsConstantQueryFragment on ConstantQuery {\n  ...HeroOverviewItemsNeutralsConstantQueryFragment\n  __typename\n}\n\nfragment HeroOverviewItemsStagesHeroStatsQueryFragment on HeroStatsQuery {\n  purchasePattern(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {\n    startingItems {\n      ...HeroOverviewItemsStagesHeroItemStartingPurchaseTypeFragment\n      __typename\n    }\n    earlyGame {\n      ...HeroOverviewItemsStagesHeroItemPurchaseTypeFragment\n      __typename\n    }\n    midGame {\n      ...HeroOverviewItemsStagesHeroItemPurchaseTypeFragment\n      __typename\n    }\n    lateGame {\n      ...HeroOverviewItemsStagesHeroItemPurchaseTypeFragment\n      __typename\n    }\n    __typename\n  }\n  purchasePatternStats: stats(\n    heroIds: [$heroId]\n    bracketBasicIds: $bracketBasicIds\n    minTime: 0\n    maxTime: 36\n    groupByTime: true\n  ) {\n    time\n    matchCount\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewItemsStagesHeroItemStartingPurchaseTypeFragment on HeroItemStartingPurchaseType {\n  itemId\n  winCount\n  matchCount\n  instance\n  wasGiven\n  __typename\n}\n\nfragment HeroOverviewItemsStagesHeroItemPurchaseTypeFragment on HeroItemPurchaseType {\n  itemId\n  winCount\n  matchCount\n  instance\n  __typename\n}\n\nfragment HeroOverviewItemsBootsHeroStatsQueryFragment on HeroStatsQuery {\n  itemBootPurchase(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {\n    itemId\n    matchCount\n    winCount\n    timeAverage\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewItemsNeutralsHeroStatsQueryFragment on HeroStatsQuery {\n  itemNeutral(\n    heroId: $heroId\n    bracketBasicIds: $bracketBasicIds\n    week: 1671984373\n  ) {\n    itemId\n    equippedMatchCount\n    equippedMatchWinCount\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewItemsNeutralsConstantQueryFragment on ConstantQuery {\n  items {\n    id\n    stat {\n      neutralItemTier\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewMatchupsHeroStatsQueryFragment on HeroStatsQuery {\n  heroVsHeroMatchup(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {\n    advantage {\n      ...HeroOverviewMatchupsHeroDryadTypeFragment\n      __typename\n    }\n    disadvantage {\n      ...HeroOverviewMatchupsHeroDryadTypeFragment\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewMatchupsHeroStatsHeroDryadTypeFragment on HeroStatsHeroDryadType {\n  heroId2\n  synergy\n  matchCount\n  winCount\n  __typename\n}\n\nfragment HeroOverviewMatchupsHeroDryadTypeFragment on HeroDryadType {\n  with {\n    ...HeroOverviewMatchupsHeroStatsHeroDryadTypeFragment\n    __typename\n  }\n  vs {\n    ...HeroOverviewMatchupsHeroStatsHeroDryadTypeFragment\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewGraphsHeroStatsQueryFragment on HeroStatsQuery {\n  winGameVersion(take: 7, groupBy: HERO_ID, bracketIds: $bracketIds) {\n    gameVersionId\n    heroId\n    winCount\n    matchCount\n    __typename\n  }\n  winDay(take: 32, groupBy: HERO_ID, bracketIds: $bracketIds) {\n    timestamp: day\n    heroId\n    winCount\n    matchCount\n    __typename\n  }\n  winHour(take: 25, groupBy: HERO_ID, bracketIds: $bracketIds) {\n    timestamp: hour\n    heroId\n    winCount\n    matchCount\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewPlayersLeaderboardQueryFragment on LeaderboardQuery {\n  hero(request: {heroIds: [$heroId], bracketIds: $topPlayersBracketIds, take: 5}) {\n    position\n    impAverage\n    steamAccount {\n      ...PlayerColSteamAccountTypeFragment\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment PlayerColSteamAccountTypeFragment on SteamAccountType {\n  avatar\n  ...PlayerNameColSteamAccountTypeFragment\n  __typename\n}\n\nfragment PlayerNameColSteamAccountTypeFragment on SteamAccountType {\n  id\n  name\n  proSteamAccount {\n    name\n    __typename\n  }\n  isAnonymous\n  smurfFlag\n  __typename\n}\n\nfragment HeroOverviewTalentsHeroStatsQueryFragment on HeroStatsQuery {\n  talent(heroId: $heroId) {\n    abilityId\n    matchCount\n    winCount\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewPositionsHeroStatsQueryFragment on HeroStatsQuery {\n  position: stats(\n    heroIds: [$heroId]\n    bracketBasicIds: $bracketBasicIds\n    groupByPosition: true\n    maxTime: 0\n  ) {\n    position\n    matchCount: remainingMatchCount\n    winCount\n    __typename\n  }\n  laneOutcomeWith_POSITION_1: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_1]\n    isWith: true\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeWith_POSITION_2: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_2]\n    isWith: true\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeWith_POSITION_3: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_3]\n    isWith: true\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeWith_POSITION_4: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_4]\n    isWith: true\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeWith_POSITION_5: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_5]\n    isWith: true\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeAgainst_POSITION_1: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_1]\n    isWith: false\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeAgainst_POSITION_2: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_2]\n    isWith: false\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeAgainst_POSITION_3: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_3]\n    isWith: false\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeAgainst_POSITION_4: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_4]\n    isWith: false\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  laneOutcomeAgainst_POSITION_5: laneOutcome(\n    heroId: $heroId\n    positionIds: [POSITION_5]\n    isWith: false\n  ) {\n    ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewPositionsHeroLaneOutcomeTypeFragment on HeroLaneOutcomeType {\n  heroId2\n  matchCount\n  winCount\n  lossCount\n  drawCount\n  stompWinCount\n  stompLossCount\n  __typename\n}\n\nfragment HeroOverviewRampagesHeroStatsQueryFragment on HeroStatsQuery {\n  rampages(request: {heroId: $heroId, bracketBasicIds: $bracketBasicIds, take: 5}) {\n    match {\n      id\n      rank\n      endDateTime\n      players {\n        steamAccountId\n        isRadiant\n        heroId\n        __typename\n      }\n      __typename\n    }\n    steamAccount {\n      avatar\n      ...PlayerNameColSteamAccountTypeFragment\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment HeroOverviewConstantsConstantQueryFragment on ConstantQuery {\n  hero(id: $heroId) {\n    id\n    language {\n      hype\n      lore\n      __typename\n    }\n    aliases\n    __typename\n  }\n  __typename\n}\n",
+      query: `query GetHeroOverview($heroId: Short!, $bracketIds: [RankBracket], $bracketBasicIds: [RankBracketBasicEnum], $topPlayersBracketIds: [RankBracket]) {
+        heroStats {
+          ...HeroOverviewGuidesHeroStatsQueryFragment
+          ...HeroOverviewItemsHeroStatsQueryFragment
+          ...HeroOverviewMatchupsHeroStatsQueryFragment
+          ...HeroOverviewGraphsHeroStatsQueryFragment
+          ...HeroOverviewAbilitiesHeroStatsQueryFragment
+          ...HeroOverviewTalentsHeroStatsQueryFragment
+          ...HeroOverviewPositionsHeroStatsQueryFragment
+          ...HeroOverviewRampagesHeroStatsQueryFragment
+          __typename
+        }
+        constants {
+          ...HeroOverviewAbilitiesConstantQueryFragment
+          ...HeroOverviewConstantsConstantQueryFragment
+          ...HeroOverviewItemsConstantQueryFragment
+          __typename
+        }
+        leaderboard {
+          ...HeroOverviewPlayersLeaderboardQueryFragment
+          __typename
+        }
+      }
+      
+      fragment HeroOverviewGuidesHeroStatsQueryFragment on HeroStatsQuery {
+        guide(heroId: $heroId) {
+          heroId
+          guides(take: 3) {
+            ...GuidePreviewHeroGuide
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      
+      fragment GuidePreviewHeroGuide on HeroGuideType {
+        heroId
+        match {
+          id
+          durationSeconds
+          players {
+            matchId
+            steamAccountId
+            heroId
+            position
+            __typename
+          }
+          __typename
+        }
+        matchPlayer {
+          matchId
+          steamAccountId
+          heroId
+          position
+          steamAccount {
+            id
+            name
+            proSteamAccount {
+              name
+              __typename
+            }
+            __typename
+          }
+          assists
+          deaths
+          imp
+          isRadiant
+          item0Id
+          item1Id
+          item2Id
+          item3Id
+          item4Id
+          item5Id
+          neutral0Id
+          kills
+          additionalUnit {
+            item0Id
+            item1Id
+            item2Id
+            item3Id
+            item4Id
+            item5Id
+            neutral0Id
+            __typename
+          }
+          stats {
+            itemPurchases {
+              itemId
+              time
+              __typename
+            }
+            level
+            __typename
+          }
+          level
+          abilities {
+            abilityId
+            time
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      
+      fragment HeroOverviewAbilitiesConstantQueryFragment on ConstantQuery {
+        hero(id: $heroId) {
+          id
+          abilities {
+            abilityId
+            ability {
+              id
+              name
+              stat {
+                maxLevel
+                behavior
+                unitTargetTeam
+                unitTargetType
+                hasScepterUpgrade
+                isGrantedByScepter
+                isGrantedByShard
+                isUltimate
+                __typename
+              }
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      
+      fragment HeroOverviewAbilitiesHeroStatsQueryFragment on HeroStatsQuery {
+        abilityMaxLevel(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {
+          abilityId
+          level
+          winCount
+          matchCount
+          __typename
+        }
+        abilityMinLevel(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {
+          abilityId
+          level
+          winCount
+          matchCount
+          __typename
+        }
+        __typename
+      }
+      
+      fragment HeroOverviewItemsHeroStatsQueryFragment on HeroStatsQuery {
+        ...HeroOverviewItemsStagesHeroStatsQueryFragment
+        ...HeroOverviewItemsNeutralsHeroStatsQueryFragment
+        ...HeroOverviewItemsBootsHeroStatsQueryFragment
+        __typename
+      }
+      
+      fragment HeroOverviewItemsConstantQueryFragment on ConstantQuery {
+        ...HeroOverviewItemsNeutralsConstantQueryFragment
+        __typename
+      }
+      
+      fragment HeroOverviewItemsStagesHeroStatsQueryFragment on HeroStatsQuery {
+        itemStartingPurchase(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {
+          ...HeroOverviewItemsStagesHeroItemStartingPurchaseTypeFragment
+          __typename
+        }
+        itemFullPurchase(
+          heroId: $heroId
+          bracketBasicIds: $bracketBasicIds
+          matchLimit: 50
+        ) {
+          ...HeroOverviewItemsStagesHeroItemPurchaseTypeFragment
+          __typename
+        }
+        purchasePatternStats: stats(
+          heroIds: [$heroId]
+          bracketBasicIds: $bracketBasicIds
+          minTime: 0
+          maxTime: 36
+          groupByTime: true
+        ) {
+          time
+          matchCount
+          __typename
+        }
+        __typename
+      }
+      
+      fragment HeroOverviewItemsStagesHeroItemStartingPurchaseTypeFragment on HeroItemStartingPurchaseType {
+        itemId
+        winCount
+        matchCount
+        instance
+        wasGiven
+        __typename
+      }
+      
+      fragment HeroOverviewItemsStagesHeroItemPurchaseTypeFragment on HeroItemPurchaseType {
+        itemId
+        time
+        winCount
+        matchCount
+        instance
+        __typename
+      }
+      
+      fragment HeroOverviewItemsBootsHeroStatsQueryFragment on HeroStatsQuery {
+        itemBootPurchase(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {
+          itemId
+          matchCount
+          winCount
+          timeAverage
+          __typename
+        }
+        __typename
+      }
+      
+      fragment HeroOverviewItemsNeutralsHeroStatsQueryFragment on HeroStatsQuery {
+        itemNeutral(
+          heroId: $heroId
+          bracketBasicIds: $bracketBasicIds
+          week: 1675061914
+        ) {
+          itemId
+          equippedMatchCount
+          equippedMatchWinCount
+          __typename
+        }
+        __typename
+      }
+      
+      fragment HeroOverviewItemsNeutralsConstantQueryFragment on ConstantQuery {
+        items {
+          id
+          stat {
+            neutralItemTier
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      
+      fragment HeroOverviewMatchupsHeroStatsQueryFragment on HeroStatsQuery {
+        heroVsHeroMatchup(heroId: $heroId, bracketBasicIds: $bracketBasicIds) {
+          advantage {
+            ...HeroOverviewMatchupsHeroDryadTypeFragment
+            __typename
+          }
+          disadvantage {
+            ...HeroOverviewMatchupsHeroDryadTypeFragment
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      
+      fragment HeroOverviewMatchupsHeroStatsHeroDryadTypeFragment on HeroStatsHeroDryadType {
+        heroId2
+        synergy
+        matchCount
+        winCount
+        __typename
+      }
+      
+      fragment HeroOverviewMatchupsHeroDryadTypeFragment on HeroDryadType {
+        with {
+          ...HeroOverviewMatchupsHeroStatsHeroDryadTypeFragment
+          __typename
+        }
+        vs {
+          ...HeroOverviewMatchupsHeroStatsHeroDryadTypeFragment
+          __typename
+        }
+        __typename
+      }
+      
+      fragment HeroOverviewGraphsHeroStatsQueryFragment on HeroStatsQuery {
+        winGameVersion(take: 7, groupBy: HERO_ID, bracketIds: $bracketIds) {
+          gameVersionId
+          heroId
+          winCount
+          matchCount
+          __typename
+        }
+        winDay(take: 32, groupBy: HERO_ID, bracketIds: $bracketIds) {
+          timestamp: day
+          heroId
+          winCount
+          matchCount
+          __typename
+        }
+        winHour(take: 25, groupBy: HERO_ID, bracketIds: $bracketIds) {
+          timestamp: hour
+          heroId
+          winCount
+          matchCount
+          __typename
+        }
+        __typename
+      }
+      
+      fragment HeroOverviewPlayersLeaderboardQueryFragment on LeaderboardQuery {
+        hero(request: {heroIds: [$heroId], bracketIds: $topPlayersBracketIds, take: 5}) {
+          position
+          impAverage
+          steamAccount {
+            ...PlayerColSteamAccountTypeFragment
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      
+      fragment PlayerColSteamAccountTypeFragment on SteamAccountType {
+        avatar
+        ...PlayerNameColSteamAccountTypeFragment
+        __typename
+      }
+      
+      fragment PlayerNameColSteamAccountTypeFragment on SteamAccountType {
+        id
+        name
+        proSteamAccount {
+          name
+          __typename
+        }
+        isAnonymous
+        smurfFlag
+        __typename
+      }
+      
+      fragment HeroOverviewTalentsHeroStatsQueryFragment on HeroStatsQuery {
+        talent(heroId: $heroId) {
+          abilityId
+          matchCount
+          winCount
+          __typename
+        }
+        __typename
+      }
+      
+      fragment HeroOverviewPositionsHeroStatsQueryFragment on HeroStatsQuery {
+        position: stats(
+          heroIds: [$heroId]
+          bracketBasicIds: $bracketBasicIds
+          groupByPosition: true
+          maxTime: 0
+        ) {
+          position
+          matchCount: remainingMatchCount
+          winCount
+          __typename
+        }
+        laneOutcomeWith_POSITION_1: laneOutcome(
+          heroId: $heroId
+          positionIds: [POSITION_1]
+          isWith: true
+        ) {
+          ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment
+          __typename
+        }
+        laneOutcomeWith_POSITION_2: laneOutcome(
+          heroId: $heroId
+          positionIds: [POSITION_2]
+          isWith: true
+        ) {
+          ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment
+          __typename
+        }
+        laneOutcomeWith_POSITION_3: laneOutcome(
+          heroId: $heroId
+          positionIds: [POSITION_3]
+          isWith: true
+        ) {
+          ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment
+          __typename
+        }
+        laneOutcomeWith_POSITION_4: laneOutcome(
+          heroId: $heroId
+          positionIds: [POSITION_4]
+          isWith: true
+        ) {
+          ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment
+          __typename
+        }
+        laneOutcomeWith_POSITION_5: laneOutcome(
+          heroId: $heroId
+          positionIds: [POSITION_5]
+          isWith: true
+        ) {
+          ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment
+          __typename
+        }
+        laneOutcomeAgainst_POSITION_1: laneOutcome(
+          heroId: $heroId
+          positionIds: [POSITION_1]
+          isWith: false
+        ) {
+          ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment
+          __typename
+        }
+        laneOutcomeAgainst_POSITION_2: laneOutcome(
+          heroId: $heroId
+          positionIds: [POSITION_2]
+          isWith: false
+        ) {
+          ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment
+          __typename
+        }
+        laneOutcomeAgainst_POSITION_3: laneOutcome(
+          heroId: $heroId
+          positionIds: [POSITION_3]
+          isWith: false
+        ) {
+          ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment
+          __typename
+        }
+        laneOutcomeAgainst_POSITION_4: laneOutcome(
+          heroId: $heroId
+          positionIds: [POSITION_4]
+          isWith: false
+        ) {
+          ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment
+          __typename
+        }
+        laneOutcomeAgainst_POSITION_5: laneOutcome(
+          heroId: $heroId
+          positionIds: [POSITION_5]
+          isWith: false
+        ) {
+          ...HeroOverviewPositionsHeroLaneOutcomeTypeFragment
+          __typename
+        }
+        __typename
+      }
+      
+      fragment HeroOverviewPositionsHeroLaneOutcomeTypeFragment on HeroLaneOutcomeType {
+        heroId2
+        matchCount
+        winCount
+        lossCount
+        drawCount
+        stompWinCount
+        stompLossCount
+        __typename
+      }
+      
+      fragment HeroOverviewRampagesHeroStatsQueryFragment on HeroStatsQuery {
+        rampages(request: {heroId: $heroId, bracketBasicIds: $bracketBasicIds, take: 5}) {
+          match {
+            id
+            rank
+            endDateTime
+            players {
+              steamAccountId
+              isRadiant
+              heroId
+              __typename
+            }
+            __typename
+          }
+          steamAccount {
+            avatar
+            ...PlayerNameColSteamAccountTypeFragment
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      
+      fragment HeroOverviewConstantsConstantQueryFragment on ConstantQuery {
+        hero(id: $heroId) {
+          id
+          language {
+            hype
+            lore
+            __typename
+          }
+          aliases
+          __typename
+        }
+        __typename
+      }
+      `,
     });
   }
   getHeroHeader(id: number) {
@@ -1535,8 +2024,217 @@ class StratsApiService {
           betweenEndDateTime: 1673110800,
         },
       },
-      query:
-        "query GetTeamOverveiw($teamId: Int!, $leaguesRequest: LeagueRequestType!) {\n  team(teamId: $teamId) {\n    id\n    ...TeamOverviewMembersTeamTypeFragment\n    series(request: {take: 6}) {\n      ...TeamSeriesSeriesTypeFragment\n      __typename\n    }\n    ...TeamOverviewSummaryRowTeamTypeFragment\n    __typename\n  }\n  leagues(request: $leaguesRequest) {\n    id\n    ...LeagueSeriesRowLeague\n    __typename\n  }\n}\n\nfragment TeamOverviewMembersTeamTypeFragment on TeamType {\n  id\n  members {\n    lastMatchDateTime\n    firstMatchDateTime\n    player {\n      steamAccountId\n      steamAccount {\n        id\n        name\n        avatar\n        proSteamAccount {\n          name\n          countries\n          realName\n          position\n          __typename\n        }\n        __typename\n      }\n      matchesGroupBy(\n        request: {groupBy: TEAM, teamId: $teamId, playerList: SINGLE, take: 10000}\n      ) {\n        teamId: id\n        matchCount\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  matches(request: {skip: 0, take: 25}) {\n    ...TeamOverviewMembersMatchMatchTypeFragment\n    __typename\n  }\n  __typename\n}\n\nfragment TeamOverviewMembersMatchMatchTypeFragment on MatchType {\n  id\n  players {\n    steamAccountId\n    isVictory\n    heroId\n    __typename\n  }\n  __typename\n}\n\nfragment LeagueSeriesRowLeague on LeagueType {\n  id\n  displayName\n  region\n  nodeGroups {\n    ...LeagueSeriesRowNodeGroup\n    __typename\n  }\n  __typename\n}\n\nfragment LeagueSeriesRowNodeGroup on LeagueNodeGroupType {\n  id\n  name\n  nodes {\n    ...LeagueSeriesRowNode\n    __typename\n  }\n  __typename\n}\n\nfragment LeagueSeriesRowNode on LeagueNodeType {\n  id\n  scheduledTime\n  actualTime\n  teamOne {\n    ...LeagueSeriesRowTeam\n    __typename\n  }\n  teamTwo {\n    ...LeagueSeriesRowTeam\n    __typename\n  }\n  teamOneWins\n  teamTwoWins\n  hasStarted\n  isCompleted\n  nodeType\n  matches {\n    id\n    __typename\n  }\n  __typename\n}\n\nfragment LeagueSeriesRowTeam on TeamType {\n  id\n  name\n  tag\n  __typename\n}\n\nfragment TeamSeriesSeriesTypeFragment on SeriesType {\n  id\n  teamOne {\n    ...LeagueSeriesRowTeam\n    __typename\n  }\n  teamTwo {\n    ...LeagueSeriesRowTeam\n    __typename\n  }\n  teamOneWins: teamOneWinCount\n  teamTwoWins: teamTwoWinCount\n  nodeType: type\n  matches {\n    startDateTime\n    ...LeagueSeriesRowMatch\n    __typename\n  }\n  league {\n    id\n    displayName\n    region\n    __typename\n  }\n  __typename\n}\n\nfragment LeagueSeriesRowMatch on MatchType {\n  id\n  durationSeconds\n  radiantTeamId\n  didRadiantWin\n  players {\n    heroId\n    kills\n    ...MatchHeroPickHoverCardPlayer\n    matchId\n    steamAccountId\n    __typename\n  }\n  radiantKills\n  direKills\n  pickBans {\n    heroId\n    isPick\n    isRadiant\n    order\n    __typename\n  }\n  __typename\n}\n\nfragment MatchHeroPickHoverCardPlayer on MatchPlayerType {\n  heroId\n  position\n  steamAccount {\n    ...SteamAccountHoverCardSteamAccountTypeFragment\n    __typename\n  }\n  __typename\n}\n\nfragment SteamAccountHoverCardSteamAccountTypeFragment on SteamAccountType {\n  id\n  name\n  avatar\n  isAnonymous\n  smurfFlag\n  proSteamAccount {\n    name\n    team {\n      id\n      tag\n      __typename\n    }\n    __typename\n  }\n  __typename\n}\n\nfragment TeamOverviewSummaryRowTeamTypeFragment on TeamType {\n  winCount\n  lossCount\n  countryCode\n  lastMatchDateTime\n  dateCreated\n  __typename\n}\n",
+      query: `query GetTeamOverveiw($teamId: Int!, $leaguesRequest: LeagueRequestType!) {
+        team(teamId: $teamId) {
+          id
+          ...TeamOverviewMembersTeamTypeFragment
+          series(request: {take: 6}) {
+            ...TeamSeriesSeriesTypeFragment
+            __typename
+          }
+          ...TeamOverviewSummaryRowTeamTypeFragment
+          __typename
+        }
+        leagues(request: $leaguesRequest) {
+          id
+          ...LeagueSeriesRowLeague
+          __typename
+        }
+      }
+      
+      fragment TeamOverviewMembersTeamTypeFragment on TeamType {
+        id
+        members {
+          lastMatchDateTime
+          firstMatchDateTime
+          player {
+            steamAccountId
+            steamAccount {
+              id
+              name
+              avatar
+              proSteamAccount {
+                name
+                countries
+                realName
+                position
+                __typename
+              }
+              __typename
+            }
+            matchesGroupBy(
+              request: {groupBy: TEAM, teamId: $teamId, playerList: SINGLE, take: 10000}
+            ) {
+              ... on MatchGroupByTeamType {
+                teamId
+                matchCount
+                __typename
+              }
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        matches(request: {skip: 0, take: 25}) {
+          ...TeamOverviewMembersMatchMatchTypeFragment
+          __typename
+        }
+        __typename
+      }
+      
+      fragment TeamOverviewMembersMatchMatchTypeFragment on MatchType {
+        id
+        players {
+          steamAccountId
+          isVictory
+          heroId
+          __typename
+        }
+        __typename
+      }
+      
+      fragment LeagueSeriesRowLeague on LeagueType {
+        id
+        displayName
+        region
+        nodeGroups {
+          ...LeagueSeriesRowNodeGroup
+          __typename
+        }
+        __typename
+      }
+      
+      fragment LeagueSeriesRowNodeGroup on LeagueNodeGroupType {
+        id
+        name
+        nodes {
+          ...LeagueSeriesRowNode
+          __typename
+        }
+        __typename
+      }
+      
+      fragment LeagueSeriesRowNode on LeagueNodeType {
+        id
+        scheduledTime
+        actualTime
+        teamOne {
+          ...LeagueSeriesRowTeam
+          __typename
+        }
+        teamTwo {
+          ...LeagueSeriesRowTeam
+          __typename
+        }
+        teamOneWins
+        teamTwoWins
+        hasStarted
+        isCompleted
+        nodeType
+        matches {
+          id
+          __typename
+        }
+        __typename
+      }
+      
+      fragment LeagueSeriesRowTeam on TeamType {
+        id
+        name
+        tag
+        __typename
+      }
+      
+      fragment TeamSeriesSeriesTypeFragment on SeriesType {
+        id
+        teamOne {
+          ...LeagueSeriesRowTeam
+          __typename
+        }
+        teamTwo {
+          ...LeagueSeriesRowTeam
+          __typename
+        }
+        teamOneWins: teamOneWinCount
+        teamTwoWins: teamTwoWinCount
+        nodeType: type
+        matches {
+          startDateTime
+          ...LeagueSeriesRowMatch
+          __typename
+        }
+        league {
+          id
+          displayName
+          region
+          __typename
+        }
+        __typename
+      }
+      
+      fragment LeagueSeriesRowMatch on MatchType {
+        id
+        durationSeconds
+        radiantTeamId
+        didRadiantWin
+        players {
+          heroId
+          kills
+          ...MatchHeroPickHoverCardPlayer
+          matchId
+          steamAccountId
+          __typename
+        }
+        radiantKills
+        direKills
+        pickBans {
+          heroId
+          isPick
+          isRadiant
+          order
+          __typename
+        }
+        __typename
+      }
+      
+      fragment MatchHeroPickHoverCardPlayer on MatchPlayerType {
+        heroId
+        position
+        steamAccount {
+          ...SteamAccountHoverCardSteamAccountTypeFragment
+          __typename
+        }
+        __typename
+      }
+      
+      fragment SteamAccountHoverCardSteamAccountTypeFragment on SteamAccountType {
+        id
+        name
+        avatar
+        isAnonymous
+        smurfFlag
+        proSteamAccount {
+          name
+          team {
+            id
+            tag
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      
+      fragment TeamOverviewSummaryRowTeamTypeFragment on TeamType {
+        winCount
+        lossCount
+        countryCode
+        lastMatchDateTime
+        dateCreated
+        __typename
+      }
+      `,
     });
   }
   getTeamHeader(id: number) {

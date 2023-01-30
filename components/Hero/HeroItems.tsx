@@ -13,7 +13,7 @@ import {
 } from "../../share/ultils";
 import MyImage from "../MyImage";
 import { useAppSelector } from "../../store";
-import { HeroStats, ItemBootPurchase } from "../../interfaces/heroes";
+import { HeroStats, ItemFullPurchaseElement } from "../../interfaces/heroes";
 
 const ToolTip = dynamic(() => import("../ToolTip"), {
   ssr: false,
@@ -85,7 +85,7 @@ const ItemList = ({
   timeline,
   currentNav,
 }: {
-  itemList: ItemBootPurchase[];
+  itemList: ItemFullPurchaseElement[];
   totalMatchCount: number;
   title: string;
   timeline?: string;
@@ -211,14 +211,14 @@ const HeroItems = ({ stats }: { stats: HeroStats }) => {
   const navs = useRef<string[]>(["Win rate", "Pick rate"]).current;
   const [currentNav, setCurrentNav] = useState<number>(0);
   const [boots, setBoots] = useState<{
-    items: ItemBootPurchase[];
+    items: ItemFullPurchaseElement[];
     total: number;
   }>();
   const [timelines, setTimelines] = useState<
     {
       title: string;
       data: {
-        items: ItemBootPurchase[];
+        items: ItemFullPurchaseElement[];
         total: number;
       };
       time: string;
@@ -227,7 +227,7 @@ const HeroItems = ({ stats }: { stats: HeroStats }) => {
   const [tiers, setTiers] = useState<Tier[]>([]);
 
   useEffect(() => {
-    const getNewArr = (itemList: ItemBootPurchase[]) => {
+    const getNewArrFull = (itemList: ItemFullPurchaseElement[]) => {
       const total = reduce(
         itemList,
         (prev, curr) => {
@@ -251,29 +251,44 @@ const HeroItems = ({ stats }: { stats: HeroStats }) => {
     };
     const {
       itemBootPurchase,
-      purchasePattern: { startingItems, earlyGame, midGame, lateGame },
+      itemFullPurchase,
       itemNeutral,
+      itemStartingPurchase,
     } = stats;
-    setBoots(getNewArr(itemBootPurchase));
+    const earlyPurchase: ItemFullPurchaseElement[] = [];
+    const middlePurchase: ItemFullPurchaseElement[] = [];
+    const latePurchase: ItemFullPurchaseElement[] = [];
+    forEach(itemFullPurchase, (vl) => {
+      const time = vl?.time || 0;
+      if (time <= 15) {
+        earlyPurchase.push(vl);
+      } else if (time <= 35) {
+        middlePurchase.push(vl);
+      } else {
+        latePurchase.push(vl);
+      }
+    });
+
+    setBoots(getNewArrFull(itemBootPurchase));
     const resultTimelines = [];
     resultTimelines.push({
       title: "Starting",
-      data: getNewArr(startingItems),
+      data: getNewArrFull(itemStartingPurchase),
       time: "-1:40",
     });
     resultTimelines.push({
       title: "Early",
-      data: getNewArr(earlyGame),
+      data: getNewArrFull(earlyPurchase),
       time: "00:00 - 15:00",
     });
     resultTimelines.push({
       title: "Mid",
-      data: getNewArr(midGame),
+      data: getNewArrFull(middlePurchase),
       time: "15:00 - 35:00",
     });
     resultTimelines.push({
       title: "Late",
-      data: getNewArr(lateGame),
+      data: getNewArrFull(latePurchase),
       time: "35:00+",
     });
     const resultTiers: Tier[] = [

@@ -252,17 +252,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
         },
       };
     }
-    // const res2 = await stratsApiService.getHeroHeader(id);
-    // if (res2.status !== 200) {
-    //   return {
-    //     props: {
-    //       heroOverView: null,
-    //       statusCode: res.status,
-    //     },
-    //   };
-    // }
     const data = res.data.data;
-    // const data2 = res2.data.data;
     return {
       props: {
         heroOverView: {
@@ -272,6 +262,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
       },
     };
   } catch (error) {
+    console.log(error);
     return {
       props: {
         heroOverView: null,

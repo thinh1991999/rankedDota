@@ -386,7 +386,9 @@ const ChartMain = () => {
       arr.push(item);
     });
     if (!isInteger(timeUtc)) arr.push(timeUtc);
-    const maxY = max(radiantNetworthLeads.concat(radiantExperienceLeads));
+    const maxY = radiantNetworthLeads
+      ? max(radiantNetworthLeads.concat(radiantExperienceLeads))
+      : 0;
     setDataChart({
       labels: arr,
       datasets: [
