@@ -34,17 +34,15 @@ const RowInfo = ({ info }: { info: PlayerTimeline }) => {
     heroDamage,
     towerDamage,
     heroHealing,
-    inventory: { item0, item1, item2, item3, item4, item5, neutral0 },
+    inventory,
     steamAccount: { name },
   } = info;
-  const itemsBuild: (BackPack0 | null)[] = [
-    item0,
-    item1,
-    item2,
-    item3,
-    item4,
-    item5,
-  ];
+  let itemsBuild: (BackPack0 | null)[] = [];
+  if (inventory) {
+    const { item0, item1, item2, item3, item4, item5, neutral0 } = inventory;
+    itemsBuild = [item0, item1, item2, item3, item4, item5];
+  }
+
   const heroDetail = getDetaiHero(heroes, heroId);
   const imgHero = getImgStratsDota(`/heroes/${heroDetail?.shortName}_horz.png`);
   const lvScore = (lv ? lv : 30 / 30) * 10;
@@ -199,8 +197,12 @@ const RowInfo = ({ info }: { info: PlayerTimeline }) => {
           })}
         </div>
         <div className="rounded-full overflow-hidden w-[18px] h-[18px]">
-          {neutral0 ? (
-            <ItemIcon id={neutral0.itemId} width="18px" height="18px" />
+          {inventory && inventory.neutral0 ? (
+            <ItemIcon
+              id={inventory.neutral0.itemId}
+              width="18px"
+              height="18px"
+            />
           ) : (
             <div className="h-full w-full bg-layerStrong-dark rounded-full"></div>
           )}
